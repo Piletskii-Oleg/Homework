@@ -1,3 +1,23 @@
+void add_last(struct node** headRef, int d)
+{
+    struct node* newNode;
+    newNode = (struct node*)malloc(sizeof(struct node));
+
+    struct node* last = *headRef;
+    newNode->next = NULL;
+    newNode->value = d;
+
+    if (*headRef == NULL)
+    {
+        *headRef = newNode;
+        return;
+    }
+    while (last->next != NULL)
+        last = last->next;
+
+    last->next = newNode;
+}
+
 struct node* create_node()
 {
     int value = 1;
