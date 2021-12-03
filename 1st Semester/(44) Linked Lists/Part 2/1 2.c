@@ -7,7 +7,6 @@ void add_first(struct node** head, int d)
     *head = p;
 }
 
-
 #define ADD_FIRST(TYPE)                                           \
 void add_first_##TYPE(struct node_##TYPE** f, TYPE d)             \
 {                                                                 \
