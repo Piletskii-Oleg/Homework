@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 int main()
 {
     double d; int i; int ii;
