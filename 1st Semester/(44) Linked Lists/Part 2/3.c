@@ -54,13 +54,12 @@ void add_another_element(struct node** headRef, int value, int position)
 
     struct node* new = *headRef;
     struct node** newnew = headRef;
-    int i = 0;
 
-    for (; i < position; i++)
+    for (int i = 0; i < position; i++)
     {
         if (new->next != NULL)
         {
-            newnew = &((*new).next);
+            newnew = &(new->next);
             new = new->next;
         }
     }

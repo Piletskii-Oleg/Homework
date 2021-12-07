@@ -4,14 +4,13 @@
 #include <ctype.h>
 #include <string.h>
 #define _CRT_SECURE_NO_WARNINGS
-
 int summing(char str[])
 {
     int sum = 0;
     int currentNumber = 0;
-    for (int i = 0; i < 30; i++)
+    for (int i = 0; str[i] != '\n' && str[i] != '\0'; i++)
     {
-        if (str[i] != -52 && isdigit(str[i]))
+        if (isdigit(str[i]))
         {
             currentNumber = currentNumber * 10 + (str[i] - 48);
         }
@@ -19,10 +18,9 @@ int summing(char str[])
         {
             sum += currentNumber;
             currentNumber = 0;
-            continue;
         }
     }
-    return sum;
+    return sum + currentNumber;
 }
 
 void count_sums(char path1[], char path2[])
@@ -31,12 +29,10 @@ void count_sums(char path1[], char path2[])
     fptr = fopen(path1, "r");
     gptr = fopen(path2, "w");
 
-    int sum;
-    int currentNumber;
     char str[30];
     while (fgets(str, 29, fptr))
     {
-        printf("%d\n", summing(str));
+        fprintf(gptr, "%d\n", summing(str));
     }
 
     fclose(fptr);
