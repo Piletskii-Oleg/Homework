@@ -14,7 +14,7 @@ struct Stack
 
 struct Stack* create_stack(int length)
 {
-    struct Stack* stack = (struct Stack*)malloc(sizeof(int));
+    struct Stack* stack = (struct Stack*)malloc(sizeof(struct Stack));
     stack->length = length;
     stack->top = -1;
     stack->array = (int*)malloc(stack->length * sizeof(int));
