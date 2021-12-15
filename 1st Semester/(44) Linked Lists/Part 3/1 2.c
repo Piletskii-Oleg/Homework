@@ -25,7 +25,7 @@ void delete_first_##TYPE(struct node_##TYPE** headRef)              \
 
 void delete_last(struct node* head)
 {
-    if (head == NULL)
+    if (head == NULL || head->next == NULL)
         return;
 
     while (head->next->next != NULL)
@@ -41,7 +41,7 @@ void delete_last(struct node* head)
 #define DELETE_LAST(TYPE)                           \
 void delete_last_##TYPE(struct node_##TYPE* head)   \
 {                                                   \
-    if (head == NULL)                               \
+    if (head == NULL || head->next == NULL)         \
         return;                                     \
                                                     \
     while (head->next->next != NULL)                \
