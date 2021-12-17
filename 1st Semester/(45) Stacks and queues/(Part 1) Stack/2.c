@@ -16,39 +16,41 @@ struct Stack
     struct node* head;
 };
 
-struct Stack* create_node(int data)
+_Bool is_empty(struct Stack root)
 {
-    struct Stack* stackNode = (struct Stack*)malloc(sizeof(struct Stack));
-    stackNode->data = data;
-    stackNode->next = NULL;
+    return !root.head;
 }
 
-struct Stack* is_empty(struct Stack* root)
+struct Stack push(struct Stack stack, int data)
 {
-    return !root;
-}
-
-void push(struct Stack** root, int data)
-{
-    struct Stack* newStackNode = create_node(data);
-    newStackNode->next = *root;
-    *root = newStackNode;
+    struct node* newNode = (struct node*)malloc(sizeof(struct node));
+    newNode->data = data;
+    newNode->next = stack.head;
+    stack.head = newNode;
     printf("Element %d pushed to stack.\n", data);
+    return stack;
 }
 
-void pop(struct Stack** root)
+int pop(struct Stack stack)
 {
-    struct Stack* temp = *root;
-    *root = (*root)->next;
+    if (is_empty(stack))
+    {
+        printf("Stack is empty.\n");
+        return;
+    }
+
+    struct node* temp = stack.head;
+    stack.head = (stack.head)->next;
     int popped = temp->data;
     free(temp);
 
     printf("Element %d popped.\n", popped);
+    return popped;
 }
 
 int peek(struct Stack* root)
 {
-    return root->data;
+    return stack.head->data;
 }
 
 int main()
@@ -59,5 +61,10 @@ int main()
     push(&stack, 3);
     printf("Last element is: %d \n", peek(stack));
     push(&stack, 4);
+    pop(&stack);
+    pop(&stack);
+    pop(&stack);
+    pop(&stack);
+    push(&stack, 6);
     pop(&stack);
 }

@@ -17,14 +17,21 @@ int grandsonAmount(struct BNode* root)
 		return 0;
 
 	int amount = 0;
-	if (root->right->right)
-		amount++;
-	if (root->right->left)
-		amount++;
-	if (root->left->right)
-		amount++;
-	if (root->left->left)
-		amount++;
+	if (root->right)
+	{
+		if (root->right->right)
+			amount++;
+		if (root->right->left)
+			amount++;
+	}
+
+	if (root->left)
+	{
+		if (root->left->right)
+			amount++;
+		if (root->left->left)
+			amount++;
+	}
 	return amount;
 }
 

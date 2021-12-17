@@ -71,6 +71,9 @@ struct BNode* rightmostSon(struct BNode* side)
 
 struct BNode* rightmostGrandsonB(struct BNode* root)
 {
+	if (!root)
+		return NULL;
+		
 	if (root->right == NULL || (root->right->left == NULL && root->right->right == NULL))
 	{
 		if (root->left == NULL)
@@ -79,7 +82,7 @@ struct BNode* rightmostGrandsonB(struct BNode* root)
 		}
 		else
 		{
-			rightmostSon(root->left);
+			return rightmostSon(root->left);
 		}
 	}
 	else
