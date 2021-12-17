@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-#include <stdlib.h>
+#include <stdlib.h> //accepted
 #include <ctype.h>
 #include <string.h>
 #define _CRT_SECURE_NO_WARNINGS

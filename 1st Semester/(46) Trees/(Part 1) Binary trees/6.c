@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-#include <stdlib.h> //accepted
+#include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 #define _CRT_SECURE_NO_WARNINGS
@@ -11,15 +11,22 @@ typedef struct BNode
 	struct BNode* left, * right;
 } binNode;
 
-binNode* leftTurn(binNode* root)
+binNode* leftmostLeaf(binNode* root)
 {
-	binNode* newRoot = root->right;
-	binNode* toMove = root->right->left;
+	if (root == NULL)
+		return NULL;
 
-	newRoot->left = root;
-	root->right = toMove;
+	while (root->left != NULL)
+		root = root->left;
+	while (root->right != NULL)
+	{
+		root = root->right;
 
-	return newRoot;
+		while (root->left != NULL)
+			root = root->left;
+	}
+
+	return root;
 }
 
 binNode* newTree(int data, binNode* left, binNode* right)
@@ -51,7 +58,6 @@ int main()
 	printTree(tree, 3);
 
 	printf("\n\n\n");
-	tree = leftTurn(tree);
-	printTree(tree, 3);
+	printf("%d", leftmostLeaf(tree)->data);
 	return 0;
 }

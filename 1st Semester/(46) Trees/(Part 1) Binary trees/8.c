@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-#include <stdlib.h> //accepted
+#include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 #define _CRT_SECURE_NO_WARNINGS
@@ -11,15 +11,27 @@ typedef struct BNode
 	struct BNode* left, * right;
 } binNode;
 
-binNode* leftTurn(binNode* root)
+binNode* leftmostNode(binNode* root)
 {
-	binNode* newRoot = root->right;
-	binNode* toMove = root->right->left;
+	if (!root)
+		return NULL;
 
-	newRoot->left = root;
-	root->right = toMove;
+	if (root->left == 0)
+		return root;
+	if (root->left != 0 && (root->left->left != 0 || root->left->right != 0))
+		return leftmostNode(root->left);
+}
 
-	return newRoot;
+void createSon(binNode* root, int data)
+{
+	if (!root)
+		return;
+
+	binNode* node = leftmostNode(root);
+	node->left = (binNode*)malloc(sizeof(binNode));
+	node->left->data = data;
+	node->left->left = NULL;
+	node->left->right = NULL;
 }
 
 binNode* newTree(int data, binNode* left, binNode* right)
@@ -47,11 +59,11 @@ void printTree(binNode* root, int offset)
 
 int main()
 {
-	binNode* tree = newTree(1, newTree(2, newTree(4, 0, 0), newTree(5, 0, 0)), newTree(3, newTree(6, 0, 0), newTree(2, 0, 0)));
+	binNode* tree = newTree(1, newTree(2, 0, newTree(5, 0, 0)), newTree(3, newTree(6, 0, 0), newTree(2, 0, 0)));
 	printTree(tree, 3);
 
 	printf("\n\n\n");
-	tree = leftTurn(tree);
+	createSon(tree, 98);
 	printTree(tree, 3);
 	return 0;
 }
