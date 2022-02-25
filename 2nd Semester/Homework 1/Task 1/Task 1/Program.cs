@@ -8,6 +8,7 @@
             array[index1] = array[index2];
             array[index2] = temp;
         }
+
         static void BubbleSort(int[] array)
         {
             for (int i = 0; i < array.Length; i++)
@@ -21,6 +22,7 @@
                 }
             }
         }
+
         static void Main(string[] args)
         {
             int[] array = { 6, 9, 55, 67, 93, 4 };
