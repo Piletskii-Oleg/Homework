@@ -15,6 +15,7 @@
             }
             return new String(output);
         }
+
         static string DirectBWT(string input, out int originalLineNumber)
         {
             string[] table = new string[input.Length];
@@ -38,12 +39,14 @@
             }
             return new String(result);
         }
+
         static string SortString(string input)
         {
             char[] array = input.ToCharArray();
             Array.Sort(array);
             return new string(array);
         }
+
         static char[] CreateAlphabet(string sortedInput)
         {
             int size = 1;
@@ -66,6 +69,7 @@
             }
             return alphabet;
         }
+
         static string ReverseBWT(string input, int originalLineNumber)
         {
             string sortedInput = SortString(input);
@@ -107,6 +111,7 @@
             }
             return new String(result);
         }
+
         static void Main(string[] args)
         {
             Console.Write("Input text to transform: ");
