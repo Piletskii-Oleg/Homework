@@ -57,3 +57,20 @@
 2nd Semester/Homework 1/Task_Two/Task_Two/obj/Task_Two.csproj.nuget.dgspec.json
 2nd Semester/Homework 1/Task_Two/Task_Two/obj/Task_Two.csproj.nuget.g.props
 2nd Semester/Homework 1/Task_Two/Task_Two/obj/Task_Two.csproj.nuget.g.targets
+*.cache
+/2nd Semester/Homework 1/Task_Two/Task_Two/obj
+/2nd Semester/Homework 1/Task_Two/Task_Two/bin
+/2nd Semester/Homework 1/Task_Two/.vs
+2nd Semester/Homework 1/Task_Two/.vs/Task_Two/DesignTimeBuild/.dtbcache.v2
+2nd Semester/Homework 1/Task_Two/Task_Two/obj/Debug/net6.0/.NETCoreApp,Version=v6.0.AssemblyAttributes.cs
+2nd Semester/Homework 1/Task_Two/Task_Two/obj/Debug/net6.0/Task 2.AssemblyInfo.cs
+2nd Semester/Homework 1/Task_Two/Task_Two/obj/Debug/net6.0/Task 2.AssemblyInfoInputs.cache
+2nd Semester/Homework 1/Task_Two/Task_Two/obj/Debug/net6.0/Task 2.assets.cache
+2nd Semester/Homework 1/Task_Two/Task_Two/obj/Debug/net6.0/Task 2.csproj.AssemblyReference.cache
+2nd Semester/Homework 1/Task_Two/Task_Two/obj/Debug/net6.0/Task 2.GeneratedMSBuildEditorConfig.editorconfig
+2nd Semester/Homework 1/Task_Two/Task_Two/obj/Debug/net6.0/Task 2.GlobalUsings.g.cs
+2nd Semester/Homework 1/Task_Two/Task_Two/obj/project.assets.json
+2nd Semester/Homework 1/Task_Two/Task_Two/obj/project.nuget.cache
+2nd Semester/Homework 1/Task_Two/Task_Two/obj/Task 2.csproj.nuget.dgspec.json
+2nd Semester/Homework 1/Task_Two/Task_Two/obj/Task 2.csproj.nuget.g.props
+2nd Semester/Homework 1/Task_Two/Task_Two/obj/Task 2.csproj.nuget.g.targets
