@@ -1,6 +1,6 @@
 ﻿namespace Task_Two
 {
-    class Program
+    internal class Program
     {
         static string CycleShift(string input, int offset)
         {
@@ -13,7 +13,7 @@
                 }
                 output[i] = input[i + offset];
             }
-            return new String(output);
+            return new string(output);
         }
 
         static string DirectBWT(string input, out int originalLineNumber)
@@ -37,7 +37,7 @@
                 }
                 result[i] = currentString[currentString.Length - 1];
             }
-            return new String(result);
+            return new string(result);
         }
 
         static string SortString(string input)
@@ -116,6 +116,12 @@
         {
             Console.Write("Input text to transform: ");
             string input = Console.ReadLine();
+            if (input == null)
+            {
+                Console.WriteLine("No text found.");
+                return;
+            }
+
             string converted = DirectBWT(input, out int originalLineNumber);
             Console.WriteLine($"The transformed text is: {converted}");
             string convertedBack = ReverseBWT(converted, originalLineNumber);
