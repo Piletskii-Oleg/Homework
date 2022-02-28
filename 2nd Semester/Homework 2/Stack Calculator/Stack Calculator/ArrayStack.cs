@@ -21,6 +21,7 @@
         {
             return currentIndex == stack.Length - 1;
         }
+
         public void Push(int element)
         {
             if (isFull())
@@ -39,8 +40,9 @@
                 Console.WriteLine("The stack is empty!");
                 return 0;
             }
+            int removed = stack[currentIndex];
             currentIndex--;
-            return stack[currentIndex];
+            return removed;
         }
 
         public int Peek()
