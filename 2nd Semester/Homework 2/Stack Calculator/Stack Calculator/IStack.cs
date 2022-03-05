@@ -2,8 +2,8 @@
 {
     internal interface IStack
     {
-        void Push(int element);
-        int Pop();
-        int Peek();
+        void Push(double element);
+
+        double Pop();
     }
 }

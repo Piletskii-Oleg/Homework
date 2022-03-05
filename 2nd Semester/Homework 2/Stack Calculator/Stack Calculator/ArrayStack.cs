@@ -1,53 +1,51 @@
 ﻿namespace Stack_Calculator
 {
-    internal class ArrayStack : IStack
+    /// <summary>
+    /// Last-In-First-Out container implemented using array.
+    /// </summary>
+    public class ArrayStack : IStack
     {
-        public int Capacity { get; set; }
-        private int[] stack;
+        private int capacity;
+        private double[] stack;
         private int currentIndex;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ArrayStack"/> class.
+        /// </summary>
+        /// <param name="capacity"></param>
         public ArrayStack(int capacity)
         {
-            Capacity = capacity;
-            stack = new int[capacity];
-            currentIndex = 0;
+            this.capacity = capacity;
+            this.stack = new double[capacity];
+            this.currentIndex = 0;
         }
 
-        private bool isEmpty()
+        /// <summary>
+        /// Puts an element to the stack.
+        /// </summary>
+        /// <param name="element">Element to add.</param>
+        public void Push(double element)
         {
-            return currentIndex == 0;
-        }
-
-        private bool isFull()
-        {
-            return currentIndex == stack.Length - 1;
-        }
-
-        public void Push(int element)
-        {
-            if (isFull())
+            if (this.currentIndex == this.stack.Length)
             {
-                Console.WriteLine("The stack is full!");
-                return;
+                throw new IndexOutOfRangeException();
             }
-            stack[currentIndex] = element;
-            currentIndex++;
+            this.stack[this.currentIndex] = element;
+            this.currentIndex++;
         }
 
-        public int Pop()
+        /// <summary>
+        /// Removes last element from the stack and returns its value.
+        /// </summary>
+        /// <returns>Last element from the stack.</returns>
+        public double Pop()
         {
-            if (isEmpty())
+            if (this.currentIndex == 0)
             {
-                Console.WriteLine("The stack is empty!");
-                return 0;
+                throw new IndexOutOfRangeException();
             }
-            int removed = stack[currentIndex];
-            currentIndex--;
+            double removed = this.stack[--this.currentIndex];
             return removed;
-        }
-
-        public int Peek()
-        {
-            return stack[currentIndex];
         }
     }
 }
