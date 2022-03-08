@@ -16,7 +16,7 @@
 
         public double Pop()
         {
-            if (stack.Count == 0)
+            if (stack.Count <= 0)
             {
                 throw new InvalidOperationException();
             }
