@@ -1,100 +1,104 @@
-﻿namespace Prefix_Tree
+﻿namespace PrefixTree;
+
+internal class Vertex
 {
-    internal class Vertex
+    public Vertex[] Next { get; set; }
+    public bool IsTerminal { get; set; }
+    public int HowManyFollow { get; set; }
+    public Vertex()
     {
-        public Vertex[] next;
-        public bool isTerminal;
-        public Vertex()
-        {
-            this.next = new Vertex[26];
-            this.isTerminal = false;
-        }
+        Next = new Vertex[26];
+        IsTerminal = false;
+        HowManyFollow = 0;
+    }
+}
+
+public class Trie
+{
+    private Vertex head;
+
+    public int Size { get; set; }
+    public Trie()
+    {
+        this.head = new Vertex();
+        this.Size = 0;
     }
 
-    internal class Trie
+    public bool Add(string element)
     {
-        private Vertex root;
-
-        public Trie()
+        Vertex currentElement = head;
+        foreach (char c in element)
         {
-            this.root = new Vertex();
+            int currentIndex = (int)c - 65;
+            if (currentElement.Next[currentIndex] == null)
+            {
+                currentElement.Next[currentIndex] = new Vertex();
+            }
+            currentElement.HowManyFollow++;
+            currentElement = currentElement.Next[currentIndex];
         }
+        currentElement.IsTerminal = true;
+        Size++;
+        return true;
+    }
 
-        public bool Add(string element)
+    public bool Contains(string element)
+    {
+        Vertex currentElement = this.head;
+        foreach (char c in element)
         {
-            Vertex currentElement = this.root;
-            foreach (char c in element)
-            {
-                int currentIndex = (int)c - 65;
-                if (currentElement.next[currentIndex] == null)
-                {
-                    currentElement.next[currentIndex] = new Vertex();
-                }
-                currentElement = currentElement.next[currentIndex];
-            }
-            currentElement.isTerminal = true;
-            return true;
-        }
-
-        public bool Contains(string element)
-        {
-            Vertex currentElement = this.root;
-            foreach (char c in element)
-            {
-                int currentIndex = (int)c - 65;
-                if (currentElement.next[currentIndex] == null)
-                {
-                    return false;
-                }
-                currentElement = currentElement.next[currentIndex];
-            }
-            if (currentElement.isTerminal)
-            {
-                return true;
-            }
-            else
+            int currentIndex = (int)c - 65;
+            if (currentElement.Next[currentIndex] == null)
             {
                 return false;
             }
+            currentElement = currentElement.Next[currentIndex];
         }
+        return true;
+    }
 
-        public bool Remove(string element)
+    public bool Remove(string element)
+    {
+        Vertex? currentElement = this.head;
+        foreach (char c in element)
         {
-            Vertex currentElement = this.root;
-            foreach (char c in element)
+            int currentIndex = (int)c - 65;
+            if (currentElement.Next[currentIndex] == null)
             {
-                int currentIndex = (int)c - 65;
-                if (currentElement.next[currentIndex] == null)
-                {
-                    return false;
-                }
-                currentElement = currentElement.next[currentIndex];
+                return false;
             }
-            currentElement.isTerminal = false;
-            return true;
-        }
 
-        public int HowManyStartsWithPrefix(string prefix)
-        {
-            Vertex currentElement = this.root;
-            foreach (char c in prefix)
+            currentElement.HowManyFollow--;
+            if (currentElement.HowManyFollow == 0)
             {
-                int currentIndex = (int)c - 65;
-                if (currentElement.next[currentIndex] == null)
-                {
-                    return 0;
-                }
-                currentElement = currentElement.next[currentIndex];
+                var toDelete = currentElement;
+                currentElement = currentElement.Next[currentIndex];
+                toDelete = null;
             }
-            int count = 0;
-            foreach (Vertex v in currentElement.next)
+            else
             {
-                if (v != null)
-                {
-                    count++;
-                }
+                currentElement = currentElement.Next[currentIndex];
             }
-            return count;
         }
+        Size--;
+        return true;
+
+        currentElement.IsTerminal = false;
+        return true;
+    }
+
+    public int HowManyStartsWithPrefix(string prefix)
+    {
+        Vertex currentElement = this.head;
+        foreach (char c in prefix)
+        {
+            int currentIndex = (int)c - 65;
+            if (currentElement.Next[currentIndex] == null)
+            {
+                return 0;
+            }
+            currentElement = currentElement.Next[currentIndex];
+        }
+        return currentElement.HowManyFollow;
     }
 }
