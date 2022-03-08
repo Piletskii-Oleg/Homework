@@ -20,6 +20,11 @@ public class ListStack : IStack
         /// </summary>
         public Node? Next { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Node"/> class.
+        /// </summary>
+        /// <param name="value">Value of the current element.</param>
+        /// <param name="next">Points to the next element.</param>
         public Node(double value, Node? next)
         {
             Value = value;

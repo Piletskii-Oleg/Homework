@@ -12,11 +12,10 @@ public class ArrayStack : IStack
     /// <summary>
     /// Initializes a new instance of the <see cref="ArrayStack"/> class.
     /// </summary>
-    /// <param name="capacity"></param>
-    public ArrayStack(int capacity)
+    public ArrayStack()
     {
-        this.capacity = capacity;
-        this.stack = new double[capacity];
+        this.capacity = 15;
+        this.stack = new double[this.capacity];
         this.currentIndex = 0;
     }
 
@@ -26,12 +25,12 @@ public class ArrayStack : IStack
     /// <param name="element">Element to add.</param>
     public void Push(double element)
     {
-        if (this.currentIndex == this.stack.Length)
+        if (currentIndex == capacity)
         {
-            throw new IndexOutOfRangeException();
+            capacity += 15;
+            Array.Resize(ref stack, capacity);
         }
-        this.stack[this.currentIndex] = element;
-        this.currentIndex++;
+        stack[currentIndex++] = element;
     }
 
     /// <summary>
@@ -39,20 +38,12 @@ public class ArrayStack : IStack
     /// </summary>
     /// <returns>Last element from the stack.</returns>
     public double? Pop()
-    {
-        if (this.currentIndex == 0)
-        {
-            return null;
-        }
-        double removed = this.stack[--this.currentIndex];
-        return removed;
-    }
+      => (currentIndex != 0) ? stack[--currentIndex] : null;
 
     /// <summary>
     /// Checks if stack is empty.
     /// </summary>
     /// <returns>Returns true if the stack is empty and false otherwise.</returns>
     public bool IsEmpty()
-        => this.stack.Length == 0;
+        => this.currentIndex == 0;
 }
-
