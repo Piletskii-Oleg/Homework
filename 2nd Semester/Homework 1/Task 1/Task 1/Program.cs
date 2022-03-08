@@ -1,29 +1,36 @@
-﻿namespace Task_One
+﻿namespace TaskOne
 {
     class Program
     {
-        static void Swap(int[] array, int index1, int index2)
+        private static void Swap(int[] array, int index1, int index2)
         {
             int temp = array[index1];
             array[index1] = array[index2];
             array[index2] = temp;
         }
 
-        static void BubbleSort(int[] array)
+        private static void BubbleSort(int[] array)
         {
-            for (int i = 0; i < array.Length; i++)
+            for (int i = 0; i < array.Length - 1; i++)
             {
-                for (int j = 0; j < i; j++)
+                bool swapped = false;
+                for (int j = 0; j < array.Length - i - 1; j++)
                 {
-                    if (array[i] < array[j])
+                    if (array[j] > array[j + 1])
                     {
-                        Swap(array, i, j);
+                        Swap(array, j, j + 1);
+                        swapped = true;
                     }
+                }
+
+                if (!swapped)
+                {
+                    break;
                 }
             }
         }
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             int[] array = { 6, 9, 55, 67, 93, 4 };
             BubbleSort(array);

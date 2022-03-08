@@ -1,10 +1,10 @@
-﻿namespace Task_2
+﻿namespace TaskTwo
 {
     internal static class BWTransform
     {
         private static string CycleShift(string input, int offset)
         {
-            char[] output = new char[input.Length];
+            var output = new char[input.Length];
             for (int i = 0; i < input.Length; i++)
             {
                 if (i + offset >= input.Length)
@@ -16,33 +16,32 @@
             return new string(output);
         }
 
-        public static string DirectBWT(string input, out int originalLineNumber)
+        public static (string, int) DirectBWT(string input)
         {
-            string[] table = new string[input.Length];
+            var table = new string[input.Length];
             for (int i = 0; i < table.Length; i++)
             {
                 table[i] = CycleShift(input, i);
             }
             Array.Sort(table);
 
-            char[] result = new char[table.Length];
-            string currentString;
-            originalLineNumber = -1;
+            var result = new char[table.Length];
+            int originalLineNumber = -1;
             for (int i = 0; i < table.Length; i++)
             {
-                currentString = table[i];
+                string currentString = table[i];
                 if (originalLineNumber == -1 && currentString == input)
                 {
                     originalLineNumber = i;
                 }
                 result[i] = currentString[currentString.Length - 1];
             }
-            return new string(result);
+            return (new string(result), originalLineNumber);
         }
 
         private static string SortString(string input)
         {
-            char[] array = input.ToCharArray();
+            var array = input.ToCharArray();
             Array.Sort(array);
             return new string(array);
         }
@@ -57,7 +56,7 @@
                     size++;
                 }
             }
-            char[] alphabet = new char[size];
+            var alphabet = new char[size];
             int currentPos = 0;
             for (int i = 0; i < sortedInput.Length; i++)
             {
@@ -73,17 +72,16 @@
         public static string ReverseBWT(string input, int originalLineNumber)
         {
             string sortedInput = SortString(input);
-            int[] positionArray = new int[input.Length];
+            var positionArray = new int[input.Length];
             for (int i = 0; i < positionArray.Length; i++)
             {
                 positionArray[i] = -1;
             }
             char[] alphabet = CreateAlphabet(sortedInput);
             int currentPos = 0;
-            int elementPos;
             for (int i = 0; i < alphabet.Length; i++)
             {
-                elementPos = input.IndexOf(alphabet[i]);
+                int elementPos = input.IndexOf(alphabet[i]);
                 for (int j = 0; j < sortedInput.Length; j++)
                 {
                     if (alphabet[i] == sortedInput[j])
@@ -103,13 +101,13 @@
             }
 
             currentPos = originalLineNumber;
-            char[] result = new char[input.Length];
+            var result = new char[input.Length];
             for (int i = input.Length - 1; i >= 0; i--)
             {
                 result[i] = input[currentPos];
                 currentPos = positionArray[currentPos]++;
             }
-            return new String(result);
+            return new string(result);
         }
     }
 }
