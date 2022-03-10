@@ -5,16 +5,20 @@ class Program
     static void Main(string[] args)
     {
         string? input = null;
+        Console.WriteLine("Введите \"Выход\", чтобы выйти.\n");
         while (input != "Выход")
         {
-            int? stackType = null;
-            while (stackType == null && stackType != 1 && stackType != 2)
+            input = null;
+            int stackType = 0;
+            while (input != "1" && input != "2")
             {
-                Console.WriteLine("Какой тип стека вы хотите использовать? /n1 - на массиве /n2 - на списке");
+                Console.WriteLine("Какой тип стека вы хотите использовать? \n1 - на массиве \n2 - на списке");
                 Console.Write("Тип: ");
-                stackType = int.Parse(Console.ReadLine());
+                input = Console.ReadLine();
+                int.TryParse(input, out stackType);
             }
 
+            input = null;
             while (input == null)
             {
                 Console.Write("Введите выражение, которое нужно посчитать: ");

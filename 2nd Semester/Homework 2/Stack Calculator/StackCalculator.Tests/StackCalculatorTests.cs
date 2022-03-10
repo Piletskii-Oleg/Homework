@@ -6,16 +6,14 @@ namespace StackCalculator.Tests;
 
 public class Tests
 {
-    private static IEnumerable<IStack> stacks
-    {
-        get
+    private static IEnumerable<TestCaseData> Stacks
+        => new TestCaseData[]
         {
-            yield return new ArrayStack();
-            yield return new ListStack();
-        }
-    }
+        new TestCaseData(new ArrayStack()),
+        new TestCaseData(new ListStack()),
+        };
     
-    [Test, TestCaseSource(nameof(stacks))]
+    [Test, TestCaseSource(nameof(Stacks))]
     public void CalculatorShouldWorkOnCorrectInput(IStack stack)
     {
         Assert.AreEqual(StackCalculator.Evaluate("2 3 + 1 - 9 *", stack), 36.0);
@@ -24,7 +22,7 @@ public class Tests
         Assert.AreEqual(StackCalculator.Evaluate("64 2 * 2 /", stack), 64.0);
     }
 
-    [Test, TestCaseSource(nameof(stacks))]
+    [Test, TestCaseSource(nameof(Stacks))]
     public void CalculatorShouldNotWorkOnIncorrectInput(IStack stack)
     {
         Assert.IsNull(StackCalculator.Evaluate("2 3 - - - 9", stack));
@@ -33,15 +31,14 @@ public class Tests
         Assert.IsNull(StackCalculator.Evaluate("2 3+ 3 -", stack));
     }
 
-    [Test, TestCaseSource(nameof(stacks))]
+    [Test, TestCaseSource(nameof(Stacks))]
     public void CalculatorShouldThrowExceptionWhenDividingByZero(IStack stack)
     {
-        var exception = Assert.Throws<DivideByZeroException>(
+        Assert.Throws<DivideByZeroException>(
             () => StackCalculator.Evaluate("9 0 /", stack));
-        Assert.That(exception.Message, Is.EqualTo("Division by zero"));
     }
 
-    [Test, TestCaseSource(nameof(stacks))]
+    [Test, TestCaseSource(nameof(Stacks))]
     public void CalculatorShouldWorkWithNegativeNumbers(IStack stack)
     {
         Assert.AreEqual(StackCalculator.Evaluate("-3 -6 + 9 * -9 /", stack), 9.0);

@@ -56,7 +56,7 @@ public static class StackCalculator
                             case "/":
                                 if (firstOperand.Equals(0.0))
                                 {
-                                    throw new DivideByZeroException("Division by zero");
+                                    throw new DivideByZeroException();
                                 }
                                 stack.Push((double)secondOperand / (double)firstOperand);
                                 break;
