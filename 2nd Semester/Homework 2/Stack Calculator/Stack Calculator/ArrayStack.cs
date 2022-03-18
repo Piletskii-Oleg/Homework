@@ -25,12 +25,13 @@ public class ArrayStack : IStack
     /// <param name="element">Element to add.</param>
     public void Push(double element)
     {
-        if (currentIndex == capacity)
+        if (this.currentIndex == this.capacity)
         {
-            capacity += 15;
-            Array.Resize(ref stack, capacity);
+            this.capacity += 15;
+            Array.Resize(ref this.stack, this.capacity);
         }
-        stack[currentIndex++] = element;
+
+        this.stack[this.currentIndex++] = element;
     }
 
     /// <summary>
@@ -38,7 +39,7 @@ public class ArrayStack : IStack
     /// </summary>
     /// <returns>Last element from the stack.</returns>
     public double? Pop()
-      => (currentIndex != 0) ? stack[--currentIndex] : null;
+      => (this.currentIndex != 0) ? this.stack[--this.currentIndex] : null;
 
     /// <summary>
     /// Checks if stack is empty.

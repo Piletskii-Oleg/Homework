@@ -58,14 +58,17 @@ public static class StackCalculator
                                 {
                                     throw new DivideByZeroException();
                                 }
+
                                 stack.Push((double)secondOperand / (double)firstOperand);
                                 break;
+                            default:
+                                return null;
                         }
+
                         break;
 
                     default:
                         return null;
-                        break;
                 }
             }
         }

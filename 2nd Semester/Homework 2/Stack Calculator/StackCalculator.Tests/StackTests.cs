@@ -7,30 +7,28 @@ namespace Stack.Tests;
 
 public class Tests
 {
-    private static IEnumerable<IStack> stacks
+    private static IEnumerable<TestCaseData> Stacks
+    => new TestCaseData[]
     {
-        get
-        {
-            yield return new ArrayStack();
-            yield return new ListStack();
-        }
-    }
+        new TestCaseData(new ArrayStack()),
+        new TestCaseData(new ListStack()),
+    };
 
-    [Test, TestCaseSource(nameof(stacks))]
+    [Test, TestCaseSource(nameof(Stacks))]
     public void PushShouldWork(IStack stack)
     {
         stack.Push(1.6);
         Assert.IsFalse(stack.IsEmpty());
     }
 
-    [Test, TestCaseSource(nameof(stacks))]
+    [Test, TestCaseSource(nameof(Stacks))]
     public void PopShouldReturnSameResultAsPush(IStack stack)
     {
         stack.Push(8.1);
         Assert.AreEqual(stack.Pop(), 8.1);
     }
 
-    [Test, TestCaseSource(nameof(stacks))]
+    [Test, TestCaseSource(nameof(Stacks))]
     public void ResultsAfterPushesAndPopsShouldBeCorrect(IStack stack)
     {
         stack.Push(8.1);
@@ -41,14 +39,14 @@ public class Tests
         Assert.AreEqual(stack.Pop(), 8.1);
     }
 
-    [Test, TestCaseSource(nameof(stacks))]
+    [Test, TestCaseSource(nameof(Stacks))]
     public void StackShouldNotBeEmptyAfterPush(IStack stack)
     {
         stack.Push(1.2);
         Assert.IsFalse(stack.IsEmpty());
     }
 
-    [Test, TestCaseSource(nameof(stacks))]
+    [Test, TestCaseSource(nameof(Stacks))]
     public void StackShouldBeEmptyAfterPop(IStack stack)
     {
         stack.Push(1.3);
