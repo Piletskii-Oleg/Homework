@@ -6,29 +6,29 @@
 internal class Vertex
 {
     /// <summary>
+    /// Initializes a new instance of the <see cref="Vertex"/> class.
+    /// </summary>
+    public Vertex()
+    {
+        this.Next = new Vertex[256];
+        this.IsTerminal = false;
+        this.HowManyFollow = 0;
+    }
+
+    /// <summary>
     /// Gets or sets array in which every index corresponds to the index of the next char element.
     /// </summary>
     public Vertex?[] Next { get; set; }
 
     /// <summary>
-    /// Gets or sets value indicating whether the vertex is terminal or not.
+    /// Gets or sets a value indicating whether the vertex is terminal or not.
     /// </summary>
     public bool IsTerminal { get; set; }
 
     /// <summary>
-    /// Gets or sets value indicating how many words there are that have this vertex in them.
+    /// Gets or sets a value indicating how many words there are that have this vertex in them.
     /// </summary>
     public int HowManyFollow { get; set; }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Vertex"/> class.
-    /// </summary>
-    public Vertex()
-    {
-        Next = new Vertex[256];
-        IsTerminal = false;
-        HowManyFollow = 0;
-    }
 }
 
 /// <summary>
@@ -59,7 +59,7 @@ public class Trie
     /// <returns>True if the element was not present in the Trie and false otherwise.</returns>
     public bool Add(string element)
     {
-        Vertex currentElement = this.head;
+        Vertex? currentElement = this.head;
         bool wordIsNew = false;
         foreach (char c in element)
         {
@@ -69,6 +69,7 @@ public class Trie
                 currentElement.Next[currentIndex] = new Vertex();
                 wordIsNew = true;
             }
+
             currentElement.HowManyFollow++;
             currentElement = currentElement.Next[currentIndex];
         }
@@ -77,7 +78,7 @@ public class Trie
         currentElement.IsTerminal = true;
         if (wordIsNew)
         {
-            Size++;
+            this.Size++;
             return true;
         }
         else
@@ -89,6 +90,7 @@ public class Trie
                 currentElement.HowManyFollow--;
                 currentElement = currentElement.Next[currentIndex];
             }
+
             return false;
         }
     }
@@ -100,7 +102,7 @@ public class Trie
     /// <returns>True if the element is present and false otherwise.</returns>
     public bool Contains(string element)
     {
-        Vertex currentElement = this.head;
+        Vertex? currentElement = this.head;
         foreach (char c in element)
         {
             int currentIndex = c;
@@ -108,8 +110,10 @@ public class Trie
             {
                 return false;
             }
+
             currentElement = currentElement.Next[currentIndex];
         }
+
         return true;
     }
 
@@ -128,6 +132,7 @@ public class Trie
             {
                 return false;
             }
+
             currentElement = currentElement.Next[currentIndex];
         }
 
@@ -154,8 +159,9 @@ public class Trie
                     currentElement = currentElement.Next[currentIndex];
                 }
             }
+
             currentElement.IsTerminal = false;
-            Size--;
+            this.Size--;
             return true;
         }
         else
@@ -171,7 +177,7 @@ public class Trie
     /// <returns>The amount of words starting with the given prefix.</returns>
     public int HowManyStartsWithPrefix(string prefix)
     {
-        Vertex currentElement = this.head;
+        Vertex? currentElement = this.head;
         foreach (char c in prefix)
         {
             int currentIndex = c;
@@ -179,8 +185,10 @@ public class Trie
             {
                 return 0;
             }
+
             currentElement = currentElement.Next[currentIndex];
         }
+
         return currentElement.HowManyFollow;
     }
 }
