@@ -1,8 +1,8 @@
 ﻿namespace StackCalculator;
 
-class Program
+internal static class Program
 {
-    static void Main(string[] args)
+    private static void Main(string[] args)
     {
         string? input = null;
         Console.WriteLine("Введите \"Выход\", чтобы выйти.\n");

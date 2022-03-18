@@ -11,25 +11,25 @@ public class ListStack : IStack
     internal class Node
     {
         /// <summary>
-        /// Gets or sets value stored in an element.
-        /// </summary>
-        public double Value { get; set; }
-
-        /// <summary>
-        /// Gets or sets points to the next element.
-        /// </summary>
-        public Node? Next { get; set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Node"/> class.
         /// </summary>
         /// <param name="value">Value of the current element.</param>
         /// <param name="next">Points to the next element.</param>
         public Node(double value, Node? next)
         {
-            Value = value;
-            Next = next;
+            this.Value = value;
+            this.Next = next;
         }
+
+        /// <summary>
+        /// Gets or sets a value stored in an element.
+        /// </summary>
+        public double Value { get; set; }
+
+        /// <summary>
+        /// Points to the next element.
+        /// </summary>
+        public Node? Next { get; set; }
     }
 
     private Node? root;
@@ -39,7 +39,7 @@ public class ListStack : IStack
     /// </summary>
     /// <param name="value">An element to push.</param>
     public void Push(double value)
-        => root = new Node(value, root);
+        => this.root = new Node(value, this.root);
 
     /// <summary>
     /// Remove an element from the top of stack and returns its value.
@@ -47,8 +47,8 @@ public class ListStack : IStack
     /// <returns>Value from the top of the stack.</returns>
     public double? Pop()
     {
-        double? removed = root?.Value ?? null;
-        root = root?.Next;
+        double? removed = this.root?.Value ?? null;
+        this.root = this.root?.Next;
         return removed;
     }
 
@@ -57,5 +57,5 @@ public class ListStack : IStack
     /// </summary>
     /// <returns>Returns true if the stack is empty and false otherwise.</returns>
     public bool IsEmpty()
-       => root == null;
+       => this.root == null;
 }

@@ -23,4 +23,3 @@ public interface IStack
     /// <returns>Returns true if the stack is empty and false otherwise.</returns>
     bool IsEmpty();
 }
-
