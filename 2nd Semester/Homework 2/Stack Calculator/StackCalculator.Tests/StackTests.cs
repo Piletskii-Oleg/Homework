@@ -8,7 +8,7 @@ namespace Stack.Tests;
 public class Tests
 {
     private static IEnumerable<TestCaseData> Stacks
-    => new TestCaseData[]
+    => new[]
     {
         new TestCaseData(new ArrayStack()),
         new TestCaseData(new ListStack()),
