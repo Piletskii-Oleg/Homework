@@ -1,43 +1,42 @@
-﻿namespace TaskOne
+﻿namespace TaskOne;
+
+public static class Program
 {
-    class Program
+    private static void Swap(int[] array, int index1, int index2)
     {
-        private static void Swap(int[] array, int index1, int index2)
-        {
-            int temp = array[index1];
-            array[index1] = array[index2];
-            array[index2] = temp;
-        }
+        int temp = array[index1];
+        array[index1] = array[index2];
+        array[index2] = temp;
+    }
 
-        private static void BubbleSort(int[] array)
+    private static void BubbleSort(int[] array)
+    {
+        for (int i = 0; i < array.Length - 1; i++)
         {
-            for (int i = 0; i < array.Length - 1; i++)
+            bool swapped = false;
+            for (int j = 0; j < array.Length - i - 1; j++)
             {
-                bool swapped = false;
-                for (int j = 0; j < array.Length - i - 1; j++)
+                if (array[j] > array[j + 1])
                 {
-                    if (array[j] > array[j + 1])
-                    {
-                        Swap(array, j, j + 1);
-                        swapped = true;
-                    }
-                }
-
-                if (!swapped)
-                {
-                    break;
+                    Swap(array, j, j + 1);
+                    swapped = true;
                 }
             }
-        }
 
-        private static void Main(string[] args)
-        {
-            int[] array = { 6, 9, 55, 67, 93, 4 };
-            BubbleSort(array);
-            foreach (int i in array)
+            if (!swapped)
             {
-                Console.WriteLine(i);
+                break;
             }
+        }
+    }
+
+    private static void Main(string[] args)
+    {
+        int[] array = { 6, 9, 55, 67, 93, 4 };
+        BubbleSort(array);
+        foreach (int i in array)
+        {
+            Console.WriteLine(i);
         }
     }
 }

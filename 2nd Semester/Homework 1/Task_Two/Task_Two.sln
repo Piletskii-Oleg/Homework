@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTwo", "Task_Two\TaskTwo.csproj", "{EA965A26-E2CC-47FF-B7DC-D250FFE96DE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BWTransform", "Task_Two\BWTransform.csproj", "{EA965A26-E2CC-47FF-B7DC-D250FFE96DE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BWTransform.Tests", "BWTransform.Tests\BWTransform.Tests.csproj", "{CBFFEDDF-9703-4D03-A4DF-97E48D235690}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{EA965A26-E2CC-47FF-B7DC-D250FFE96DE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA965A26-E2CC-47FF-B7DC-D250FFE96DE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA965A26-E2CC-47FF-B7DC-D250FFE96DE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBFFEDDF-9703-4D03-A4DF-97E48D235690}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBFFEDDF-9703-4D03-A4DF-97E48D235690}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBFFEDDF-9703-4D03-A4DF-97E48D235690}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBFFEDDF-9703-4D03-A4DF-97E48D235690}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
