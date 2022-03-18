@@ -8,7 +8,7 @@ internal class Vertex
     /// <summary>
     /// Gets or sets array in which every index corresponds to the index of the next char element.
     /// </summary>
-    public Vertex[] Next { get; set; }
+    public Vertex?[] Next { get; set; }
 
     /// <summary>
     /// Gets or sets value indicating whether the vertex is terminal or not.
@@ -36,12 +36,7 @@ internal class Vertex
 /// </summary>
 public class Trie
 {
-    private Vertex head;
-
-    /// <summary>
-    /// Gets or sets the amount of words in the Trie.
-    /// </summary>
-    public int Size { get; set; }
+    private readonly Vertex head;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Trie"/> class.
@@ -51,6 +46,11 @@ public class Trie
         this.head = new Vertex();
         this.Size = 0;
     }
+
+    /// <summary>
+    /// Gets or sets the amount of words in the Trie.
+    /// </summary>
+    public int Size { get; set; }
 
     /// <summary>
     /// Adds an element to the Trie.
@@ -89,7 +89,6 @@ public class Trie
                 currentElement.HowManyFollow--;
                 currentElement = currentElement.Next[currentIndex];
             }
-            currentElement.HowManyFollow--;
             return false;
         }
     }
