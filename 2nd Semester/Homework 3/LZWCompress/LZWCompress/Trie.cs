@@ -1,0 +1,203 @@
+﻿namespace LZWCompress;
+
+/// <summary>
+/// Single vertex of a prefix tree.
+/// </summary>
+internal class Vertex
+{
+    /// <summary>
+    /// Gets or sets array in which every index corresponds to the index of the next char element.
+    /// </summary>
+    public Vertex[] Next { get; set; }
+
+    /// <summary>
+    /// Gets or sets value indicating whether the vertex is terminal or not.
+    /// </summary>
+    public bool IsTerminal { get; set; }
+
+    /// <summary>
+    /// Gets or sets value indicating how many words there are that have this vertex in them.
+    /// </summary>
+    public int HowManyFollow { get; set; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Vertex"/> class.
+    /// </summary>
+    
+    public int NumberInDictionary { get; set; }
+
+    public Vertex()
+    {
+        Next = new Vertex[256];
+        IsTerminal = false;
+        HowManyFollow = 0;
+        NumberInDictionary = 0;
+    }
+}
+
+/// <summary>
+/// Prefix tree data structure.
+/// </summary>
+public class Trie
+{
+    private Vertex head;
+
+    /// <summary>
+    /// Gets or sets the amount of words in the Trie.
+    /// </summary>
+    public int Size { get; set; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Trie"/> class.
+    /// </summary>
+    public Trie()
+    {
+        this.head = new Vertex();
+        this.Size = 0;
+    }
+
+    /// <summary>
+    /// Adds an element to the Trie.
+    /// </summary>
+    /// <param name="element">An element to add.</param>
+    /// <returns>True if the element was not present in the Trie and false otherwise.</returns>
+    public bool Add(string element, int numberInDictionary)
+    {
+        Vertex currentElement = this.head;
+        bool wordIsNew = false;
+        foreach (char c in element)
+        {
+            int currentIndex = c;
+            if (currentElement.Next[currentIndex] == null)
+            {
+                currentElement.Next[currentIndex] = new Vertex();
+                wordIsNew = true;
+            }
+            currentElement.HowManyFollow++;
+            currentElement = currentElement.Next[currentIndex];
+        }
+
+        currentElement.HowManyFollow++;
+        currentElement.IsTerminal = true;
+        if (wordIsNew)
+        {
+            Size++;
+            currentElement.NumberInDictionary = numberInDictionary;
+            return true;
+        }
+        else
+        {
+            foreach (char c in element)
+            {
+                currentElement = this.head;
+                int currentIndex = c;
+                currentElement.HowManyFollow--;
+                currentElement = currentElement.Next[currentIndex];
+            }
+            currentElement.HowManyFollow--;
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Checks if the element is present in the Trie.
+    /// </summary>
+    /// <param name="element">An element to check.</param>
+    /// <returns>True if the element is present and false otherwise.</returns>
+    public bool Contains(string element)
+    {
+        Vertex currentElement = this.head;
+        foreach (char c in element)
+        {
+            int currentIndex = c;
+            if (currentElement.Next[currentIndex] == null)
+            {
+                return false;
+            }
+            currentElement = currentElement.Next[currentIndex];
+        }
+        return true;
+    }
+
+    public int getNumber(string element)
+    {
+        Vertex currentElement = this.head;
+        foreach (char c in element)
+        {
+            int currentIndex = c;
+            currentElement = currentElement.Next[currentIndex];
+        }
+        return currentElement.NumberInDictionary;
+    }
+
+    /// <summary>
+    /// Removes an element from the Trie.
+    /// </summary>
+    /// <param name="element">An element to remove.</param>
+    /// <returns>True if the element was present and false otherwise.</returns>
+    public bool Remove(string element)
+    {
+        Vertex? currentElement = this.head;
+        foreach (char c in element)
+        {
+            int currentIndex = c;
+            if (currentElement.Next[currentIndex] == null)
+            {
+                return false;
+            }
+            currentElement = currentElement.Next[currentIndex];
+        }
+
+        if (currentElement.IsTerminal)
+        {
+            currentElement = this.head;
+            foreach (char c in element)
+            {
+                int currentIndex = c;
+                if (currentElement.Next[currentIndex] == null)
+                {
+                    return false;
+                }
+
+                currentElement.HowManyFollow--;
+                if (currentElement.HowManyFollow == 0)
+                {
+                    var next = currentElement.Next[currentIndex];
+                    currentElement.Next[currentIndex] = null;
+                    currentElement = next;
+                }
+                else
+                {
+                    currentElement = currentElement.Next[currentIndex];
+                }
+            }
+            currentElement.IsTerminal = false;
+            Size--;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Shows how many words start with the given prefix.
+    /// </summary>
+    /// <param name="prefix">The given prefix.</param>
+    /// <returns>The amount of words starting with the given prefix.</returns>
+    public int HowManyStartsWithPrefix(string prefix)
+    {
+        Vertex currentElement = this.head;
+        foreach (char c in prefix)
+        {
+            int currentIndex = c;
+            if (currentElement.Next[currentIndex] == null)
+            {
+                return 0;
+            }
+            currentElement = currentElement.Next[currentIndex];
+        }
+        return currentElement.HowManyFollow;
+    }
+}
