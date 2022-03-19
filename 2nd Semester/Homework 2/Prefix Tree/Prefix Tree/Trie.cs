@@ -10,15 +10,15 @@ internal class Vertex
     /// </summary>
     public Vertex()
     {
-        this.Next = new Vertex[256];
+        this.Next = new Dictionary<char, Vertex?>();
         this.IsTerminal = false;
         this.HowManyFollow = 0;
     }
 
     /// <summary>
-    /// Gets or sets array in which every index corresponds to the index of the next char element.
+    /// Gets or sets a dictionary which has pointers to the next elements.
     /// </summary>
-    public Vertex?[] Next { get; set; }
+    public Dictionary<char, Vertex?> Next { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the vertex is terminal or not.
@@ -63,15 +63,14 @@ public class Trie
         bool wordIsNew = false;
         foreach (char c in element)
         {
-            int currentIndex = c;
-            if (currentElement.Next[currentIndex] == null)
+            if (!currentElement.Next.ContainsKey(c))
             {
-                currentElement.Next[currentIndex] = new Vertex();
+                currentElement.Next.Add(c, new Vertex());
                 wordIsNew = true;
             }
 
             currentElement.HowManyFollow++;
-            currentElement = currentElement.Next[currentIndex];
+            currentElement = currentElement.Next[c];
         }
 
         currentElement.HowManyFollow++;
@@ -83,12 +82,11 @@ public class Trie
         }
         else
         {
+            currentElement = this.head;
             foreach (char c in element)
             {
-                currentElement = this.head;
-                int currentIndex = c;
                 currentElement.HowManyFollow--;
-                currentElement = currentElement.Next[currentIndex];
+                currentElement = currentElement.Next[c];
             }
 
             return false;
@@ -105,13 +103,12 @@ public class Trie
         Vertex? currentElement = this.head;
         foreach (char c in element)
         {
-            int currentIndex = c;
-            if (currentElement.Next[currentIndex] == null)
+            if (!currentElement.Next.ContainsKey(c))
             {
                 return false;
             }
 
-            currentElement = currentElement.Next[currentIndex];
+            currentElement = currentElement.Next[c];
         }
 
         return true;
@@ -127,13 +124,12 @@ public class Trie
         Vertex? currentElement = this.head;
         foreach (char c in element)
         {
-            int currentIndex = c;
-            if (currentElement.Next[currentIndex] == null)
+            if (!currentElement.Next.ContainsKey(c))
             {
                 return false;
             }
 
-            currentElement = currentElement.Next[currentIndex];
+            currentElement = currentElement.Next[c];
         }
 
         if (currentElement.IsTerminal)
@@ -141,8 +137,7 @@ public class Trie
             currentElement = this.head;
             foreach (char c in element)
             {
-                int currentIndex = c;
-                if (currentElement.Next[currentIndex] == null)
+                if (!currentElement.Next.ContainsKey(c))
                 {
                     return false;
                 }
@@ -150,13 +145,13 @@ public class Trie
                 currentElement.HowManyFollow--;
                 if (currentElement.HowManyFollow == 0)
                 {
-                    var next = currentElement.Next[currentIndex];
-                    currentElement.Next[currentIndex] = null;
+                    var next = currentElement.Next[c];
+                    currentElement.Next.Remove(c);
                     currentElement = next;
                 }
                 else
                 {
-                    currentElement = currentElement.Next[currentIndex];
+                    currentElement = currentElement.Next[c];
                 }
             }
 
@@ -180,13 +175,12 @@ public class Trie
         Vertex? currentElement = this.head;
         foreach (char c in prefix)
         {
-            int currentIndex = c;
-            if (currentElement.Next[currentIndex] == null)
+            if (!currentElement.Next.ContainsKey(c))
             {
                 return 0;
             }
 
-            currentElement = currentElement.Next[currentIndex];
+            currentElement = currentElement.Next[c];
         }
 
         return currentElement.HowManyFollow;
