@@ -12,6 +12,7 @@ internal static class Program
                 "Введите \"Выход\", чтобы выйти из программы.");
         while (input != "Выход")
         {
+            Console.Write("Введите номер действия: ");
             input = Console.ReadLine();
             switch (input)
             {
@@ -99,12 +100,13 @@ internal static class Program
                 case "5":
                     Console.WriteLine($"Размер дерева: {trie.Size}");
                     break;
+                case "Выход":
+                    Console.WriteLine("Выход из программы...\n");
+                    break;
                 default:
                     Console.WriteLine("Ошибка!");
                     break;
             }
-
-            Console.Write("Введите номер действия: ");
         }
     }
 }
