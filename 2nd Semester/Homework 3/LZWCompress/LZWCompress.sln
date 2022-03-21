@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LZWCompress", "LZWCompress\LZWCompress.csproj", "{2BD38295-A978-491E-84C9-B4760C21C336}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LZWCompress.Tests", "LZWCompress.Tests\LZWCompress.Tests.csproj", "{4D2C0D61-74FE-4FC9-9FBD-6C88F33F5CD7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LZWCompress.Tests", "LZWCompress.Tests\LZWCompress.Tests.csproj", "{4D2C0D61-74FE-4FC9-9FBD-6C88F33F5CD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -6,33 +6,35 @@
 internal class Vertex
 {
     /// <summary>
-    /// Gets or sets array in which every index corresponds to the index of the next char element.
+    /// Initializes a new instance of the <see cref="Vertex"/> class.
     /// </summary>
-    public Vertex[] Next { get; set; }
+    public Vertex()
+    {
+        this.Next = new Dictionary<byte, Vertex?>();
+        this.IsTerminal = false;
+        this.HowManyFollow = 0;
+        this.NumberInDictionary = 0;
+    }
 
     /// <summary>
-    /// Gets or sets value indicating whether the vertex is terminal or not.
+    /// Gets or sets a dictionary which has pointers to the next elements.
+    /// </summary>
+    public Dictionary<byte, Vertex?> Next { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the vertex is terminal or not.
     /// </summary>
     public bool IsTerminal { get; set; }
 
     /// <summary>
-    /// Gets or sets value indicating how many words there are that have this vertex in them.
+    /// Gets or sets a value indicating how many words there are that have this vertex in them.
     /// </summary>
     public int HowManyFollow { get; set; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Vertex"/> class.
+    /// Gets or sets a value indicating the number of the word in dictionary.
     /// </summary>
-    
     public int NumberInDictionary { get; set; }
-
-    public Vertex()
-    {
-        Next = new Vertex[256];
-        IsTerminal = false;
-        HowManyFollow = 0;
-        NumberInDictionary = 0;
-    }
 }
 
 /// <summary>
@@ -40,12 +42,7 @@ internal class Vertex
 /// </summary>
 public class Trie
 {
-    private Vertex head;
-
-    /// <summary>
-    /// Gets or sets the amount of words in the Trie.
-    /// </summary>
-    public int Size { get; set; }
+    private readonly Vertex head;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Trie"/> class.
@@ -57,46 +54,61 @@ public class Trie
     }
 
     /// <summary>
+    /// Gets or sets the amount of words in the Trie.
+    /// </summary>
+    public int Size { get; set; }
+
+    /// <summary>
     /// Adds an element to the Trie.
     /// </summary>
     /// <param name="element">An element to add.</param>
     /// <returns>True if the element was not present in the Trie and false otherwise.</returns>
-    public bool Add(string element, int numberInDictionary)
+    public bool Add(byte[] element, int numberInDictionary)
     {
-        Vertex currentElement = this.head;
+        Vertex? currentElement = this.head;
         bool wordIsNew = false;
-        foreach (char c in element)
+        foreach (byte b in element)
         {
-            int currentIndex = c;
-            if (currentElement.Next[currentIndex] == null)
+            if (!currentElement.Next.ContainsKey(b))
             {
-                currentElement.Next[currentIndex] = new Vertex();
+                currentElement.Next.Add(b, new Vertex());
                 wordIsNew = true;
             }
+
             currentElement.HowManyFollow++;
-            currentElement = currentElement.Next[currentIndex];
+            currentElement = currentElement.Next[b];
         }
 
         currentElement.HowManyFollow++;
         currentElement.IsTerminal = true;
         if (wordIsNew)
         {
-            Size++;
+            this.Size++;
             currentElement.NumberInDictionary = numberInDictionary;
             return true;
         }
         else
         {
-            foreach (char c in element)
+            currentElement = this.head;
+            foreach (byte b in element)
             {
-                currentElement = this.head;
-                int currentIndex = c;
                 currentElement.HowManyFollow--;
-                currentElement = currentElement.Next[currentIndex];
+                currentElement = currentElement.Next[b];
             }
-            currentElement.HowManyFollow--;
+
             return false;
         }
+    }
+
+    public int GetNumberInDictionary(byte[] element)
+    {
+        var currentElement = this.head;
+        foreach (byte b in element)
+        {
+            currentElement = currentElement.Next[b];
+        }
+        return currentElement.NumberInDictionary;
+        
     }
 
     /// <summary>
@@ -104,30 +116,20 @@ public class Trie
     /// </summary>
     /// <param name="element">An element to check.</param>
     /// <returns>True if the element is present and false otherwise.</returns>
-    public bool Contains(string element)
+    public bool Contains(byte[] element)
     {
-        Vertex currentElement = this.head;
-        foreach (char c in element)
+        Vertex? currentElement = this.head;
+        foreach (byte b in element)
         {
-            int currentIndex = c;
-            if (currentElement.Next[currentIndex] == null)
+            if (!currentElement.Next.ContainsKey(b))
             {
                 return false;
             }
-            currentElement = currentElement.Next[currentIndex];
-        }
-        return true;
-    }
 
-    public int getNumber(string element)
-    {
-        Vertex currentElement = this.head;
-        foreach (char c in element)
-        {
-            int currentIndex = c;
-            currentElement = currentElement.Next[currentIndex];
+            currentElement = currentElement.Next[b];
         }
-        return currentElement.NumberInDictionary;
+        
+        return true;
     }
 
     /// <summary>
@@ -135,26 +137,25 @@ public class Trie
     /// </summary>
     /// <param name="element">An element to remove.</param>
     /// <returns>True if the element was present and false otherwise.</returns>
-    public bool Remove(string element)
+    public bool Remove(byte[] element)
     {
         Vertex? currentElement = this.head;
-        foreach (char c in element)
+        foreach (byte b in element)
         {
-            int currentIndex = c;
-            if (currentElement.Next[currentIndex] == null)
+            if (!currentElement.Next.ContainsKey(b))
             {
                 return false;
             }
-            currentElement = currentElement.Next[currentIndex];
+
+            currentElement = currentElement.Next[b];
         }
 
         if (currentElement.IsTerminal)
         {
             currentElement = this.head;
-            foreach (char c in element)
+            foreach (byte b in element)
             {
-                int currentIndex = c;
-                if (currentElement.Next[currentIndex] == null)
+                if (!currentElement.Next.ContainsKey(b))
                 {
                     return false;
                 }
@@ -162,17 +163,18 @@ public class Trie
                 currentElement.HowManyFollow--;
                 if (currentElement.HowManyFollow == 0)
                 {
-                    var next = currentElement.Next[currentIndex];
-                    currentElement.Next[currentIndex] = null;
+                    var next = currentElement.Next[b];
+                    currentElement.Next.Remove(b);
                     currentElement = next;
                 }
                 else
                 {
-                    currentElement = currentElement.Next[currentIndex];
+                    currentElement = currentElement.Next[b];
                 }
             }
+
             currentElement.IsTerminal = false;
-            Size--;
+            this.Size--;
             return true;
         }
         else
@@ -186,18 +188,19 @@ public class Trie
     /// </summary>
     /// <param name="prefix">The given prefix.</param>
     /// <returns>The amount of words starting with the given prefix.</returns>
-    public int HowManyStartsWithPrefix(string prefix)
+    public int HowManyStartsWithPrefix(byte[] prefix)
     {
-        Vertex currentElement = this.head;
-        foreach (char c in prefix)
+        Vertex? currentElement = this.head;
+        foreach (byte b in prefix)
         {
-            int currentIndex = c;
-            if (currentElement.Next[currentIndex] == null)
+            if (!currentElement.Next.ContainsKey(b))
             {
                 return 0;
             }
-            currentElement = currentElement.Next[currentIndex];
+
+            currentElement = currentElement.Next[b];
         }
+
         return currentElement.HowManyFollow;
     }
 }
