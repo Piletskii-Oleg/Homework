@@ -8,9 +8,8 @@ using System.Collections;
 
 namespace LZWCompress
 {
-    internal class LZW2
+    internal class LZW
     {
-
         public static void Encode(string path)
         {
             var trie = new Trie();
@@ -152,20 +151,6 @@ namespace LZWCompress
                             previousBytes.Add(currentBytes[0]);
                             dictionary.Add(dictionary.Count, previousBytes);
                             previousBytes = currentBytes.ToList();
-
-                            //if (numberInDictionary != dictionary.Count)
-                            //{
-                            //    previousBytes.Add(dictionary[numberInDictionary][0]);
-                            //    dictionary.Add(dictionary.Count, previousBytes);
-                            //}
-                            //else
-                            //{
-                            //    previousBytes.Add(previousBytes[0]);
-                            //    dictionary.Add(dictionary.Count, previousBytes);
-                            //}
-                            //writer.Write(dictionary[numberInDictionary].ToArray());
-                            //previousBytes = dictionary[numberInDictionary].ToList();
-
                             if (dictionary.Count >= Math.Pow(2, bitAmount) - 1)
                             {
                                 bitAmount++;
@@ -174,13 +159,6 @@ namespace LZWCompress
                         }
                         catch (EndOfStreamException)
                         {
-                            //var bitArray = new BitArray(previousBytes.ToArray());
-                            //int numberInDictionary = 0;
-                            //for (int i = 7; i >= 0; i--)
-                            //{
-                            //    numberInDictionary = numberInDictionary * 2 + (bitArray[i] ? 1 : 0);
-                            //}
-                            //writer.Write(dictionary[numberInDictionary].ToArray());
                             break;
                         }
                     }
