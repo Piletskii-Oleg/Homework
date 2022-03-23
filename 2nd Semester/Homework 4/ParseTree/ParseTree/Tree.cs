@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace ParseTree;
 
-namespace ParseTree;
 public class Node
 {
     public double Value { get; set; }
@@ -145,10 +140,10 @@ public class Tree
 
     public static void PrintTree(Node root)
     {
-        if (root == null)
-        {
-            return;
-        }
+        //if (root is Operator)
+        //{
+        //    root.Print();
+        //}
         if (root.Operation != null)
         {
             Console.Write($"( {root.Operation} ");

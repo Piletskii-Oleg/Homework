@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace ParseTree;
 
-namespace ParseTree
+public interface INode
 {
-    internal interface Interface1
-    {
-    }
+    public INode? LeftChild { get; set; }
+
+    public INode? RightChild { get; set; }
+
+    public INode? Parent { get; set; }
+
+    public double Evaluate();
+
+    public void Print();
 }

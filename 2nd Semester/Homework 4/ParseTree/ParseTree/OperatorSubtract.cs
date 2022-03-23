@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace ParseTree;
 
-namespace ParseTree
+internal class OperatorSubtract : Operator
 {
-    internal class OperatorMinus
+    public override double Evaluate()
     {
+        return LeftChild.Evaluate() - RightChild.Evaluate();
     }
 }
