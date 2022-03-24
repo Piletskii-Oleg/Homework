@@ -1,43 +1,15 @@
 ﻿namespace ParseTree;
 
-public class Node
-{
-    public double Value { get; set; }
-    public char? Operation { get; set; }
-    public Node? LeftChild { get; set; }
-    public Node? RightChild { get; set; }
-    public Node? Parent { get; set; }
-
-    public Node()
-    {
-        LeftChild = null;
-        RightChild = null;
-    }
-    public Node(Node parent)
-        : this()
-    {
-        this.Parent = parent;
-    }
-    public Node(Node parent, double value)
-        : this(parent)
-    {
-        this.Value = value;
-        this.Operation = null;
-    }
-    public Node(Node parent, char operation)
-        : this(parent)
-    {
-        this.Operation = operation;
-    }
-
-}
-
+/// <summary>
+/// 
+/// </summary>
 public class Tree
 {
-    public static Node CreateTree(string input)
+    public static INode CreateTree(string input)
     {
         string[] array = ParseInput(input);
-        Node? currentElement = null;
+        INode? currentElement = null;
+        Operator? operandNode = null;
         foreach (string item in array)
         {
             switch (item)
@@ -46,20 +18,66 @@ public class Tree
                 case " ":
                     continue;
                 case "+":
+                    operandNode = new OperatorAdd(currentElement, char.Parse(item));
+                    break;
+                case "-":
+                    operandNode = new OperatorSubtract(currentElement, char.Parse(item));
+                    break;
+                case "*":
+                    operandNode = new OperatorMultiply(currentElement, char.Parse(item));
+                    break;
+                case "/":
+                    operandNode = new OperatorDivide(currentElement, char.Parse(item));
+                    break;
+                case ")":
+                    if (currentElement.Parent != null)
+                    {
+                        currentElement = currentElement.Parent;
+                    }
+
+                    break;
+                default:
+                    int number;
+                    if (int.TryParse(item, out number))
+                    {
+                        var numberNode = new Operand(currentElement, number);
+                        if (currentElement.LeftChild is null)
+                        {
+                            currentElement.LeftChild = numberNode;
+                        }
+                        else if (currentElement.RightChild is null)
+                        {
+                            currentElement.RightChild = numberNode;
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException();
+                        }
+
+                        break;
+                    }
+                    else
+                    {
+                        throw new ArgumentException();
+                    }
+            }
+
+            switch (item)
+            {
+                case "+":
                 case "-":
                 case "*":
                 case "/":
-                    var operandNode = new Node(currentElement, char.Parse(item));
-                    if (currentElement == null)
+                    if (currentElement is null)
                     {
                         currentElement = operandNode;
                     }
-                    else if (currentElement.LeftChild == null)
+                    else if (currentElement.LeftChild is null)
                     {
                         currentElement.LeftChild = operandNode;
                         currentElement = currentElement.LeftChild;
                     }
-                    else if (currentElement.RightChild == null)
+                    else if (currentElement.RightChild is null)
                     {
                         currentElement.RightChild = operandNode;
                         currentElement = currentElement.RightChild;
@@ -68,37 +86,10 @@ public class Tree
                     {
                         throw new InvalidOperationException();
                     }
-                    break;
-                case ")":
-                    if (currentElement.Parent != null)
-                    {
-                        currentElement = currentElement.Parent;
-                    }
+
                     break;
                 default:
-                    int number;
-                    if (int.TryParse(item, out number))
-                    {
-                        var numberNode = new Node(currentElement, number);
-                        if (currentElement.LeftChild == null)
-                        {
-                            currentElement.LeftChild = numberNode;
-                        }
-                        else if (currentElement.RightChild == null)
-                        {
-                            currentElement.RightChild = numberNode;
-                        }
-                        else
-                        {
-                            throw new InvalidOperationException();
-                        }
-                        break;
-                    }
-                    else
-                    {
-                        throw new ArgumentException();
-                    }
-
+                    break;
             }
         }
 
@@ -107,59 +98,21 @@ public class Tree
         return currentElement;
     }
 
-    public static double CalculateValue(Node root)
-    {
-        if (root.LeftChild == null && root.RightChild == null)
-        {
-            return root.Value;
-        }
-        double firstOperand = CalculateValue(root.LeftChild);
-        double secondOperand = CalculateValue(root.RightChild);
-        double result = 0;
-        switch (root.Operation)
-        {
-            case '*':
-                result = firstOperand * secondOperand;
-                break;
-            case '+':
-                result = firstOperand + secondOperand;
-                break;
-            case '-':
-                result = firstOperand - secondOperand;
-                break;
-            case '/':
-                if (secondOperand.Equals(0.0))
-                {
-                    throw new DivideByZeroException();
-                }
-                result = firstOperand / secondOperand;
-                break;
-        }
-        return result;
-    }
+    public static double CalculateValue(INode root)
+        => root.Evaluate();
 
-    public static void PrintTree(Node root)
+    public static void PrintTree(INode root)
     {
-        //if (root is Operator)
-        //{
-        //    root.Print();
-        //}
-        if (root.Operation != null)
+        root.Print();
+        if (root.LeftChild is not null)
         {
-            Console.Write($"( {root.Operation} ");
+            PrintTree(root.LeftChild);
         }
-        else
+
+        if (root.RightChild is not null)
         {
-            Console.Write($"{root.Value} ");
-            var currentNode = root;
-            while (currentNode.Parent != null && currentNode.Parent.RightChild == currentNode)
-            {
-                Console.Write(") ");
-                currentNode = currentNode.Parent;
-            }
+            PrintTree(root.RightChild);
         }
-        PrintTree(root.LeftChild);
-        PrintTree(root.RightChild);
     }
 
     private static string[] ParseInput(string input)
@@ -189,16 +142,18 @@ public class Tree
                         {
                             newElements.Add(c.ToString());
                         }
+
                         parsed.RemoveAt(i);
                         for (int j = 0; j < newElements.Count; j++)
                         {
                             parsed.Insert(i + j, newElements[j]);
                         }
+
                         break;
                     }
             }
         }
+
         return parsed.ToArray();
     }
 }
-

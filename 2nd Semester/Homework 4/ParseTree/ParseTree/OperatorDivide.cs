@@ -1,7 +1,10 @@
 ﻿namespace ParseTree;
 
-internal class OperatorDivide : Operator
+public class OperatorDivide : Operator
 {
+    public OperatorDivide(INode parent, char operation)
+        : base(parent, operation) { }
+
     public override double Evaluate()
     {
         double firstOperand = LeftChild.Evaluate();

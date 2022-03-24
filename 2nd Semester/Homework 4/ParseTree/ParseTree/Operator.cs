@@ -1,6 +1,6 @@
 ﻿namespace ParseTree;
 
-internal abstract class Operator : INode
+public abstract class Operator : INode
 {
     public INode? LeftChild { get; set; }
 
@@ -13,8 +13,12 @@ internal abstract class Operator : INode
     public abstract double Evaluate();
 
     public void Print()
+        => Console.Write($"( {Operation} ");
+
+    public Operator(INode parent, char operation)
     {
-        Console.Write($"( {Operation}");
+        Parent = parent;
+        Operation = operation;
     }
 
 }

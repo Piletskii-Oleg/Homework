@@ -1,6 +1,6 @@
 ﻿namespace ParseTree;
 
-internal class Operand : INode
+public class Operand : INode
 {
     public INode? LeftChild { get; set; }
 
@@ -10,16 +10,20 @@ internal class Operand : INode
 
     public int Value { get; set; }
 
-    public double Evaluate()
+    public Operand(INode parent, int value)
     {
-        return Value;
+        Parent = parent;
+        Value = value;
     }
+
+    public double Evaluate()
+        => Value;
 
     public void Print()
     {
         if (Parent.RightChild == this)
         {
-            Console.Write($"{Value} )");
+            Console.Write($"{Value} ) ");
         }
         else
         {
