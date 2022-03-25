@@ -22,11 +22,10 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
     - name: Install dependencies
-      run: dotnet restore
-      working-directory: 2nd Semester/Homework 4/ParseTree/ParseTree
+      run: dotnet restore ./2nd Semester/Homework 4/ParseTree/ParseTree
       
     - name: Build
-      run: dotnet build 
+      run: dotnet build 2nd Semester/Homework 4/ParseTree/ParseTree.csproj --configuration Release --no-restore
       
     - name: Run tests
-      run: dotnet test
+      run: dotnet test --configuration Release --no-restore
