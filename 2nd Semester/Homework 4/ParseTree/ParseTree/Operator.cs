@@ -1,24 +1,56 @@
 ﻿namespace ParseTree;
 
+/// <summary>
+/// Node that stores an operator.
+/// </summary>
 public abstract class Operator : INode
 {
+    /// <summary>
+    /// Gets or sets left child of a node.
+    /// </summary>
     public INode? LeftChild { get; set; }
 
+    /// <summary>
+    /// Gets or sets right child of a node.
+    /// </summary>
     public INode? RightChild { get; set; }
 
+    /// <summary>
+    /// Gets or sets parent of a node.
+    /// </summary>
     public INode? Parent { get; set; }
 
+    /// <summary>
+    /// Gets or sets an arithmetic operation.
+    /// </summary>
     public char Operation { get; set; }
 
-    public abstract double Evaluate();
-
-    public void Print()
-        => Console.Write($"( {Operation} ");
-
-    public Operator(INode parent, char operation)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Operator"/> class.
+    /// </summary>
+    public Operator()
     {
-        Parent = parent;
-        Operation = operation;
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Operator"/> class.
+    /// </summary>
+    /// <param name="parent">Parent of a node.</param>
+    public Operator(INode parent)
+        : this()
+    {
+        Parent = parent;
+    }
+
+    /// <summary>
+    /// Calculates the value of the node according to the stored operation.
+    /// </summary>
+    /// <returns>Calculated value.</returns>
+    public abstract double Evaluate();
+
+    /// <summary>
+    /// Prints stored operation on the screen.
+    /// </summary>
+    public void Print()
+        => Console.Write($"( {Operation} ");
 }

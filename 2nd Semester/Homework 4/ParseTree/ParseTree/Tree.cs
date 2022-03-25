@@ -1,11 +1,18 @@
 ﻿namespace ParseTree;
 
 /// <summary>
-/// 
+/// An ordered tree that represents the structure of an arithmetic expression.
 /// </summary>
-public class Tree
+public static class Tree
 {
-    public static INode CreateTree(string input)
+    /// <summary>
+    /// Creates a parse tree.
+    /// </summary>
+    /// <param name="input">An arithmetic expression.</param>
+    /// <returns>Root of the created tree.</returns>
+    /// <exception cref="InvalidOperationException">Throws if an unknown symbol is encountered.</exception>
+    /// <exception cref="ArgumentException">Throws if the input string is not correct.</exception>
+    public static INode? CreateTree(string input)
     {
         string[] array = ParseInput(input);
         INode? currentElement = null;
@@ -18,19 +25,19 @@ public class Tree
                 case " ":
                     continue;
                 case "+":
-                    operandNode = new OperatorAdd(currentElement, char.Parse(item));
+                    operandNode = new OperatorAdd(currentElement);
                     break;
                 case "-":
-                    operandNode = new OperatorSubtract(currentElement, char.Parse(item));
+                    operandNode = new OperatorSubtract(currentElement);
                     break;
                 case "*":
-                    operandNode = new OperatorMultiply(currentElement, char.Parse(item));
+                    operandNode = new OperatorMultiply(currentElement);
                     break;
                 case "/":
-                    operandNode = new OperatorDivide(currentElement, char.Parse(item));
+                    operandNode = new OperatorDivide(currentElement);
                     break;
                 case ")":
-                    if (currentElement.Parent != null)
+                    if (currentElement.Parent is not null)
                     {
                         currentElement = currentElement.Parent;
                     }
@@ -51,14 +58,14 @@ public class Tree
                         }
                         else
                         {
-                            throw new InvalidOperationException();
+                            throw new InvalidOperationException("Unknown operation");
                         }
 
                         break;
                     }
                     else
                     {
-                        throw new ArgumentException();
+                        throw new ArgumentException("The input string was not a correct expression");
                     }
             }
 
@@ -84,23 +91,33 @@ public class Tree
                     }
                     else
                     {
-                        throw new InvalidOperationException();
+                        throw new ArgumentException("The input string was not a correct expression");
                     }
 
-                    break;
-                default:
                     break;
             }
         }
 
-        while (currentElement.Parent != null)
+        while (currentElement is not null && currentElement.Parent is not null)
+        {
             currentElement = currentElement.Parent;
+        }
+
         return currentElement;
     }
 
+    /// <summary>
+    /// Calculates an expression stored in the tree.
+    /// </summary>
+    /// <param name="root">Root of a parse tree.</param>
+    /// <returns>Calculated value.</returns>
     public static double CalculateValue(INode root)
         => root.Evaluate();
 
+    /// <summary>
+    /// Prints the parse tree on screen in the form of an arithmetic expression.
+    /// </summary>
+    /// <param name="root">Root of a parse tree.</param>
     public static void PrintTree(INode root)
     {
         root.Print();
@@ -118,6 +135,7 @@ public class Tree
     private static string[] ParseInput(string input)
     {
         List<string> parsed = input.Split(' ').ToList();
+        parsed.RemoveAll(x => x == string.Empty);
         for (int i = 0; i < parsed.Count; i++)
         {
             switch (parsed[i])
@@ -130,10 +148,29 @@ public class Tree
                 case "/":
                     continue;
                 default:
-                    int number;
-                    if (int.TryParse(parsed[i], out number))
+
+                    if (int.TryParse(parsed[i], out _))
                     {
                         continue;
+                    }
+                    else if (parsed[i][parsed[i].Length - 1].Equals(')'))
+                    {
+                        int lastIndexOfBracket = parsed[i].IndexOf(')');
+                        int pastLength = parsed[i].Length;
+                        char[] tryNumber = new char[lastIndexOfBracket];
+                        parsed[i].CopyTo(0, tryNumber, 0, lastIndexOfBracket);
+                        if (int.TryParse(tryNumber, out _))
+                        {
+                            parsed.RemoveAt(i);
+                            parsed.Insert(i, new string(tryNumber));
+                            while (lastIndexOfBracket < pastLength)
+                            {
+                                parsed.Insert(i + 1, ")");
+                                lastIndexOfBracket++;
+                            }
+                        }
+
+                        break;
                     }
                     else
                     {

@@ -1,5 +1,21 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
-ParseTree.INode tree = ParseTree.Tree.CreateTree("( + ( * 3 4) ( + 1 ( * 4 5)))");
-Console.WriteLine(ParseTree.Tree.CalculateValue(tree));
-ParseTree.Tree.PrintTree(tree);
+﻿namespace ParseTree;
+
+public static class Program
+{
+    public static void Main(string[] args)
+    {
+        Console.Write("Enter an expression: ");
+        string input = Console.ReadLine();
+        var root = Tree.CreateTree(input);
+        if (root is null)
+        {
+            Console.WriteLine("No tree was made.");
+        }
+        else
+        {
+            Console.WriteLine($"The result is: {Tree.CalculateValue(root)}");
+            Console.Write("The expression was:");
+            Tree.PrintTree(root);
+        }
+    }
+}
