@@ -23,7 +23,7 @@ jobs:
 
     - name: Install dependencies
       run: dotnet restore
-      working-directory: src/2nd Semester/Homework 4/ParseTree/ParseTree
+      working-directory: 2nd Semester/Homework 4/ParseTree/ParseTree
       
     - name: Build
       run: dotnet build 
