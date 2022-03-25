@@ -9,7 +9,6 @@ public class OperatorDivide : Operator
     /// Initializes a new instance of the <see cref="OperatorDivide"/> class.
     /// </summary>
     public OperatorDivide()
-        : base()
     {
         Operation = '/';
     }

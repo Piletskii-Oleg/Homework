@@ -41,6 +41,8 @@ namespace ParseTree.Tests
                 case '/':
                     Assert.AreEqual(oper.Evaluate(), 3.1 / 8.9);
                     break;
+                default:
+                    throw new ArgumentException();
             }
         }
 
@@ -76,15 +78,6 @@ namespace ParseTree.Tests
             Tree.PrintTree(root);
             Assert.AreEqual("( * ( + 1 2 ) 3 ) ", stringWriter.ToString());
         }
-
-        //[Test]
-        //public void StringShouldBeParsedCorrectly()
-        //{
-        //    Assert.AreEqual(Tree.ParseInput("(*(*(* 3 9) 10) 8 )"),
-        //        "( * ( * ( * 3 9 ) 10 ) 8 )".Split());
-        //    Assert.AreEqual(Tree.ParseInput("(+  (* 2 1 ) ( + 3 ( + (* 5 66) 4)))"),
-        //        "( + ( * 2 1 ) ( + 3 ( + ( * 5 66 ) 4 ) ) )".Split());
-        //}
 
         [Test]
         public void DivisionByZeroShouldThrowException()

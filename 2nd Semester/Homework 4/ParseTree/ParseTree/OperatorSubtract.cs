@@ -9,7 +9,6 @@ public class OperatorSubtract : Operator
     /// Initializes a new instance of the <see cref="OperatorSubtract"/> class.
     /// </summary>
     public OperatorSubtract()
-        : base()
     {
         Operation = '-';
     }

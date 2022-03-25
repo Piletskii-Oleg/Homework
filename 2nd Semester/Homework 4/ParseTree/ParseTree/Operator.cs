@@ -28,7 +28,7 @@ public abstract class Operator : INode
     /// <summary>
     /// Initializes a new instance of the <see cref="Operator"/> class.
     /// </summary>
-    public Operator()
+    protected Operator()
     {
     }
 
@@ -36,7 +36,7 @@ public abstract class Operator : INode
     /// Initializes a new instance of the <see cref="Operator"/> class.
     /// </summary>
     /// <param name="parent">Parent of a node.</param>
-    public Operator(INode parent)
+    protected Operator(INode parent)
         : this()
     {
         Parent = parent;

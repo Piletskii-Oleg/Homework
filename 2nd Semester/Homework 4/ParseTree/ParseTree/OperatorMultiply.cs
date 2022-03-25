@@ -9,7 +9,6 @@ public class OperatorMultiply : Operator
     /// Initializes a new instance of the <see cref="OperatorMultiply"/> class.
     /// </summary>
     public OperatorMultiply()
-        : base()
     {
         Operation = '*';
     }
