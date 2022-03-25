@@ -22,7 +22,7 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
       
     - name: Build
-      run: dotnet build 2nd Semester/Homework 4/ParseTree --configuration Release --no-restore 
+      run: dotnet build 2nd Semester/Homework 4/ParseTree
       
     - name: Run tests
-      run: dotnet test 2nd Semester/Homework 4/ParseTree/ParseTree.Tests --configuration Release --no-restore
+      run: dotnet test 2nd Semester/Homework 4/ParseTree/ParseTree.Tests
