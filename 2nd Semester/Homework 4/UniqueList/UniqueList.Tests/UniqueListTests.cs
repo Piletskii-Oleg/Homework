@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
+using UniqueList.Exceptions;
 using NUnit.Framework;
 
 namespace UniqueList.Tests;
 
 public class UniqueListTests
 {
-    private MyUniqueList<int> list = new MyUniqueList<int>();
+    private MyUniqueList<int> list = new ();
 
     [SetUp]
     public void Setup()
@@ -20,7 +20,7 @@ public class UniqueListTests
         list.Add(1);
         Assert.Multiple(() =>
         {
-            Assert.Throws<NotImplementedException>(() => list.Add(1));
+            Assert.Throws<AddExistingElementException>(() => list.Add(1));
             Assert.AreEqual(list.Length, 1);
             Assert.AreEqual(list[0], 1);
         });
@@ -32,7 +32,7 @@ public class UniqueListTests
         list.Insert(0, 1);
         Assert.Multiple(() =>
         {
-            Assert.Throws<NotImplementedException>(() => list.Insert(1, 1));
+            Assert.Throws<AddExistingElementException>(() => list.Insert(1, 1));
             Assert.AreEqual(list.Length, 1);
             Assert.AreEqual(list[0], 1);
         });
@@ -45,9 +45,10 @@ public class UniqueListTests
         list.Add(2);
         Assert.Multiple(() =>
         {
-            Assert.Throws<NotImplementedException>(() => list[0] = 2);
+            Assert.Throws<AddExistingElementException>(() => list[0] = 2);
             Assert.AreEqual(list.Length, 2);
             Assert.AreEqual(list[0], 1);
+            Assert.AreEqual(list[1], 2);
         });
     }
 
@@ -57,7 +58,7 @@ public class UniqueListTests
         list.Add(0);
         list.Add(1);
         list.Add(2);
-        list.Delete(2);
+        list.DeleteAt(2);
         Assert.Multiple(() =>
         {
             Assert.DoesNotThrow(() => list.Add(2));
