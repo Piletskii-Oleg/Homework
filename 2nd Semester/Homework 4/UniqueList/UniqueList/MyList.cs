@@ -11,12 +11,12 @@ public class MyList<T>
     /// <summary>
     /// Gets or sets length of the linked list.
     /// </summary>
-    public int Length { get; set; } = 0;
+    public int Length { get; set; }
 
     /// <summary>
     /// Gets root of the linked list.
     /// </summary>
-    internal Node<T>? Root { get; private set; }
+    internal Node<T>? Head { get; private set; }
 
     /// <summary>
     /// Gets or sets a value in the linked list by index.
@@ -35,13 +35,13 @@ public class MyList<T>
     /// <param name="value">A value to add.</param>
     public virtual void Add(T value)
     {
-        if (Root is null)
+        if (Head is null)
         {
-            Root = new Node<T>(value, null);
+            Head = new Node<T>(value, null);
         }
         else
         {
-            Node<T> currentNode = Root;
+            Node<T> currentNode = Head;
             while (currentNode.Next is not null)
             {
                 currentNode = currentNode.Next;
@@ -63,7 +63,7 @@ public class MyList<T>
     {
         if (index == 0)
         {
-            Root = new Node<T>(value, Root);
+            Head = new Node<T>(value, Head);
         }
         else
         {
@@ -82,14 +82,14 @@ public class MyList<T>
     /// <exception cref="IndexOutOfRangeException">Throws if the index was outside the linked list.</exception>
     public virtual void DeleteAt(int index)
     {
-        if (Root is null)
+        if (Head is null)
         {
             throw new DeleteFromEmptyListException();
         }
 
         if (index == 0)
         {
-            Root = Root.Next ?? null;
+            Head = Head.Next ?? null;
         }
         else
         {
@@ -108,18 +108,18 @@ public class MyList<T>
     /// <exception cref="DeleteNonexistentElementException">Throws if element is not contained in the list.</exception>
     public virtual void Delete(T value)
     {
-        if (Root is null)
+        if (Head is null)
         {
             throw new DeleteFromEmptyListException();
         }
-        else if (Root.Value.Equals(value))
+        else if (Head.Value.Equals(value))
         {
-            Root = Root.Next ?? null;
+            Head = Head.Next ?? null;
             Length--;
         }
         else
         {
-            var currentNode = Root;
+            var currentNode = Head;
             while (currentNode.Next is not null)
             {
                 if (currentNode.Next.Value.Equals(value))
@@ -151,7 +151,7 @@ public class MyList<T>
             throw new ArgumentException("Offset was not 0 or 1", nameof(offset));
         }
 
-        var currentNode = Root;
+        var currentNode = Head;
         for (int i = 0; i < index - offset; i++)
         {
             if (currentNode.Next is null)
@@ -179,7 +179,7 @@ public class MyList<T>
 
     private T GetValue(int index)
     {
-        if (Root is null)
+        if (Head is null)
         {
             throw new GetElementFromEmptyListException();
         }
