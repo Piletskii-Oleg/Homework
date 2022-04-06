@@ -1,11 +1,17 @@
 ﻿namespace BWTransform;
 
-internal static class Program
+/// <summary>
+/// Main class.
+/// </summary>
+public static class Program
 {
-    private static void Main(string[] args)
+    /// <summary>
+    /// Entry point.
+    /// </summary>
+    public static void Main()
     {
         Console.Write("Input text to transform: ");
-        string input = Console.ReadLine();
+        string? input = Console.ReadLine();
         if (input == null)
         {
             throw new ArgumentNullException();

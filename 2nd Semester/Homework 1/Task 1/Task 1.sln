@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskOne", "Task 1\TaskOne.csproj", "{3384435E-9E40-4457-8A90-203F2C5F4733}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BubbleSort", "Task 1\BubbleSort.csproj", "{3384435E-9E40-4457-8A90-203F2C5F4733}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
