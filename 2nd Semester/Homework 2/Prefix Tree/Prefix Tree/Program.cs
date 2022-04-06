@@ -1,10 +1,17 @@
 ﻿namespace PrefixTree;
 
+/// <summary>
+/// Main class.
+/// </summary>
 internal static class Program
 {
-    public static void Main(string[] args)
+    /// <summary>
+    /// Entry point.
+    /// </summary>
+    /// <exception cref="ArgumentNullException">Throws if input was null.</exception>
+    public static void Main()
     {
-        Trie trie = new Trie();
+        var trie = new Trie();
         string? input = string.Empty;
         Console.WriteLine("Введите номер действия, которое вы хотите выполнить:\n0 - открыть помощь\n" +
                 "1 - добавить слово \n2 - удалить слово \n3 - проверить, есть ли слово\n" +

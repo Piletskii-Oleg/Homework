@@ -60,13 +60,16 @@ public class Trie
     public bool Add(string element)
     {
         Vertex? currentElement = this.head;
-        bool wordIsNew = false;
+        if (this.Contains(element))
+        {
+            return false;
+        }
+
         foreach (char c in element)
         {
             if (!currentElement.Next.ContainsKey(c))
             {
                 currentElement.Next.Add(c, new Vertex());
-                wordIsNew = true;
             }
 
             currentElement.HowManyFollow++;
@@ -75,22 +78,8 @@ public class Trie
 
         currentElement.HowManyFollow++;
         currentElement.IsTerminal = true;
-        if (wordIsNew)
-        {
-            this.Size++;
-            return true;
-        }
-        else
-        {
-            currentElement = this.head;
-            foreach (char c in element)
-            {
-                currentElement.HowManyFollow--;
-                currentElement = currentElement.Next[c];
-            }
-
-            return false;
-        }
+        this.Size++;
+        return true;
     }
 
     /// <summary>
@@ -137,11 +126,6 @@ public class Trie
             currentElement = this.head;
             foreach (char c in element)
             {
-                if (!currentElement.Next.ContainsKey(c))
-                {
-                    return false;
-                }
-
                 currentElement.HowManyFollow--;
                 if (currentElement.HowManyFollow == 0)
                 {
