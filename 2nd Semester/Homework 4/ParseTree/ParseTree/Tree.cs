@@ -109,7 +109,7 @@ public static class Tree
                     {
                         int lastIndexOfBracket = parsed[i].IndexOf(')');
                         int pastLength = parsed[i].Length;
-                        char[] tryNumber = new char[lastIndexOfBracket];
+                        var tryNumber = new char[lastIndexOfBracket];
                         parsed[i].CopyTo(0, tryNumber, 0, lastIndexOfBracket);
                         if (int.TryParse(tryNumber, out _))
                         {
