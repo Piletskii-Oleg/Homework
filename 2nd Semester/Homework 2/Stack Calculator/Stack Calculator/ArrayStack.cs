@@ -25,7 +25,7 @@ public class ArrayStack : IStack
     /// <param name="element">Element to add.</param>
     public void Push(double element)
     {
-        if (this.currentIndex == this.capacity)
+        if (this.currentIndex == this.capacity - 1)
         {
             this.capacity += 15;
             Array.Resize(ref this.stack, this.capacity);

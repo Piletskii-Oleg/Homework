@@ -27,7 +27,7 @@ public class ListStack : IStack
         public double Value { get; set; }
 
         /// <summary>
-        /// Points to the next element.
+        /// Gets or sets a pointer to the next element.
         /// </summary>
         public Node? Next { get; set; }
     }

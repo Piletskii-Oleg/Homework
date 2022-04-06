@@ -15,10 +15,10 @@ public static class StackCalculator
     public static double? Evaluate(string input, IStack stack)
     {
         string[] array = input.Split(' ');
-        double currentNumber;
+        double threshold = 0.0000001;
         foreach (string item in array)
         {
-            if (double.TryParse(item, out currentNumber))
+            if (double.TryParse(item, out double currentNumber))
             {
                 stack.Push(currentNumber);
             }
@@ -54,7 +54,7 @@ public static class StackCalculator
                                 stack.Push((double)secondOperand - (double)firstOperand);
                                 break;
                             case "/":
-                                if (firstOperand.Equals(0.0))
+                                if (firstOperand < threshold)
                                 {
                                     throw new DivideByZeroException();
                                 }

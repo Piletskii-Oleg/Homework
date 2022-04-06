@@ -1,8 +1,14 @@
 ﻿namespace StackCalculator;
 
-internal static class Program
+/// <summary>
+/// Main class.
+/// </summary>
+public static class Program
 {
-    private static void Main(string[] args)
+    /// <summary>
+    /// Entry point.
+    /// </summary>
+    public static void Main()
     {
         string? input = null;
         Console.WriteLine("Введите \"Выход\", чтобы выйти.\n");
@@ -15,7 +21,7 @@ internal static class Program
                 Console.WriteLine("Какой тип стека вы хотите использовать? \n1 - на массиве \n2 - на списке");
                 Console.Write("Тип: ");
                 input = Console.ReadLine();
-                int.TryParse(input, out stackType);
+                _ = int.TryParse(input, out stackType);
             }
 
             input = null;
