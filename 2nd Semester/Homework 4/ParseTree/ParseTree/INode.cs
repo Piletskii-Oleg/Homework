@@ -30,4 +30,10 @@ public interface INode
     /// Prints a node to the screen in the form of an arithmetic expression.
     /// </summary>
     public void Print();
+
+    /// <summary>
+    /// Makes the node that called the method or its children the current element.
+    /// </summary>
+    /// <param name="currentElement">Element that is currently used in the building of the tree.</param>
+    public void AddNode(ref INode currentElement);
 }

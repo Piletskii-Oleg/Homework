@@ -1,11 +1,18 @@
 ﻿namespace ParseTree;
 
+/// <summary>
+/// Main class.
+/// </summary>
 public static class Program
 {
-    public static void Main(string[] args)
+    /// <summary>
+    /// Entry point.
+    /// </summary>
+    public static void Main()
     {
         Console.Write("Enter an expression: ");
         string input = Console.ReadLine();
+
         var root = Tree.CreateTree(input);
         if (root is null)
         {

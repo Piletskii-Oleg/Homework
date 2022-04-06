@@ -6,6 +6,23 @@
 public abstract class Operator : INode
 {
     /// <summary>
+    /// Initializes a new instance of the <see cref="Operator"/> class.
+    /// </summary>
+    protected Operator()
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Operator"/> class.
+    /// </summary>
+    /// <param name="parent">Parent of a node.</param>
+    protected Operator(INode parent)
+        : this()
+    {
+        Parent = parent;
+    }
+
+    /// <summary>
     /// Gets or sets left child of a node.
     /// </summary>
     public INode? LeftChild { get; set; }
@@ -26,23 +43,6 @@ public abstract class Operator : INode
     public char Operation { get; set; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Operator"/> class.
-    /// </summary>
-    protected Operator()
-    {
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Operator"/> class.
-    /// </summary>
-    /// <param name="parent">Parent of a node.</param>
-    protected Operator(INode parent)
-        : this()
-    {
-        Parent = parent;
-    }
-
-    /// <summary>
     /// Calculates the value of the node according to the stored operation.
     /// </summary>
     /// <returns>Calculated value.</returns>
@@ -52,5 +52,33 @@ public abstract class Operator : INode
     /// Prints stored operation on the screen.
     /// </summary>
     public void Print()
-        => Console.Write($"( {Operation} ");
+    {
+        Console.Write($"( {Operation} ");
+        LeftChild.Print();
+        RightChild.Print();
+    }
+
+    /// <inheritdoc/>
+    /// <exception cref="InvalidOperationException">Throws if input string was not valid.</exception>
+    public void AddNode(ref INode currentElement)
+    {
+        if (currentElement is null)
+        {
+            currentElement = this;
+        }
+        else if (currentElement.LeftChild is null)
+        {
+            currentElement.LeftChild = this;
+            currentElement = currentElement.LeftChild;
+        }
+        else if (currentElement.RightChild is null)
+        {
+            currentElement.RightChild = this;
+            currentElement = currentElement.RightChild;
+        }
+        else
+        {
+            throw new ArgumentException("The input string was not a correct expression");
+        }
+    }
 }

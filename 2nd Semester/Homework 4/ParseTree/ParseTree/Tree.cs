@@ -16,7 +16,7 @@ public static class Tree
     {
         string[] array = ParseInput(input);
         INode? currentElement = null;
-        Operator? operandNode = null;
+        Operator? operatorNode = null;
         foreach (string item in array)
         {
             switch (item)
@@ -25,16 +25,20 @@ public static class Tree
                 case " ":
                     continue;
                 case "+":
-                    operandNode = new OperatorAdd(currentElement);
+                    operatorNode = new OperatorAdd(currentElement);
+                    operatorNode.AddNode(ref currentElement);
                     break;
                 case "-":
-                    operandNode = new OperatorSubtract(currentElement);
+                    operatorNode = new OperatorSubtract(currentElement);
+                    operatorNode.AddNode(ref currentElement);
                     break;
                 case "*":
-                    operandNode = new OperatorMultiply(currentElement);
+                    operatorNode = new OperatorMultiply(currentElement);
+                    operatorNode.AddNode(ref currentElement);
                     break;
                 case "/":
-                    operandNode = new OperatorDivide(currentElement);
+                    operatorNode = new OperatorDivide(currentElement);
+                    operatorNode.AddNode(ref currentElement);
                     break;
                 case ")":
                     if (currentElement.Parent is not null)
@@ -44,57 +48,16 @@ public static class Tree
 
                     break;
                 default:
-                    int number;
-                    if (int.TryParse(item, out number))
+                    if (int.TryParse(item, out int number))
                     {
                         var numberNode = new Operand(currentElement, number);
-                        if (currentElement.LeftChild is null)
-                        {
-                            currentElement.LeftChild = numberNode;
-                        }
-                        else if (currentElement.RightChild is null)
-                        {
-                            currentElement.RightChild = numberNode;
-                        }
-                        else
-                        {
-                            throw new InvalidOperationException("Unknown operation");
-                        }
-
+                        numberNode.AddNode(ref currentElement);
                         break;
                     }
                     else
                     {
                         throw new ArgumentException("The input string was not a correct expression");
                     }
-            }
-
-            switch (item)
-            {
-                case "+":
-                case "-":
-                case "*":
-                case "/":
-                    if (currentElement is null)
-                    {
-                        currentElement = operandNode;
-                    }
-                    else if (currentElement.LeftChild is null)
-                    {
-                        currentElement.LeftChild = operandNode;
-                        currentElement = currentElement.LeftChild;
-                    }
-                    else if (currentElement.RightChild is null)
-                    {
-                        currentElement.RightChild = operandNode;
-                        currentElement = currentElement.RightChild;
-                    }
-                    else
-                    {
-                        throw new ArgumentException("The input string was not a correct expression");
-                    }
-
-                    break;
             }
         }
 
@@ -119,18 +82,7 @@ public static class Tree
     /// </summary>
     /// <param name="root">Root of a parse tree.</param>
     public static void PrintTree(INode root)
-    {
-        root.Print();
-        if (root.LeftChild is not null)
-        {
-            PrintTree(root.LeftChild);
-        }
-
-        if (root.RightChild is not null)
-        {
-            PrintTree(root.RightChild);
-        }
-    }
+        => root.Print();
 
     private static string[] ParseInput(string input)
     {
