@@ -14,7 +14,7 @@ public class MyList<T>
     public int Length { get; set; }
 
     /// <summary>
-    /// Gets root of the linked list.
+    /// Gets head of the linked list.
     /// </summary>
     internal Node<T>? Head { get; private set; }
 
@@ -68,6 +68,11 @@ public class MyList<T>
         else
         {
             var currentNode = GetNode(index, 1);
+            if (currentNode is null)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             currentNode.Next = new Node<T>(value, currentNode.Next);
         }
 
@@ -94,6 +99,11 @@ public class MyList<T>
         else
         {
             var currentNode = GetNode(index, 1);
+            if (currentNode is null)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             currentNode.Next = (index == Length - 1) ? null : currentNode.Next.Next;
         }
 
@@ -104,6 +114,7 @@ public class MyList<T>
     /// Deletes a given element from the linked list.
     /// </summary>
     /// <param name="value">Value of an element to delete.</param>
+    /// <exception cref="IndexOutOfRangeException">Throws if the index was outside the linked list.</exception>
     /// <exception cref="DeleteFromEmptyListException">Throws if the list is empty.</exception>
     /// <exception cref="DeleteNonexistentElementException">Throws if element is not contained in the list.</exception>
     public virtual void Delete(T value)
@@ -152,6 +163,11 @@ public class MyList<T>
         }
 
         var currentNode = Head;
+        if (currentNode is null)
+        {
+            return null;
+        }
+
         for (int i = 0; i < index - offset; i++)
         {
             if (currentNode.Next is null)
@@ -174,6 +190,11 @@ public class MyList<T>
     protected virtual void SetValue(int index, T value)
     {
         var currentNode = GetNode(index, 0);
+        if (currentNode is null)
+        {
+            throw new IndexOutOfRangeException();
+        }
+
         currentNode.Value = value;
     }
 
@@ -185,6 +206,11 @@ public class MyList<T>
         }
 
         var currentNode = GetNode(index, 0);
+        if (currentNode is null)
+        {
+            throw new IndexOutOfRangeException();
+        }
+
         return currentNode.Value;
     }
 }

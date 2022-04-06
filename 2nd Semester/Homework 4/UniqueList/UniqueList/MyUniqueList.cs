@@ -47,6 +47,11 @@ public class MyUniqueList<T> : MyList<T>
     public override void DeleteAt(int index)
     {
         var nodeToDelete = GetNode(index, 0);
+        if (nodeToDelete is null)
+        {
+            throw new IndexOutOfRangeException();
+        }
+
         base.DeleteAt(index);
         containedElements.Remove(nodeToDelete.Value);
     }
@@ -74,6 +79,11 @@ public class MyUniqueList<T> : MyList<T>
         }
 
         var nodeToChange = GetNode(index, 0);
+        if (nodeToChange is null)
+        {
+            throw new IndexOutOfRangeException();
+        }
+
         containedElements.Remove(nodeToChange.Value);
         containedElements.Add(value, value);
         base.SetValue(index, value);
