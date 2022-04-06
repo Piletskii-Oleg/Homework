@@ -2,8 +2,6 @@
 
 internal class Graph
 {
-    private DisjointSet disjointSet = new();
-
     private List<Edge> edges = new ();
 
     private List<Node> nodes = new ();
@@ -35,10 +33,22 @@ internal class Graph
         }
     }
 
-    public void MakeMinimalTree()
+    public Graph MakeMinimalTree()
     {
         edges.Sort();
-
+        var tree = new Graph();
+        var newEdges = new List<Edge>();
+        foreach (var edge in edges)
+        {
+            if (DisjointSet.Find(edge.Begin) != DisjointSet.Find(edge.End))
+            {
+                newEdges.Add(edge);
+                DisjointSet.Union(edge.Begin, edge.End);
+            }
+        }
+        tree.nodes = this.nodes;
+        tree.edges = newEdges;
+        return tree;
     }
 
     private bool CheckForConnectivity()
