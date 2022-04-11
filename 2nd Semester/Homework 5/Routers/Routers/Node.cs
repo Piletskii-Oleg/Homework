@@ -1,10 +1,12 @@
 ﻿namespace Routers;
 
-internal class Node : SetElement
+public class Node : SetElement
 {
-    internal int Number { get; set; }
+    public int Number { get; set; }
 
-    internal Node(int number)
+    public List<Edge> ConnectedEdges { get; set; } = new ();
+
+    public Node(int number)
         : base()
     {
         Number = number;

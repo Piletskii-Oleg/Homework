@@ -1,14 +1,14 @@
 ﻿namespace Routers;
 
-internal class SetElement
+public class SetElement
 {
-    internal SetElement()
+    public SetElement()
     {
         Identificator = this;
         Rank = 0;
     }
 
-    internal SetElement Identificator { get; set; }
+    public SetElement Identificator { get; set; }
 
-    internal int Rank { get; set; }
+    public int Rank { get; set; }
 }

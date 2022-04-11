@@ -1,14 +1,14 @@
 ﻿namespace Routers;
 
-internal class Edge : IComparable<Edge>
+public class Edge : IComparable<Edge>
 {
-    internal int Capacity { get; set; }
+    public int Capacity { get; set; }
 
-    internal Node Begin { get; set; }
+    public Node Begin { get; set; }
 
-    internal Node End { get; set; }
+    public Node End { get; set; }
 
-    internal Edge(int capacity, Node begin, Node end)
+    public Edge(int capacity, Node begin, Node end)
     {
         Capacity = capacity;
         Begin = begin;

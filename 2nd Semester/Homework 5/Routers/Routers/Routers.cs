@@ -5,16 +5,25 @@ public static class Routers
     public static void MakeConfiguration(string path)
     {
         var tree = Graph.MakeMinimalTree(path);
-        var newPath = path.Replace(Path.GetFileNameWithoutExtension(path),
-            Path.GetFileNameWithoutExtension(path) + "-coherent");
+        var newPath = path.Replace(Path.GetFileNameWithoutExtension(path), "output");
 
-        using (var writer = new StreamWriter(newPath))
+        using var writer = new StreamWriter(newPath);
+        var visitedEdges = new List<Edge>();
+        foreach (var node in tree.Nodes)
         {
-            var visitedNodes = new List<Node>();
-            foreach (var edge in tree.Edges)
+            string line = node.Number + ": ";
+            foreach (var connectedEdge in node.ConnectedEdges)
             {
-                string line = edge.Begin.Number + ": ";
-                line += $"{edge.End.Number} ({edge.Capacity})";
+                if (!visitedEdges.Contains(connectedEdge))
+                {
+                    visitedEdges.Add(connectedEdge);
+                    line += connectedEdge.Begin.Equals(node) ? $"{connectedEdge.End.Number}" : $"{connectedEdge.Begin.Number}";
+                    line += $"({connectedEdge.Capacity}) ";
+                }
+            }
+
+            if (line != $"{node.Number}: ")
+            {
                 writer.WriteLine(line);
             }
         }

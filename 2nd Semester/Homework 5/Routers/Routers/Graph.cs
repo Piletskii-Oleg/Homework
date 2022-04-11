@@ -1,14 +1,14 @@
 ﻿namespace Routers;
 
-internal class Graph
+public class Graph
 {
-    internal List<Edge> Edges { get; set; } = new ();
+    public List<Edge> Edges { get; private set; } = new ();
 
-    internal List<Node> Nodes { get; set; } = new ();
+    public List<Node> Nodes { get; private set; } = new ();
 
     private readonly List<List<int>> matrix = new ();
 
-    internal static Graph MakeMinimalTree(string path)
+    public static Graph MakeMinimalTree(string path)
     {
         var graph = new Graph();
         graph.FillMatrix(path);
@@ -23,8 +23,21 @@ internal class Graph
                 DisjointSet.Union(edge.Begin, edge.End);
             }
         }
-        tree.Nodes = graph.Nodes;
+
         tree.Edges = newEdges;
+        tree.Nodes = graph.Nodes;
+        foreach (var node in tree.Nodes)
+        {
+            node.ConnectedEdges = new List<Edge>();
+            foreach (var edge in newEdges)
+            {
+                if (edge.Begin.Equals(node) || edge.End.Equals(node))
+                {
+                    node.ConnectedEdges.Add(edge);
+                }
+            }
+        }
+
         return tree;
     }
 

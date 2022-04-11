@@ -1,8 +1,8 @@
 ﻿namespace Routers;
 
-internal static class DisjointSet
+public static class DisjointSet
 {
-    internal static void Union(SetElement firstElement, SetElement secondElement)
+    public static void Union(SetElement firstElement, SetElement secondElement)
     {
         var firstIdentity = Find(firstElement);
         var secondIdentity = Find(secondElement);
@@ -22,7 +22,7 @@ internal static class DisjointSet
         }
     }
 
-    internal static SetElement Find(SetElement element)
+    public static SetElement Find(SetElement element)
     {
         if (element.Identificator != element)
         {
