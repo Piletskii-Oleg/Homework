@@ -1,17 +1,29 @@
 ﻿namespace Routers;
 
+/// <summary>
+/// Class that represents a graph.
+/// </summary>
 public class Graph
 {
+    /// <summary>
+    /// Gets list containing edges of the graph.
+    /// </summary>
     public List<Edge> Edges { get; private set; } = new ();
 
-    public List<Node> Nodes { get; private set; } = new ();
+    /// <summary>
+    /// Gets dictionary that contains nodes of the graph with the keys being their index numbers.
+    /// </summary>
+    public Dictionary<int, Node> Nodes { get; private set; } = new ();
 
-    private readonly List<List<int>> matrix = new ();
-
+    /// <summary>
+    /// Creates minimum spanning tree from a graph.
+    /// </summary>
+    /// <param name="path">Path to the input file.</param>
+    /// <returns>Minimum spanning tree.</returns>
     public static Graph MakeMinimalTree(string path)
     {
         var graph = new Graph();
-        graph.FillMatrix(path);
+        graph.FillEdgesAndNodes(path);
         graph.Edges.Sort();
         var tree = new Graph();
         var newEdges = new List<Edge>();
@@ -28,12 +40,12 @@ public class Graph
         tree.Nodes = graph.Nodes;
         foreach (var node in tree.Nodes)
         {
-            node.ConnectedEdges = new List<Edge>();
+            node.Value.ConnectedEdges = new List<Edge>();
             foreach (var edge in newEdges)
             {
-                if (edge.Begin.Equals(node) || edge.End.Equals(node))
+                if (edge.Begin.Equals(node.Value) || edge.End.Equals(node.Value))
                 {
-                    node.ConnectedEdges.Add(edge);
+                    node.Value.ConnectedEdges.Add(edge);
                 }
             }
         }
@@ -41,7 +53,7 @@ public class Graph
         return tree;
     }
 
-    private void FillMatrix(string path)
+    private void FillEdgesAndNodes(string path)
     {
         using (var streamReader = new StreamReader(File.OpenRead(path)))
         {
@@ -49,24 +61,32 @@ public class Graph
             while ((line = streamReader.ReadLine()) != null)
             {
                 int routerNumber = int.Parse(line[0].ToString());
-                Nodes.Add(new Node(routerNumber));
+                Nodes.Add(routerNumber, new Node(routerNumber));
+            }
+
+            for (int i = 1; i < MaxNodeNumber(); i++)
+            {
+                if (!Nodes.ContainsKey(i))
+                {
+                    Nodes.Add(i, new Node(i));
+                }
             }
 
             streamReader.BaseStream.Seek(0, SeekOrigin.Begin);
             while ((line = streamReader.ReadLine()) != null)
             {
-                int routerNumber = int.Parse(line[0].ToString()) - 1;
-                matrix.Add(GetEdgesFromFile(line, routerNumber));
+                int routerNumber = int.Parse(line[0].ToString());
+                GetEdgesFromFile(line, routerNumber);
             }
         }
 
         var visitedNodes = new Dictionary<Node, bool>();
         foreach (var node in Nodes)
         {
-            visitedNodes.Add(node, false);
+            visitedNodes.Add(node.Value, false);
         }
 
-        if (CheckForConnectivity(Nodes[0], visitedNodes) != Nodes.Count)
+        if (CheckForConnectivity(Nodes[1], visitedNodes) != Nodes.Count)
         {
             throw new NotImplementedException();
         }
@@ -78,44 +98,50 @@ public class Graph
         visitedNodes[originalNode] = true;
         foreach (var node in Nodes)
         {
-            if (!visitedNodes[node])
+            if (!visitedNodes[node.Value])
             {
-                visitedNodesAmount += CheckForConnectivity(node, visitedNodes);
+                visitedNodesAmount += CheckForConnectivity(node.Value, visitedNodes);
             }
         }
 
         return visitedNodesAmount;
     }
 
-    private List<int> GetEdgesFromFile(string line, int routerNumber)
+    private void GetEdgesFromFile(string line, int routerNumber)
     {
         string[] array = line.Split(" ");
-        var result = new List<int>();
-        for (int i = 0; i < Nodes.Count + 1; i++)
-        {
-            result.Add(0);
-        }
 
         for (int i = 1; i < array.Length; i += 2)
         {
             if (!int.TryParse(array[i], out int number))
             {
-                throw new ArgumentException(nameof(line));
+                throw new ArgumentException("Input was not in correct form");
             }
 
-            if (number > Nodes.Count)
+            if (number > Nodes.Count || routerNumber > Nodes.Count)
             {
-                while (Nodes.Count < number)
+                while (Nodes.Count < number || Nodes.Count < routerNumber)
                 {
-                    Nodes.Add(new Node(Nodes.Count + 1));
+                    Nodes.Add(Nodes.Count + 1, new Node(Nodes.Count + 1));
                 }
             }
 
             var capacityToPut = array[i + 1].Where(c => char.IsDigit(c)).ToArray();
-            result.Insert(number - 1, int.Parse(capacityToPut));
-            Edges.Add(new Edge(int.Parse(capacityToPut), Nodes[routerNumber], Nodes[number - 1]));
+            Edges.Add(new Edge(int.Parse(capacityToPut), Nodes[routerNumber], Nodes[number]));
+        }
+    }
+
+    private int MaxNodeNumber()
+    {
+        int max = 0;
+        foreach (var node in Nodes)
+        {
+            if (node.Key > max)
+            {
+                max = node.Key;
+            }
         }
 
-        return result;
+        return max;
     }
 }

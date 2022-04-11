@@ -1,7 +1,14 @@
 ﻿namespace Routers;
 
+/// <summary>
+/// Utility to work with router networks.
+/// </summary>
 public static class Routers
 {
+    /// <summary>
+    /// Makes configuration with maximum carrying capacity and minimum amount of connections.
+    /// </summary>
+    /// <param name="path">Path to the input file.</param>
     public static void MakeConfiguration(string path)
     {
         var tree = Graph.MakeMinimalTree(path);
@@ -11,18 +18,18 @@ public static class Routers
         var visitedEdges = new List<Edge>();
         foreach (var node in tree.Nodes)
         {
-            string line = node.Number + ": ";
-            foreach (var connectedEdge in node.ConnectedEdges)
+            string line = node.Key + ": ";
+            foreach (var connectedEdge in node.Value.ConnectedEdges)
             {
                 if (!visitedEdges.Contains(connectedEdge))
                 {
                     visitedEdges.Add(connectedEdge);
-                    line += connectedEdge.Begin.Equals(node) ? $"{connectedEdge.End.Number}" : $"{connectedEdge.Begin.Number}";
-                    line += $"({connectedEdge.Capacity}) ";
+                    line += connectedEdge.Begin.Number == node.Key ? connectedEdge.End.Number : connectedEdge.Begin.Number;
+                    line += $" ({connectedEdge.Capacity}) ";
                 }
             }
 
-            if (line != $"{node.Number}: ")
+            if (line != $"{node.Value.Number}: ")
             {
                 writer.WriteLine(line);
             }
