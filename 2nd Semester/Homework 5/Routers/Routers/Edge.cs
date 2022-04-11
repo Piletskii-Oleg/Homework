@@ -15,7 +15,7 @@ internal class Edge : IComparable<Edge>
         End = end;
     }
 
-    public int CompareTo(Edge edge)
+    public int CompareTo(Edge? edge)
     {
         if (edge is null)
         {

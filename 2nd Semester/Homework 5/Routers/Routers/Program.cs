@@ -4,9 +4,8 @@ class Program
 {
     static void Main()
     {
-        Graph graph = new Graph();
         string path = "C:\\Users\\Oleg\\Documents\\GitHub\\Homework\\2nd Semester\\Homework 5\\Routers\\Routers\\input.txt";
-        graph.FillMatrix(path);
-        var tree = graph.MakeMinimalTree();
+        var tree = Graph.MakeMinimalTree(path);
+        Routers.MakeConfiguration(path);
     }
 }

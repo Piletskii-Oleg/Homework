@@ -4,21 +4,21 @@ internal static class DisjointSet
 {
     internal static void Union(SetElement firstElement, SetElement secondElement)
     {
-        var firstIdentificator = Find(firstElement);
-        var secondIdentificator = Find(secondElement);
+        var firstIdentity = Find(firstElement);
+        var secondIdentity = Find(secondElement);
 
-        if (firstIdentificator.Rank == secondIdentificator.Rank)
+        if (firstIdentity.Rank == secondIdentity.Rank)
         {
-            firstIdentificator.Rank++;
-            secondIdentificator.Identificator = firstIdentificator;
+            firstIdentity.Rank++;
+            secondIdentity.Identificator = firstIdentity;
         }
-        else if (firstIdentificator.Rank > secondIdentificator.Rank)
+        else if (firstIdentity.Rank > secondIdentity.Rank)
         {
-            secondIdentificator.Identificator = firstIdentificator;
+            secondIdentity.Identificator = firstIdentity;
         }
         else
         {
-            firstIdentificator.Identificator = secondIdentificator;
+            firstIdentity.Identificator = secondIdentity;
         }
     }
 
