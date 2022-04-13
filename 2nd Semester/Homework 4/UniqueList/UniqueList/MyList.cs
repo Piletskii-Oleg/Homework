@@ -104,14 +104,14 @@ public class MyList<T>
                 throw new IndexOutOfRangeException();
             }
 
-            currentNode.Next = (index == Length - 1) ? null : currentNode.Next.Next;
+            currentNode.Next = currentNode.Next?.Next;
         }
 
         Length--;
     }
 
     /// <summary>
-    /// Deletes a given element from the linked list.
+    /// Deletes the given element from the linked list.
     /// </summary>
     /// <param name="value">Value of an element to delete.</param>
     /// <exception cref="IndexOutOfRangeException">Throws if the index was outside the linked list.</exception>

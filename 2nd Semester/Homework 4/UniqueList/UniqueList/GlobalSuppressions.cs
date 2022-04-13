@@ -11,3 +11,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1611:Element parameters should be documented", Justification = "<Ожидание>", Scope = "member", Target = "~M:UniqueList.Exceptions.DeleteFromEmptyListException.#ctor(System.String)")]
 [assembly: SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1611:Element parameters should be documented", Justification = "<Ожидание>", Scope = "member", Target = "~M:UniqueList.Exceptions.DeleteFromEmptyListException.#ctor(System.String,System.Exception)")]
 [assembly: SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1633:File should have header", Justification = "<Ожидание>", Scope = "namespace", Target = "~N:UniqueList")]
+[assembly: SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1633:File should have header", Justification = "<Ожидание>")]

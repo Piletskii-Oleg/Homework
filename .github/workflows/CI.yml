@@ -1,21 +1,31 @@
-name: CI
+name: build
 
-on: [push, pull_request]
+on: [push]
 
 env:
   DOTNET_VERSION: '6.x'
 
 jobs:
   build:
-    runs-on: windows-latest
-        
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Build
-        run: $slnInList = Get-ChildItem -Recurse -Filter '*.sln'; foreach ($file in $slnInList) {dotnet build $file.FullName}
-      - name: Run tests
-        run: $slnInList = Get-ChildItem -Recurse -Filter '*.sln'; foreach ($file in $slnInList) {dotnet test $file.FullName}
+    name: build-${{matrix.os}}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: NuGet Restore
+      run: nuget restore "2nd Semester/Homework 4/UniqueList"
+
+    - name: Build
+      run: dotnet build "2nd Semester/Homework 4/UniqueList"
+
+    - name: Tests
+      run: dotnet test "2nd Semester/Homework 4/UniqueList/UniqueList.Tests" 

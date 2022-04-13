@@ -8,7 +8,7 @@ using UniqueList.Exceptions;
 /// <typeparam name="T">Type.</typeparam>
 public class MyUniqueList<T> : MyList<T>
 {
-    private readonly Dictionary<T, T> containedElements = new ();
+    private readonly HashSet<T> containedElements = new ();
 
     /// <inheritdoc/>
     public override T this[int index]
@@ -21,26 +21,26 @@ public class MyUniqueList<T> : MyList<T>
     /// <exception cref="AddExistingElementException">Throws if the element is already contained in the list.</exception>
     public override void Add(T value)
     {
-        if (containedElements.ContainsKey(value))
+        if (containedElements.Contains(value))
         {
             throw new AddExistingElementException();
         }
 
         base.Add(value);
-        containedElements.Add(value, value);
+        containedElements.Add(value);
     }
 
     /// <inheritdoc/>
     /// <exception cref="AddExistingElementException">Throws if the element is already contained in the list.</exception>
     public override void Insert(int index, T value)
     {
-        if (containedElements.ContainsKey(value))
+        if (containedElements.Contains(value))
         {
             throw new AddExistingElementException();
         }
 
         base.Insert(index, value);
-        containedElements.Add(value, value);
+        containedElements.Add(value);
     }
 
     /// <inheritdoc/>
@@ -49,7 +49,7 @@ public class MyUniqueList<T> : MyList<T>
         var nodeToDelete = GetNode(index, 0);
         if (nodeToDelete is null)
         {
-            throw new IndexOutOfRangeException();
+            throw new DeleteFromEmptyListException();
         }
 
         base.DeleteAt(index);
@@ -60,7 +60,7 @@ public class MyUniqueList<T> : MyList<T>
     /// <exception cref="DeleteNonexistentElementException">Throws if the element was not contained in the list.</exception>
     public override void Delete(T value)
     {
-        if (!containedElements.ContainsKey(value))
+        if (!containedElements.Contains(value))
         {
             throw new DeleteNonexistentElementException();
         }
@@ -73,7 +73,7 @@ public class MyUniqueList<T> : MyList<T>
     /// <exception cref="AddExistingElementException">Throws if the element is already contained in the list.</exception>
     protected override void SetValue(int index, T value)
     {
-        if (containedElements.ContainsKey(value))
+        if (containedElements.Contains(value))
         {
             throw new AddExistingElementException();
         }
@@ -85,7 +85,7 @@ public class MyUniqueList<T> : MyList<T>
         }
 
         containedElements.Remove(nodeToChange.Value);
-        containedElements.Add(value, value);
+        containedElements.Add(value);
         base.SetValue(index, value);
     }
 }
