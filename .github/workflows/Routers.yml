@@ -29,3 +29,6 @@ jobs:
         
     - name: Tests
       run: dotnet test "2nd Semester/Homework 5/Routers/Routers.Tests"
+      
+    - name: Codecov
+      uses: codecov/codecov-action@v3.0.0
