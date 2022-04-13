@@ -27,7 +27,7 @@ public class ArrayStack : IStack
     {
         if (this.currentIndex == this.capacity - 1)
         {
-            this.capacity += 15;
+            this.capacity *= 2;
             Array.Resize(ref this.stack, this.capacity);
         }
 

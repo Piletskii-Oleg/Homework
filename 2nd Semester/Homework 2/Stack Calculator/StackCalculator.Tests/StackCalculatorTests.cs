@@ -1,25 +1,25 @@
+namespace StackCalculator.Tests;
+
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-
-namespace StackCalculator.Tests;
 
 public class Tests
 {
     private static IEnumerable<TestCaseData> Stacks
         => new []
         {
-        new TestCaseData(new ArrayStack()),
-        new TestCaseData(new ListStack()),
+            new TestCaseData(new ArrayStack()),
+            new TestCaseData(new ListStack()),
         };
     
     [Test, TestCaseSource(nameof(Stacks))]
     public void CalculatorShouldWorkOnCorrectInput(IStack stack)
     {
-        Assert.AreEqual(StackCalculator.Evaluate("2 3 + 1 - 9 *", stack), 36.0);
-        Assert.AreEqual(StackCalculator.Evaluate("1000 2 * 90 -", stack), 1910.0);
-        Assert.AreEqual(StackCalculator.Evaluate("90 5 / 3 /", stack), 6.0);
-        Assert.AreEqual(StackCalculator.Evaluate("64 2 * 2 /", stack), 64.0);
+        Assert.AreEqual(36.0, StackCalculator.Evaluate("2 3 + 1 - 9 *", stack));
+        Assert.AreEqual(1910.0, StackCalculator.Evaluate("1000 2 * 90 -", stack));
+        Assert.AreEqual(6.0,StackCalculator.Evaluate("90 5 / 3 /", stack));
+        Assert.AreEqual(64.0, StackCalculator.Evaluate("64 2 * 2 /", stack));
     }
 
     [Test, TestCaseSource(nameof(Stacks))]
