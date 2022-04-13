@@ -3,7 +3,7 @@
 /// <summary>
 /// Utility to work with router networks.
 /// </summary>
-public static class Routers
+public static class RoutersUtility
 {
     /// <summary>
     /// Makes configuration with maximum carrying capacity and minimum amount of connections.

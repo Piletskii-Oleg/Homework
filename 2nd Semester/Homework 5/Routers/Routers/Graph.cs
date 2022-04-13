@@ -1,5 +1,7 @@
 ﻿namespace Routers;
 
+using Routers.Exceptions;
+
 /// <summary>
 /// Class that represents a graph.
 /// </summary>
@@ -20,6 +22,8 @@ public class Graph
     /// </summary>
     /// <param name="path">Path to the input file.</param>
     /// <returns>Minimum spanning tree.</returns>
+    /// <exception cref="GraphNotConnectedException">Throws if the graph was not connected.</exception>
+    /// <exception cref="ArgumentException">Throws if the input was not in correct form.</exception>
     public static Graph MakeMinimalTree(string path)
     {
         var graph = new Graph();
@@ -53,6 +57,43 @@ public class Graph
         return tree;
     }
 
+    private bool CheckForConnectivity()
+    {
+        var visitedNodes = new Dictionary<Node, bool>();
+        foreach (var node in Nodes)
+        {
+            visitedNodes.Add(node.Value, false);
+        }
+
+        if (DepthFirstSearch(Nodes[1], visitedNodes) == Nodes.Count)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private int DepthFirstSearch(Node originalNode, Dictionary<Node, bool> visitedNodes)
+    {
+        int visitedNodesAmount = 1;
+        visitedNodes[originalNode] = true;
+        foreach (var edge in originalNode.ConnectedEdges)
+        {
+            if (!visitedNodes[edge.Begin])
+            {
+                visitedNodesAmount += DepthFirstSearch(edge.Begin, visitedNodes);
+            }
+            else if (!visitedNodes[edge.End])
+            {
+                visitedNodesAmount += DepthFirstSearch(edge.End, visitedNodes);
+            }
+        }
+
+        return visitedNodesAmount;
+    }
+
     private void FillEdgesAndNodes(string path)
     {
         using (var streamReader = new StreamReader(File.OpenRead(path)))
@@ -80,31 +121,10 @@ public class Graph
             }
         }
 
-        var visitedNodes = new Dictionary<Node, bool>();
-        foreach (var node in Nodes)
+        if (!CheckForConnectivity())
         {
-            visitedNodes.Add(node.Value, false);
+            throw new GraphNotConnectedException();
         }
-
-        if (CheckForConnectivity(Nodes[1], visitedNodes) != Nodes.Count)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    private int CheckForConnectivity(Node originalNode, Dictionary<Node, bool> visitedNodes)
-    {
-        int visitedNodesAmount = 1;
-        visitedNodes[originalNode] = true;
-        foreach (var node in Nodes)
-        {
-            if (!visitedNodes[node.Value])
-            {
-                visitedNodesAmount += CheckForConnectivity(node.Value, visitedNodes);
-            }
-        }
-
-        return visitedNodesAmount;
     }
 
     private void GetEdgesFromFile(string line, int routerNumber)
@@ -127,7 +147,10 @@ public class Graph
             }
 
             var capacityToPut = array[i + 1].Where(c => char.IsDigit(c)).ToArray();
-            Edges.Add(new Edge(int.Parse(capacityToPut), Nodes[routerNumber], Nodes[number]));
+            var newEdge = new Edge(int.Parse(capacityToPut), Nodes[routerNumber], Nodes[number]);
+            Nodes[routerNumber].ConnectedEdges.Add(newEdge);
+            Nodes[number].ConnectedEdges.Add(newEdge);
+            Edges.Add(newEdge);
         }
     }
 

@@ -5,7 +5,24 @@
     <Nullable>enable</Nullable>
 
     <IsPackable>false</IsPackable>
+
+    <BaseOutputPath></BaseOutputPath>
+
+    <OutputType>Library</OutputType>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Debug\**" />
+    <Compile Remove="TestFiles\**" />
+    <EmbeddedResource Remove="Debug\**" />
+    <EmbeddedResource Remove="TestFiles\**" />
+    <None Remove="Debug\**" />
+    <None Remove="TestFiles\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="input.txt" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
