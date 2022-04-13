@@ -10,7 +10,6 @@ public class Node : SetElement
     /// </summary>
     /// <param name="number">Index number of a node.</param>
     public Node(int number)
-    : base()
     {
         Number = number;
     }

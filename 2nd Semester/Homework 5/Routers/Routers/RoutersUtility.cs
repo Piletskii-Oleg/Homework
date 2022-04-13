@@ -1,5 +1,7 @@
 ﻿namespace Routers;
 
+using System.Text;
+
 /// <summary>
 /// Utility to work with router networks.
 /// </summary>
@@ -18,18 +20,18 @@ public static class RoutersUtility
         var visitedEdges = new List<Edge>();
         foreach (var node in tree.Nodes)
         {
-            string line = node.Key + ": ";
+            var line = new StringBuilder($"{node.Key}: ");
             foreach (var connectedEdge in node.Value.ConnectedEdges)
             {
                 if (!visitedEdges.Contains(connectedEdge))
                 {
                     visitedEdges.Add(connectedEdge);
-                    line += connectedEdge.Begin.Number == node.Key ? connectedEdge.End.Number : connectedEdge.Begin.Number;
-                    line += $" ({connectedEdge.Capacity}) ";
+                    line.Append(connectedEdge.Begin.Number == node.Key ? connectedEdge.End.Number : connectedEdge.Begin.Number);
+                    line.Append($" ({connectedEdge.Capacity}) ");
                 }
             }
 
-            if (line != $"{node.Value.Number}: ")
+            if (line.Length != $"{node.Value.Number}: ".Length)
             {
                 writer.WriteLine(line);
             }
