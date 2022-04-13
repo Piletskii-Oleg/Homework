@@ -21,11 +21,11 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
         
-      - name: NuGet Restore
-        run: nuget restore "2nd Semester/Homework 5/Routers"
+    - name: NuGet Restore
+      run: nuget restore "2nd Semester/Homework 5/Routers"
         
-      - name: Build
-        run: dotnet build "2nd Semester/Homework 5/Routers"
+    - name: Build
+      run: dotnet build "2nd Semester/Homework 5/Routers"
         
-      - name: Tests
-        run: dotnet test "2nd Semester/Homework 5/Routers/Routers.Tests"
+    - name: Tests
+      run: dotnet test "2nd Semester/Homework 5/Routers/Routers.Tests"
