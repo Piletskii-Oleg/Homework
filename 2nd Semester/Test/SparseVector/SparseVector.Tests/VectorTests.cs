@@ -50,8 +50,8 @@ public class Tests
     [Test]
     public void VectorsOfDifferentLengthCannotBeAddedWhenDeclaredWithLists()
     {
-        var vector = new Vector(new List<int>() { 2, 3, 4 });
-        var vector2 = new Vector(new List<int>() { 7 });
+        var vector = new Vector(new List<int> { 2, 3, 4 });
+        var vector2 = new Vector(new List<int> { 7 });
         Assert.Throws<ArgumentException>(() => vector.Add(vector2));
     }
 
@@ -133,7 +133,7 @@ public class Tests
     [Test]
     public void VectorCopiedWithConstructorShouldBeSame()
     {
-        var vector = new Vector(new int[] { 2, 3 });
+        var vector = new Vector(new [] { 2, 3 });
         var copy = new Vector(vector);
         Assert.Multiple(() =>
         {
