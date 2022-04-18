@@ -7,51 +7,48 @@ public class Game
 {
     private readonly char[,] walls;
 
+    private (int, int) playerPosition;
+
+    public (int, int) PositionInMatrix { get; private set; }
+
     public Game(string path)
     {
         walls = LoadMap(path);
-        Spawn();
     }
 
     public void OnLeft(object? sender, EventArgs args)
     {
-        if (CursorLeft - 2 >= 0 && CursorLeft <= walls.GetLength(1) && walls[CursorTop, CursorLeft - 2] == ' ')
+        if (playerPosition.Item2 - 1 >= 0 &&
+            walls[playerPosition.Item1, playerPosition.Item2 - 1] == ' ')
         {
-            CursorLeft--;
-            Write(' ');
-            CursorLeft -= 2;
-            Write("@");
+            playerPosition.Item2--;
         }
     }
 
     public void OnRight(object? sender, EventArgs args)
     {
-        if (CursorLeft >= 0 && CursorLeft < walls.GetLength(1) && walls[CursorTop, CursorLeft] == ' ')
+        if (playerPosition.Item2 + 1 < walls.GetLength(1) &&
+            walls[playerPosition.Item1, playerPosition.Item2 + 1] == ' ')
         {
-            RemoveCharacter();
-            Write("@");
+            playerPosition.Item2++;
         }
     }
 
     public void OnDown(object? sender, EventArgs args)
     {
-        if (CursorTop + 1 < walls.GetLength(0) && CursorLeft - 1 < walls.GetLength(1) && walls[CursorTop + 1, CursorLeft - 1] == ' ')
+        if (playerPosition.Item1 + 1 < walls.GetLength(0) &&
+            walls[playerPosition.Item1 + 1, playerPosition.Item2] == ' ')
         {
-            RemoveCharacter();
-            CursorLeft--;
-            CursorTop++;
-            Write("@");
+            playerPosition.Item1++;
         }
     }
 
     public void OnUp(object? sender, EventArgs args)
-    { 
-        if (CursorTop - 1 >= 0 && CursorTop < walls.GetLength(0) && walls[CursorTop - 1, CursorLeft - 1] == ' ')
+    {
+        if (playerPosition.Item1 - 1 >= 0
+            && walls[playerPosition.Item1 - 1, playerPosition.Item2] == ' ')
         {
-            RemoveCharacter();
-            CursorLeft--;
-            CursorTop--;
-            Write("@");
+            playerPosition.Item1--;
         }
     }
 
@@ -61,94 +58,104 @@ public class Game
         Write("Thanks for playing!");
     }
 
-    private static void RemoveCharacter()
+    public void UpdatePosition(object? sender, EventArgs args)
     {
-        CursorLeft--;
         Write(' ');
+        ChangePosition(playerPosition);
     }
 
-    private static char[,] LoadMap(string path)
+    private void ChangePosition((int, int) newPosition)
+    {
+        SetCursorPosition(newPosition.Item2, newPosition.Item1);
+        Write('@');
+        SetCursorPosition(newPosition.Item2, newPosition.Item1);
+        playerPosition = newPosition;
+    }
+
+    private char[,] LoadMap(string path)
     {
         using var reader = new StreamReader(File.OpenRead(path));
         var line = string.Empty;
-        int sizeX = 0;
-        int sizeY = 0;
+        int rowCount = 0;
+        int columnCount = 0;
         while ((line = reader.ReadLine()) != null)
         {
-            WriteLine(line);
-            if (line.Length > sizeX)
+            if (line.Length > columnCount)
             {
-                sizeX = line.Length;
+                columnCount = line.Length;
             }
 
-            sizeY++;
+            rowCount++;
         }
 
-        if (sizeX == 0 && sizeY == 0)
+        if (rowCount == 0 && columnCount == 0)
         {
             throw new EmptyMapException();
         }
 
-        WriteLine("Press Escape to quit");
-
-        var map = new char[sizeY, sizeX];
+        var map = new char[rowCount, columnCount];
         reader.BaseStream.Seek(0, SeekOrigin.Begin);
-        for (int i = 0; i < sizeY; i++)
+        bool hasSpawnPoint = false;
+        bool hasSpace = false;
+        for (int i = 0; i < rowCount; i++)
         {
             line = reader.ReadLine();
             for (int j = 0; j < line!.Length; j++)
             {
                 map[i, j] = line[j];
+                if (line[j] == '@')
+                {
+                    playerPosition = (i, j);
+                    map[i, j] = ' ';
+                    hasSpawnPoint = true;
+                }
+                else if (line[j] == ' ')
+                {
+                    hasSpace = true;
+                }
             }
 
-            if (line.Length < sizeX)
+            if (line.Length < columnCount)
             {
-                for (int j = line.Length; j < sizeX; j++)
+                hasSpace = true;
+                for (int j = line.Length; j < columnCount; j++)
                 {
                     map[i, j] = ' ';
                 }
             }
         }
 
+        if (!hasSpawnPoint)
+        {
+            throw new NoSpawnPointException();
+        }
+        else if (!hasSpace)
+        {
+            throw new NoSpaceToMoveException();
+        }
+
         return map;
     }
 
-    private void Spawn()
+    public void StartConsole()
     {
-        bool hasFreeSpace = false;
-        bool spawned = false;
         for (int i = 0; i < walls.GetLength(0); i++)
         {
             for (int j = 0; j < walls.GetLength(1); j++)
             {
-                if (walls[i, j] == '@')
+                if ((i, j) == playerPosition)
                 {
-                    SetCursorPosition(j, i);
                     Write('@');
-                    walls[i, j] = ' ';
-                    spawned = true;
                 }
-
-                if (walls[i, j] == ' ')
+                else
                 {
-                    hasFreeSpace = true;
-                }
-
-                if (spawned && hasFreeSpace)
-                {
-                    return;
+                    Write(walls[i, j]);
                 }
             }
+            WriteLine();
         }
 
-        if (!spawned)
-        {
-            throw new NoSpawnPointException();
-        }
-
-        if (!hasFreeSpace)
-        {
-            throw new NoSpaceToMoveException();
-        }
+        WriteLine("Press Escape to quit");
+        SetCursorPosition(playerPosition.Item2, playerPosition.Item1);
     }
 }

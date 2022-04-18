@@ -1,19 +1,22 @@
-﻿namespace ConsoleGame;
+﻿using ConsoleGame;
 
-class Program
-{
-    static void Main()
-    {
-        string path = "../../../map.txt";
-        var eventLoop = new EventLoop();
-        var game = new Game(path);
+string path = "../../../map.txt";
+var eventLoop = new EventLoop();
+var game = new Game(path);
+game.StartConsole();
 
-        eventLoop.LeftHandler += game.OnLeft;
-        eventLoop.RightHandler += game.OnRight;
-        eventLoop.DownHandler += game.OnDown;
-        eventLoop.UpHandler += game.OnUp;
-        eventLoop.EscHandler += game.OnEsc;
+eventLoop.LeftHandler += game.OnLeft;
+eventLoop.LeftHandler += game.UpdatePosition;
 
-        eventLoop.Run();
-    }
-}
+eventLoop.RightHandler += game.OnRight;
+eventLoop.RightHandler += game.UpdatePosition;
+
+eventLoop.DownHandler += game.OnDown;
+eventLoop.DownHandler += game.UpdatePosition;
+
+eventLoop.UpHandler += game.OnUp;
+eventLoop.UpHandler += game.UpdatePosition;
+
+eventLoop.EscHandler += game.OnEsc;
+
+eventLoop.Run();

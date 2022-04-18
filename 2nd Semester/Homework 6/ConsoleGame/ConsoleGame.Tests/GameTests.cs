@@ -28,8 +28,14 @@ public class Tests
     {
         Game? game = null;
         string path = "../../../nospace.txt";
-        var stringWriter = new StringWriter();
-        Console.SetOut(stringWriter);
         Assert.Throws<NoSpaceToMoveException>(() => game = new Game(path));
+    }
+
+    [Test]
+    public void MapWithNoSpawnPointShouldThrowException()
+    {
+        Game? game = null;
+        string path = "../../../nospawn.txt";
+        Assert.Throws<NoSpawnPointException>(() => game = new Game(path));
     }
 }
