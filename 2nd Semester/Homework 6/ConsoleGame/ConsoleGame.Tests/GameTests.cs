@@ -1,24 +1,11 @@
 namespace ConsoleGame.Tests;
 
 using System;
-using System.IO;
-using System.Collections.Generic;
 using NUnit.Framework;
 using ConsoleGame.Exceptions;
 
-public class Tests
+public class GameTests
 {
-    private EventLoop eventLoop = new();
-
-    private event EventHandler<EventArgs> Directions = (sender, args) => { };
-
-    [SetUp]
-    public void Setup()
-    {
-        eventLoop = new EventLoop();
-        Directions = (sender, args) => { };
-    }
-
     [Test]
     public void EmptyMapShouldThrowException()
     {
@@ -46,26 +33,80 @@ public class Tests
     [Test]
     public void GoingLeftShouldNotGoThroughWall()
     {
-        string path = "../../../TestFiles/map.txt";
+        string path = "../../../TestFiles/goingStraight.txt";
         var game = new Game(path);
         for (int i = 0; i < 5; i++)
         {
             game.OnLeft(this, EventArgs.Empty);
         }
 
-        Assert.AreEqual((2, 1), game.GetPosition);
+        Assert.AreEqual((2, 1), game.Position);
     }
 
     [Test]
     public void GoingRightShouldNotGoThroughWall()
     {
-        string path = "../../../map.txt";
+        string path = "../../../TestFiles/goingStraight.txt";
         var game = new Game(path);
         for (int i = 0; i < 5; i++)
         {
             game.OnRight(this, EventArgs.Empty);
         }
 
-        Assert.AreEqual((2, 5), game.GetPosition);
+        Assert.AreEqual((2, 5), game.Position);
+    }
+
+    [Test]
+    public void GoingUpShouldNotGoThroughWall()
+    {
+        string path = "../../../TestFiles/goingStraight.txt";
+        var game = new Game(path);
+        for (int i = 0; i < 5; i++)
+        {
+            game.OnUp(this, EventArgs.Empty);
+        }
+
+        Assert.AreEqual((1, 3), game.Position);
+    }
+
+    [Test]
+    public void GoingDownShouldNotGoThroughWall()
+    {
+        string path = "../../../TestFiles/goingStraight.txt";
+        var game = new Game(path);
+        for (int i = 0; i < 5; i++)
+        {
+            game.OnDown(this, EventArgs.Empty);
+        }
+
+        Assert.AreEqual((3, 3), game.Position);
+    }
+
+    [Test]
+    public void PlayerShouldBeAbleToPassThroughNarrowCorridors()
+    {
+        string path = "../../../TestFiles/corridor.txt";
+        var game = new Game(path);
+        for (int i = 0; i < 2; i++)
+        {
+            game.OnUp(this, EventArgs.Empty);
+        }
+
+        for (int i = 0; i < 6; i++)
+        {
+            game.OnRight(this, EventArgs.Empty);
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            game.OnDown(this, EventArgs.Empty);
+        }
+
+        for (int i = 0; i < 7; i++)
+        {
+            game.OnLeft(this, EventArgs.Empty);
+        }
+
+        Assert.AreEqual((5, 1), game.Position);
     }
 }

@@ -1,75 +1,140 @@
 ﻿namespace ConsoleGame;
 
-using static Console;
 using ConsoleGame.Exceptions;
 
+/// <summary>
+/// A console game where player moves within walls using directional keys.
+/// </summary>
 public class Game
 {
     private readonly char[,] walls;
 
     private (int, int) playerPosition;
 
-    public (int, int) GetPosition { get => playerPosition; }
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Game"/> class.
+    /// </summary>
+    /// <param name="path">Path to the map.</param>
     public Game(string path)
     {
-        walls = LoadMap(path);
+        this.walls = this.LoadMap(path);
     }
 
+    /// <summary>
+    /// Gets current position of the player.
+    /// </summary>
+    public (int, int) Position { get => this.playerPosition; }
+
+    /// <summary>
+    /// Corresponds to the player moving left.
+    /// </summary>
+    /// <param name="sender">References object that raised the event.</param>
+    /// <param name="args">Event data.</param>
     public void OnLeft(object? sender, EventArgs args)
     {
-        if (playerPosition.Item2 - 1 >= 0 &&
-            walls[playerPosition.Item1, playerPosition.Item2 - 1] == ' ')
+        if (this.playerPosition.Item2 - 1 >= 0 &&
+            this.walls[this.playerPosition.Item1, this.playerPosition.Item2 - 1] == ' ')
         {
-            playerPosition.Item2--;
+            this.playerPosition.Item2--;
         }
     }
 
+    /// <summary>
+    /// Corresponds to the player moving right.
+    /// </summary>
+    /// <param name="sender">References object that raised the event.</param>
+    /// <param name="args">Event data.</param>
     public void OnRight(object? sender, EventArgs args)
     {
-        if (playerPosition.Item2 + 1 < walls.GetLength(1) &&
-            walls[playerPosition.Item1, playerPosition.Item2 + 1] == ' ')
+        if (this.playerPosition.Item2 + 1 < this.walls.GetLength(1) &&
+            this.walls[this.playerPosition.Item1, this.playerPosition.Item2 + 1] == ' ')
         {
-            playerPosition.Item2++;
+            this.playerPosition.Item2++;
         }
     }
 
+    /// <summary>
+    /// Corresponds to the player moving down.
+    /// </summary>
+    /// <param name="sender">References object that raised the event.</param>
+    /// <param name="args">Event data.</param>
     public void OnDown(object? sender, EventArgs args)
     {
-        if (playerPosition.Item1 + 1 < walls.GetLength(0) &&
-            walls[playerPosition.Item1 + 1, playerPosition.Item2] == ' ')
+        if (this.playerPosition.Item1 + 1 < this.walls.GetLength(0) &&
+            this.walls[this.playerPosition.Item1 + 1, this.playerPosition.Item2] == ' ')
         {
-            playerPosition.Item1++;
+            this.playerPosition.Item1++;
         }
     }
 
+    /// <summary>
+    /// Corresponds to the player moving up.
+    /// </summary>
+    /// <param name="sender">References object that raised the event.</param>
+    /// <param name="args">Event data.</param>
     public void OnUp(object? sender, EventArgs args)
     {
-        if (playerPosition.Item1 - 1 >= 0
-            && walls[playerPosition.Item1 - 1, playerPosition.Item2] == ' ')
+        if (this.playerPosition.Item1 - 1 >= 0
+            && this.walls[this.playerPosition.Item1 - 1, this.playerPosition.Item2] == ' ')
         {
-            playerPosition.Item1--;
+            this.playerPosition.Item1--;
         }
     }
 
+    /// <summary>
+    /// Corresponds to the player exiting.
+    /// </summary>
+    /// <param name="sender">References object that raised the event.</param>
+    /// <param name="args">Event data.</param>
     public void OnEsc(object? sender, EventArgs args)
     {
-        SetCursorPosition(0, walls.GetLength(0) + 1);
-        Write("Thanks for playing!");
+        Console.SetCursorPosition(0, this.walls.GetLength(0) + 1);
+        Console.Write("Thanks for playing!");
     }
 
+    /// <summary>
+    /// Updates player's position.
+    /// </summary>
+    /// <param name="sender">References object that raised the event.</param>
+    /// <param name="args">Event data.</param>
     public void UpdatePosition(object? sender, EventArgs args)
     {
-        Write(' ');
-        ChangePosition(playerPosition);
+        Console.Write(' ');
+        this.ChangePosition(this.playerPosition);
+    }
+
+    /// <summary>
+    /// Enables console display.
+    /// </summary>
+    public void StartConsole()
+    {
+        for (int i = 0; i < this.walls.GetLength(0); i++)
+        {
+            for (int j = 0; j < this.walls.GetLength(1); j++)
+            {
+                if ((i, j) == this.playerPosition)
+                {
+                    Console.Write('@');
+                }
+                else
+                {
+                    Console.Write(this.walls[i, j]);
+                }
+            }
+
+            Console.WriteLine();
+        }
+
+        Console.WriteLine("Press Escape to quit");
+        Console.SetCursorPosition(this.playerPosition.Item2, this.playerPosition.Item1);
     }
 
     private void ChangePosition((int, int) newPosition)
     {
-        SetCursorPosition(newPosition.Item2, newPosition.Item1);
-        Write('@');
-        SetCursorPosition(newPosition.Item2, newPosition.Item1);
-        playerPosition = newPosition;
+        Console.SetCursorPosition(newPosition.Item2, newPosition.Item1);
+        Console.Write('@');
+        Console.SetCursorPosition(newPosition.Item2, newPosition.Item1);
+        this.playerPosition = newPosition;
     }
 
     private char[,] LoadMap(string path)
@@ -105,7 +170,7 @@ public class Game
                 map[i, j] = line[j];
                 if (line[j] == '@')
                 {
-                    playerPosition = (i, j);
+                    this.playerPosition = (i, j);
                     map[i, j] = ' ';
                     hasSpawnPoint = true;
                 }
@@ -135,27 +200,5 @@ public class Game
         }
 
         return map;
-    }
-
-    public void StartConsole()
-    {
-        for (int i = 0; i < walls.GetLength(0); i++)
-        {
-            for (int j = 0; j < walls.GetLength(1); j++)
-            {
-                if ((i, j) == playerPosition)
-                {
-                    Write('@');
-                }
-                else
-                {
-                    Write(walls[i, j]);
-                }
-            }
-            WriteLine();
-        }
-
-        WriteLine("Press Escape to quit");
-        SetCursorPosition(playerPosition.Item2, playerPosition.Item1);
     }
 }
