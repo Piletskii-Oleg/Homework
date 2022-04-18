@@ -1,6 +1,7 @@
 ﻿namespace ConsoleGame;
 
 using static Console;
+using ConsoleGame.Exceptions;
 
 public class Game
 {
@@ -25,17 +26,10 @@ public class Game
 
     public void OnRight(object? sender, EventArgs args)
     {
-        if (CursorLeft < walls.GetLength(1) && walls[CursorTop, CursorLeft] == ' ')
+        if (CursorLeft >= 0 && CursorLeft < walls.GetLength(1) && walls[CursorTop, CursorLeft] == ' ')
         {
-            if (CursorLeft == 0)
-            {
-                Write("@");
-            }
-            else
-            {
-                RemoveCharacter();
-                Write("@");
-            }
+            RemoveCharacter();
+            Write("@");
         }
     }
 
@@ -89,6 +83,12 @@ public class Game
 
             sizeY++;
         }
+
+        if (sizeX == 0 && sizeY == 0)
+        {
+            throw new EmptyMapException();
+        }
+
         WriteLine("Press Escape to quit");
 
         var map = new char[sizeY, sizeX];
@@ -98,7 +98,7 @@ public class Game
             line = reader.ReadLine();
             for (int j = 0; j < line!.Length; j++)
             {
-                map[i, j] = line[j] == ' ' ? ' ' : line[j];
+                map[i, j] = line[j];
             }
 
             if (line.Length < sizeX)
@@ -115,6 +115,8 @@ public class Game
 
     private void Spawn()
     {
+        bool hasFreeSpace = false;
+        bool spawned = false;
         for (int i = 0; i < walls.GetLength(0); i++)
         {
             for (int j = 0; j < walls.GetLength(1); j++)
@@ -122,11 +124,31 @@ public class Game
                 if (walls[i, j] == '@')
                 {
                     SetCursorPosition(j, i);
-                    Write(' ');
+                    Write('@');
                     walls[i, j] = ' ';
+                    spawned = true;
+                }
+
+                if (walls[i, j] == ' ')
+                {
+                    hasFreeSpace = true;
+                }
+
+                if (spawned && hasFreeSpace)
+                {
                     return;
                 }
             }
+        }
+
+        if (!spawned)
+        {
+            throw new NoSpawnPointException();
+        }
+
+        if (!hasFreeSpace)
+        {
+            throw new NoSpaceToMoveException();
         }
     }
 }

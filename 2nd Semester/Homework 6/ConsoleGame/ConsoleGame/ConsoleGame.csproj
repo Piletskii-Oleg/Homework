@@ -11,4 +11,8 @@
     <None Remove="map.txt" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ConsoleGame.Exceptions\ConsoleGame.Exceptions.csproj" />
+  </ItemGroup>
+
 </Project>
