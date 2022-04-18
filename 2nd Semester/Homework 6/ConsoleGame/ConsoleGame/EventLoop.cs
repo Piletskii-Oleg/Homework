@@ -10,13 +10,12 @@ public class EventLoop
 
     public event EventHandler<EventArgs> UpHandler = (sender, args) => { };
 
-    public event EventHandler<EventArgs> EnterHandler = (sender, args) => { };
-
-    public List<EventHandler<EventArgs>> EventHandlers = new ();
+    public event EventHandler<EventArgs> EscHandler = (sender, args) => { };
 
     public void Run()
     {
-        while (true)
+        bool isRunning = true;
+        while (isRunning)
         {
             var key = Console.ReadKey(true);
             switch (key.Key)
@@ -27,14 +26,15 @@ public class EventLoop
                 case ConsoleKey.RightArrow:
                     RightHandler(this, EventArgs.Empty);
                     break;
-                case ConsoleKey.Enter:
-                    EnterHandler(this, EventArgs.Empty);
-                    break;
                 case ConsoleKey.DownArrow:
                     DownHandler(this, EventArgs.Empty);
                     break;
                 case ConsoleKey.UpArrow:
                     UpHandler(this, EventArgs.Empty);
+                    break;
+                case ConsoleKey.Escape:
+                    EscHandler(this, EventArgs.Empty);
+                    isRunning = false;
                     break;
             }
         }
