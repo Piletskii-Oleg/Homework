@@ -8,27 +8,27 @@ public class EventLoop
     /// <summary>
     /// Handles actions directed to the left.
     /// </summary>
-    public event EventHandler<EventArgs> LeftHandler = (sender, args) => { };
+    public event EventHandler<EventArgs> LeftHandler = (_, _) => { };
 
     /// <summary>
     /// Handles actions directed to the right.
     /// </summary>
-    public event EventHandler<EventArgs> RightHandler = (sender, args) => { };
+    public event EventHandler<EventArgs> RightHandler = (_, _) => { };
 
     /// <summary>
     /// Handles actions directed down.
     /// </summary>
-    public event EventHandler<EventArgs> DownHandler = (sender, args) => { };
+    public event EventHandler<EventArgs> DownHandler = (_, _) => { };
 
     /// <summary>
     /// Handles actions directed up.
     /// </summary>
-    public event EventHandler<EventArgs> UpHandler = (sender, args) => { };
+    public event EventHandler<EventArgs> UpHandler = (_, _) => { };
 
     /// <summary>
     /// Handles actions assigned to Escape button.
     /// </summary>
-    public event EventHandler<EventArgs> EscHandler = (sender, args) => { };
+    public event EventHandler<EventArgs> EscHandler = (_, _) => { };
 
     /// <summary>
     /// Processes user input.
@@ -56,6 +56,8 @@ public class EventLoop
                 case ConsoleKey.Escape:
                     this.EscHandler(this, EventArgs.Empty);
                     isRunning = false;
+                    break;
+                default:
                     break;
             }
         }

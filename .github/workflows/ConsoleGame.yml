@@ -22,10 +22,10 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
     - name: NuGet Restore
-      run: nuget restore "2nd Semester/Homework 7/ConsoleGame"
+      run: nuget restore "2nd Semester/Homework 6/ConsoleGame"
 
     - name: Build
-      run: dotnet build "2nd Semester/Homework 7/ConsoleGame"
+      run: dotnet build "2nd Semester/Homework 6/ConsoleGame"
 
     - name: Tests
-      run: dotnet test "2nd Semester/Homework 7/ConsoleGame/ConsoleGame.Tests" 
+      run: dotnet test "2nd Semester/Homework 6/ConsoleGame/ConsoleGame.Tests" 
