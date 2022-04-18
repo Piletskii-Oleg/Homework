@@ -57,8 +57,6 @@ public class EventLoop
                     this.EscHandler(this, EventArgs.Empty);
                     isRunning = false;
                     break;
-                default:
-                    break;
             }
         }
     }
