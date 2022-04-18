@@ -9,7 +9,7 @@ public class Game
 
     private (int, int) playerPosition;
 
-    public (int, int) PositionInMatrix { get; private set; }
+    public (int, int) GetPosition { get => playerPosition; }
 
     public Game(string path)
     {

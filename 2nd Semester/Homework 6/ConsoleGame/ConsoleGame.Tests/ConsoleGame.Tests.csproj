@@ -10,8 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="empty.txt" />
-    <None Remove="nospace.txt" />
+    <Compile Remove="TestFiles\**" />
+    <EmbeddedResource Remove="TestFiles\**" />
+    <None Remove="TestFiles\**" />
   </ItemGroup>
 
   <ItemGroup>
