@@ -1,5 +1,7 @@
 ﻿namespace Calculator;
 
+using System.Globalization;
+
 /// <summary>
 /// Calculator that calculates values immediately.
 /// </summary>
@@ -57,7 +59,7 @@ public class Calculator
         {
             if (inputOperator == "Sqrt")
             {
-                this.FirstOperand = Math.Sqrt(double.Parse(this.FirstOperand)).ToString("G30");
+                this.FirstOperand = Math.Sqrt(double.Parse(this.FirstOperand)).ToString("G30", CultureInfo.GetCultureInfo("ru-RU"));
             }
             else
             {
@@ -71,13 +73,13 @@ public class Calculator
             switch (this.Operator)
             {
                 case '+':
-                    this.FirstOperand = (decimalFirst + decimalSecond).ToString("G30");
+                    this.FirstOperand = (decimalFirst + decimalSecond).ToString("G30", CultureInfo.GetCultureInfo("ru-RU"));
                     break;
                 case '-':
-                    this.FirstOperand = (decimalFirst - decimalSecond).ToString("G30");
+                    this.FirstOperand = (decimalFirst - decimalSecond).ToString("G30", CultureInfo.GetCultureInfo("ru-RU"));
                     break;
                 case '*':
-                    this.FirstOperand = (decimalFirst * decimalSecond).ToString("G30");
+                    this.FirstOperand = (decimalFirst * decimalSecond).ToString("G30", CultureInfo.GetCultureInfo("ru-RU"));
                     break;
                 case '/':
                     decimal threshold = 10e-15M;
@@ -88,7 +90,7 @@ public class Calculator
                     }
                     else
                     {
-                        this.FirstOperand = (decimalFirst / decimalSecond).ToString("G30");
+                        this.FirstOperand = (decimalFirst / decimalSecond).ToString("G30", CultureInfo.GetCultureInfo("ru-RU"));
                     }
 
                     break;
