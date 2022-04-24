@@ -68,8 +68,8 @@ public class Calculator
         }
         else
         {
-            this.FirstOperand.Replace(',', '.');
-            this.SecondOperand.Replace(',', '.');
+            this.FirstOperand = this.FirstOperand.Replace(',', '.');
+            this.SecondOperand = this.SecondOperand.Replace(',', '.');
             var decimalFirst = decimal.Parse(this.FirstOperand);
             var decimalSecond = decimal.Parse(this.SecondOperand);
             switch (this.Operator)
