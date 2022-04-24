@@ -57,7 +57,7 @@ public class Calculator
         {
             if (inputOperator == "Sqrt")
             {
-                this.FirstOperand = Math.Sqrt(double.Parse(this.FirstOperand)).ToString();
+                this.FirstOperand = Math.Sqrt(double.Parse(this.FirstOperand)).ToString("G30");
             }
             else
             {
@@ -71,16 +71,16 @@ public class Calculator
             switch (this.Operator)
             {
                 case '+':
-                    this.FirstOperand = (decimalFirst + decimalSecond).ToString();
+                    this.FirstOperand = (decimalFirst + decimalSecond).ToString("G30");
                     break;
                 case '-':
-                    this.FirstOperand = (decimalFirst - decimalSecond).ToString();
+                    this.FirstOperand = (decimalFirst - decimalSecond).ToString("G30");
                     break;
                 case '*':
-                    this.FirstOperand = (decimalFirst * decimalSecond).ToString();
+                    this.FirstOperand = (decimalFirst * decimalSecond).ToString("G30");
                     break;
                 case '/':
-                    decimal threshold = 10e-9M;
+                    decimal threshold = 10e-15M;
                     if (Math.Abs(decimalSecond) < threshold)
                     {
                         this.Clear();
@@ -88,7 +88,7 @@ public class Calculator
                     }
                     else
                     {
-                        this.FirstOperand = (decimalFirst / decimalSecond).ToString();
+                        this.FirstOperand = (decimalFirst / decimalSecond).ToString("G30");
                     }
 
                     break;
@@ -113,6 +113,10 @@ public class Calculator
         else if (this.FirstOperand != string.Empty)
         {
             this.FirstOperand += this.FirstOperand.Contains(',') ? string.Empty : ",";
+        }
+        else
+        {
+            this.FirstOperand = "0,";
         }
     }
 
@@ -167,7 +171,7 @@ public class Calculator
 
     private static string ChangeSign(string number)
     {
-        if (int.TryParse(number, out int _) && int.Parse(number) == decimal.Parse(number) && int.Parse(number) == 0)
+        if (number == "0")
         {
             return number;
         }

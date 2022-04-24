@@ -57,6 +57,7 @@ partial class CalculatorForm
             // 
             this.richTextBox.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.richTextBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.richTextBox.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.richTextBox.Location = new System.Drawing.Point(0, 0);
             this.richTextBox.Name = "richTextBox";
             this.richTextBox.ReadOnly = true;
@@ -64,7 +65,6 @@ partial class CalculatorForm
             this.richTextBox.TabIndex = 4;
             this.richTextBox.TabStop = false;
             this.richTextBox.Text = "";
-            this.richTextBox.ZoomFactor = 2F;
             // 
             // tableLayoutPanel1
             // 

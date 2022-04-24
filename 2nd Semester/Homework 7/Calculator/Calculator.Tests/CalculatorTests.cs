@@ -64,7 +64,7 @@ namespace Calculator.Tests
             calc.DecimalPress();
             calc.OperandPress("6");
             calc.OperatorPress("=");
-            Assert.AreEqual("4,8", calc.FirstOperand);
+            Assert.AreEqual((3.2 + 1.6).ToString("G2"), calc.FirstOperand);
         }
 
         [Test]
@@ -74,6 +74,14 @@ namespace Calculator.Tests
             calc.OperandPress("2");
             calc.ChangeSignPress();
             Assert.AreEqual("-32", calc.FirstOperand);
+        }
+
+        [Test]
+        public void ZeroShouldNotChangeSign()
+        {
+            calc.OperandPress("0");
+            calc.ChangeSignPress();
+            Assert.AreEqual("0", calc.FirstOperand);
         }
 
         [Test]
