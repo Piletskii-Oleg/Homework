@@ -64,7 +64,7 @@ namespace Calculator.Tests
             calc.DecimalPress();
             calc.OperandPress("6");
             calc.OperatorPress("=");
-            Assert.AreEqual((3.2 + 1.6).ToString(), calc.FirstOperand);
+            Assert.AreEqual("4,8", calc.FirstOperand);
         }
 
         [Test]

@@ -66,29 +66,29 @@ public class Calculator
         }
         else
         {
-            var doubleFirst = double.Parse(this.FirstOperand);
-            var doubleSecond = double.Parse(this.SecondOperand);
+            var decimalFirst = decimal.Parse(this.FirstOperand);
+            var decimalSecond = decimal.Parse(this.SecondOperand);
             switch (this.Operator)
             {
                 case '+':
-                    this.FirstOperand = (doubleFirst + doubleSecond).ToString();
+                    this.FirstOperand = (decimalFirst + decimalSecond).ToString();
                     break;
                 case '-':
-                    this.FirstOperand = (doubleFirst - doubleSecond).ToString();
+                    this.FirstOperand = (decimalFirst - decimalSecond).ToString();
                     break;
                 case '*':
-                    this.FirstOperand = (doubleFirst * doubleSecond).ToString();
+                    this.FirstOperand = (decimalFirst * decimalSecond).ToString();
                     break;
                 case '/':
-                    double threshold = 10e-9;
-                    if (Math.Abs(doubleSecond) < threshold)
+                    decimal threshold = 10e-9M;
+                    if (Math.Abs(decimalSecond) < threshold)
                     {
                         this.Clear();
                         throw new DivideByZeroException();
                     }
                     else
                     {
-                        this.FirstOperand = (doubleFirst / doubleSecond).ToString();
+                        this.FirstOperand = (decimalFirst / decimalSecond).ToString();
                     }
 
                     break;
@@ -167,11 +167,11 @@ public class Calculator
 
     private static string ChangeSign(string number)
     {
-        if (int.TryParse(number, out int _) && int.Parse(number) == double.Parse(number) && int.Parse(number) == 0)
+        if (int.TryParse(number, out int _) && int.Parse(number) == decimal.Parse(number) && int.Parse(number) == 0)
         {
             return number;
         }
-        else if (double.Parse(number) > 0)
+        else if (decimal.Parse(number) > 0)
         {
             number = "-" + number;
         }
