@@ -1,11 +1,13 @@
-﻿namespace LZWCompress;
-using System.Collections;
-class Program
+﻿string path = args[0];
+if (args[1] == "-c")
 {
-    static void Main(string[] args)
-    {
-        string testPath = "C:\\Users\\Oleg\\Documents\\GitHub\\Homework\\2nd Semester\\Homework 3\\LZWCompress\\LZWCompress\\test2.txt";
-        LZW.Encode(testPath);
-        LZW.Decode(testPath + ".zipped");
-    }
+    LZWCompress.LZWCompress.Encode(path);
+}
+else if (args[1] == "-u")
+{
+    LZWCompress.LZWCompress.Decode(path);
+}
+else
+{
+    throw new ArgumentException("Passed parameter was not of correct form.", args[1]);
 }
