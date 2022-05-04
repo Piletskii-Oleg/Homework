@@ -430,3 +430,11 @@ FodyWeavers.xsd
 2nd Semester/Homework 3/LZWCompress/LZWCompress/test2.txt.zipped.txt
 2nd Semester/Homework 3/LZWCompress/LZWCompress/test.txt
 2nd Semester/Homework 3/LZWCompress/LZWCompress/test.txt
+/2nd Semester/Homework 3/LZWCompress/LZWCompress.Tests/TestFiles/testchmb_a_08.bsp.zipped
+/2nd Semester/Homework 3/LZWCompress/LZWCompress.Tests/TestFiles/testchmb_a_08-unzipped.bsp
+/2nd Semester/Homework 3/LZWCompress/LZWCompress.Tests/TestFiles/Cat.mp4.zipped
+/2nd Semester/Homework 3/LZWCompress/LZWCompress.Tests/TestFiles/Cat-unzipped.mp4
+/2nd Semester/Homework 3/LZWCompress/LZWCompress.Tests/TestFiles/compress.txt.zipped
+/2nd Semester/Homework 3/LZWCompress/LZWCompress.Tests/TestFiles/compress-unzipped.txt
+/2nd Semester/Homework 3/LZWCompress/LZWCompress.Tests/TestFiles/Promise (Reprise).flac.zipped
+/2nd Semester/Homework 3/LZWCompress/LZWCompress.Tests/TestFiles/Promise (Reprise)-unzipped.flac

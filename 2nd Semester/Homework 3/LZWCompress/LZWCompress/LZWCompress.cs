@@ -52,6 +52,18 @@ public static class LZWCompress
     }
 
     /// <summary>
+    /// Calculates coefficient of compression after using LZW.
+    /// </summary>
+    /// <param name="path">Path to the original file.</param>
+    /// <returns>Compression Coefficient.</returns>
+    public static double GetCompressionCoefficient(string path)
+    {
+        var originalSize = new FileInfo(path).Length;
+        var newSize = new FileInfo(path + ".zipped").Length;
+        return (double) originalSize / newSize;
+    }
+
+    /// <summary>
     /// Decodes file encoded by the LZW algorithm.
     /// </summary>
     /// <param name="path">Path to the encoded file.</param>
@@ -106,6 +118,8 @@ public static class LZWCompress
         }
 
         var resultPath = new string(path.ToCharArray(), 0, path.Length - 7);
+        var length = Path.GetExtension(resultPath).Length;
+        resultPath = resultPath.Insert(resultPath.Length - Path.GetExtension(resultPath).Length, "-unzipped");
         File.WriteAllBytes(resultPath, result.ToArray());
     }
 

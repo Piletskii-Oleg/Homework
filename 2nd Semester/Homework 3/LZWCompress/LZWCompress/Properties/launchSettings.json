@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "LZWCompress": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\Users\\Oleg\\Documents\\GitHub\\Homework\\2nd Semester\\Homework 3\\LZWCompress\\LZWCompress\\test.txt.zipped\" -u"
+    }
+  }
+}
