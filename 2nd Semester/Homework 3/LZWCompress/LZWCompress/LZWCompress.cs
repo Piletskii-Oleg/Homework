@@ -83,14 +83,10 @@ public static class LZWCompress
         while (currentByte < allBytes.Length)
         {
             var currentBytes = new List<byte>();
-            
-            
-                for (int j = 0; j < byteAmount; j++)
-                {
-                    currentBytes.Add(allBytes[currentByte++]);
-                }
-            
-            
+            for (int j = 0; j < byteAmount; j++)
+            {
+                currentBytes.Add(allBytes[currentByte++]);
+            }
 
             currentByte--;
             var numberInDictionary = ByteListIntoInt(currentBytes);
