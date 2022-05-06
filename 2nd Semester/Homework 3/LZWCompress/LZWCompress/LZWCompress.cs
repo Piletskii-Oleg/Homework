@@ -14,8 +14,7 @@ public static class LZWCompress
         var trie = new Trie();
         for (int i = 0; i < 256; i++)
         {
-            var toAdd = new byte[] { (byte)i };
-            trie.Add(toAdd.ToList());
+            trie.Add(new[] { (byte)i }.ToList());
         }
 
         var allBytes = File.ReadAllBytes(path);
@@ -80,22 +79,20 @@ public static class LZWCompress
         result.Add(allBytes[0]);
         var previousBytes = new List<byte>(new[] { allBytes[0] });
         int byteAmount = 2;
-        for (int i = 1; i < allBytes.Length; i++)
+        int currentByte = 1;
+        while (currentByte < allBytes.Length)
         {
             var currentBytes = new List<byte>();
-            try
-            {
+            
+            
                 for (int j = 0; j < byteAmount; j++)
                 {
-                    currentBytes.Add(allBytes[i++]);
+                    currentBytes.Add(allBytes[currentByte++]);
                 }
-            }
-            catch (IndexOutOfRangeException)
-            {
-                break;
-            }
+            
+            
 
-            i--;
+            currentByte--;
             var numberInDictionary = ByteListIntoInt(currentBytes);
             if (dictionary.ContainsKey(numberInDictionary))
             {
@@ -115,6 +112,8 @@ public static class LZWCompress
             {
                 byteAmount++;
             }
+
+            currentByte++;
         }
 
         var resultPath = new string(path.ToCharArray(), 0, path.Length - 7);
@@ -129,7 +128,7 @@ public static class LZWCompress
         byte currentBit = 1;
         while (number > 0)
         {
-            if (number % 2 == 1)
+            if (number % 2 != 0)
             {
                 oneByte |= currentBit;
             }
