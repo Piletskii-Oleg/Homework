@@ -60,7 +60,7 @@ public static class LZWCompress
     {
         var originalSize = new FileInfo(path).Length;
         var newSize = new FileInfo(path + ".zipped").Length;
-        return (double) originalSize / newSize;
+        return (double)originalSize / newSize;
     }
 
     /// <summary>
@@ -118,7 +118,6 @@ public static class LZWCompress
         }
 
         var resultPath = new string(path.ToCharArray(), 0, path.Length - 7);
-        var length = Path.GetExtension(resultPath).Length;
         resultPath = resultPath.Insert(resultPath.Length - Path.GetExtension(resultPath).Length, "-unzipped");
         File.WriteAllBytes(resultPath, result.ToArray());
     }

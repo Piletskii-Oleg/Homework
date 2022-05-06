@@ -3,7 +3,7 @@
 /// <summary>
 /// Single vertex of a prefix tree.
 /// </summary>
-internal class Vertex
+public class Vertex
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Vertex"/> class.

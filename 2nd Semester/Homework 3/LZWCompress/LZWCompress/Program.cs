@@ -12,7 +12,3 @@ else
 {
     throw new ArgumentException("Passed parameter was not of correct form.", args[1]);
 }
-//var bytes = File.ReadAllBytes(path);
-//var (tr, num) = LZWCompress.BWTransform.DirectBWT(bytes);
-//var trr = LZWCompress.BWTransform.ReverseBWT(tr, num);
-Console.WriteLine("s");
