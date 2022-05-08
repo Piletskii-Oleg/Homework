@@ -27,22 +27,20 @@ namespace ParseTree.Tests
         {
             oper.LeftChild = new Operand(oper, 3.1);
             oper.RightChild = new Operand(oper, 8.9);
-            switch (oper.Operation)
+            switch (oper)
             {
-                case '+':
-                    Assert.AreEqual(oper.Evaluate(), 3.1 + 8.9);
+                case OperatorAdd:
+                    Assert.AreEqual(3.1 + 8.9, oper.Evaluate());
                     break;
-                case '-':
-                    Assert.AreEqual(oper.Evaluate(), 3.1 - 8.9);
+                case OperatorSubtract:
+                    Assert.AreEqual(3.1 - 8.9, oper.Evaluate());
                     break;
-                case '*':
-                    Assert.AreEqual(oper.Evaluate(), 3.1 * 8.9);
+                case OperatorMultiply:
+                    Assert.AreEqual(3.1 * 8.9, oper.Evaluate());
                     break;
-                case '/':
-                    Assert.AreEqual(oper.Evaluate(), 3.1 / 8.9);
+                case OperatorDivide:
+                    Assert.AreEqual(3.1 / 8.9, oper.Evaluate());
                     break;
-                default:
-                    throw new ArgumentException();
             }
         }
 
