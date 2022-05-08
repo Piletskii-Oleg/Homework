@@ -8,11 +8,8 @@ env:
 jobs:
   build:
 
-    name: build-${{matrix.os}}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
+    name: build-windows
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
