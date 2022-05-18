@@ -1,2 +1,14 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿var list = new SkipList.SkipList<int>();
+list.Add(30);
+list.Add(40);
+list.Add(50);
+list.Add(60);
+list.Add(70);
+list.Add(55);
+list.Add(65);
+list.Add(75);
+list.Add(80);
+list.Print();
+Console.WriteLine();
+var newList = new SkipList.SkipList<int>(new List<int> { 3, 55, 1, 8, 9, 4});
+newList.Print();
