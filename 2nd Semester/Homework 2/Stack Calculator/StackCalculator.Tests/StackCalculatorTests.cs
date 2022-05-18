@@ -17,10 +17,11 @@ public class StackCalculatorTests
     [TestCaseSource(nameof(Stacks))]
     public void CalculatorShouldWorkOnCorrectInput(IStack stack)
     {
-        Assert.AreEqual(36.0, Calculator.Evaluate("2 3 + 1 - 9 *", stack));
-        Assert.AreEqual(1910.0, Calculator.Evaluate("1000 2 * 90 -", stack));
-        Assert.AreEqual(6.0,Calculator.Evaluate("90 5 / 3 /", stack));
-        Assert.AreEqual(64.0, Calculator.Evaluate("64 2 * 2 /", stack));
+        double threshold = 1e-7;
+        Assert.AreEqual(36.0, Calculator.Evaluate("2 3 + 1 - 9 *", stack), threshold);
+        Assert.AreEqual(1910.0, Calculator.Evaluate("1000 2 * 90 -", stack), threshold);
+        Assert.AreEqual(6.0, Calculator.Evaluate("90 5 / 3 /", stack), threshold);
+        Assert.AreEqual(64.0, Calculator.Evaluate("64 2 * 2 /", stack), threshold);
     }
 
     [Test, TestCaseSource(nameof(Stacks))]
