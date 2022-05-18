@@ -1,5 +1,7 @@
 ﻿namespace StackCalculator;
 
+using StackCalculator.Exceptions;
+
 /// <summary>
 /// Last-In-First-Out container implemented using array.
 /// </summary>
@@ -31,15 +33,16 @@ public class ArrayStack : IStack
             Array.Resize(ref this.stack, this.capacity);
         }
 
-        this.stack[this.currentIndex++] = element;
+        this.stack[this.currentIndex] = element;
+        this.currentIndex++;
     }
 
     /// <summary>
     /// Removes last element from the stack and returns its value.
     /// </summary>
     /// <returns>Last element from the stack.</returns>
-    public double? Pop()
-      => (this.currentIndex != 0) ? this.stack[--this.currentIndex] : null;
+    public double Pop()
+      => (this.currentIndex != 0) ? this.stack[--this.currentIndex] : throw new PopFromEmptyStackException();
 
     /// <summary>
     /// Checks if stack is empty.

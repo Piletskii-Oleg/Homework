@@ -15,7 +15,7 @@ public interface IStack
     /// Remove an element from the top of stack and returns its value.
     /// </summary>
     /// <returns>Value from the top of the stack.</returns>
-    double? Pop();
+    double Pop();
 
     /// <summary>
     /// Checks if stack is empty.

@@ -35,15 +35,15 @@ public static class Program
                 }
             }
 
-            var arrayStack = new ArrayStack();
-            var listStack = new ListStack();
             if (stackType == 1)
             {
-                Console.WriteLine(StackCalculator.Evaluate(input, arrayStack));
+                var arrayStack = new ArrayStack();
+                Console.WriteLine(Calculator.Evaluate(input, arrayStack));
             }
             else
             {
-                Console.WriteLine(StackCalculator.Evaluate(input, listStack));
+                var listStack = new ListStack();
+                Console.WriteLine(Calculator.Evaluate(input, listStack));
             }
         }
 

@@ -1,5 +1,7 @@
 ﻿namespace StackCalculator;
 
+using StackCalculator.Exceptions;
+
 /// <summary>
 /// Last-In-First-Out container implemented using linked list.
 /// </summary>
@@ -8,7 +10,7 @@ public class ListStack : IStack
     /// <summary>
     /// An element from a linked list.
     /// </summary>
-    internal class Node
+    private class Node
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Node"/> class.
@@ -45,9 +47,14 @@ public class ListStack : IStack
     /// Remove an element from the top of stack and returns its value.
     /// </summary>
     /// <returns>Value from the top of the stack.</returns>
-    public double? Pop()
+    public double Pop()
     {
-        double? removed = this.root?.Value ?? null;
+        if (this.root == null)
+        {
+            throw new PopFromEmptyStackException();
+        }
+
+        double removed = this.root.Value;
         this.root = this.root?.Next;
         return removed;
     }

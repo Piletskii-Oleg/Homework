@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Stack Calculator\StackCalculator.csproj" />
+    <ProjectReference Include="..\StackCalculator.Exceptions\StackCalculator.Exceptions.csproj" />
   </ItemGroup>
 
 </Project>

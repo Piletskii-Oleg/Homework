@@ -1,9 +1,11 @@
 ﻿namespace StackCalculator;
 
+using StackCalculator.Exceptions;
+
 /// <summary>
 /// Calculator implemented using reverse Polish notation.
 /// </summary>
-public static class StackCalculator
+public static class Calculator
 {
     /// <summary>
     /// Calculates the value from the input.
@@ -12,7 +14,7 @@ public static class StackCalculator
     /// <param name="stack">Stack implementation.</param>
     /// <returns>Calculated value.</returns>
     /// <exception cref="DivideByZeroException">Division by zero.</exception>
-    public static double? Evaluate(string input, IStack stack)
+    public static double Evaluate(string input, IStack stack)
     {
         string[] array = input.Split(' ');
         decimal threshold = 1E-9M;
@@ -31,16 +33,7 @@ public static class StackCalculator
                     case "-":
                     case "/":
                         var firstOperand = stack.Pop();
-                        if (firstOperand == null)
-                        {
-                            return null;
-                        }
-
                         var secondOperand = stack.Pop();
-                        if (secondOperand == null)
-                        {
-                            return null;
-                        }
 
                         switch (item)
                         {
@@ -62,18 +55,22 @@ public static class StackCalculator
                                 stack.Push((double)secondOperand / (double)firstOperand);
                                 break;
                             default:
-                                return null;
+                                throw new IncorrectExpressionException();
                         }
 
                         break;
-
                     default:
-                        return null;
+                        throw new IncorrectExpressionException();
                 }
             }
         }
 
-        double? result = stack.Pop();
-        return stack.IsEmpty() ? result : null;
+        double result = stack.Pop();
+        if (stack.IsEmpty())
+        {
+            return result;
+        }
+
+        throw new IncorrectExpressionException();
     }
 }
