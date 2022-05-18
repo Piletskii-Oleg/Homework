@@ -15,4 +15,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PrefixTree.Exceptions\PrefixTree.Exceptions.csproj" />
+  </ItemGroup>
+
 </Project>

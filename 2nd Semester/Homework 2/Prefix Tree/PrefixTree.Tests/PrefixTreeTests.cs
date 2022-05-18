@@ -26,7 +26,7 @@ public class Tests
         trie.Add("ber");
         trie.Add("jejr");
         trie.Add("jejk");
-        Assert.AreEqual(trie.Size, 3);
+        Assert.AreEqual(3, trie.Size);
     }
 
     [Test]
@@ -35,7 +35,7 @@ public class Tests
         trie.Add("ber");
         trie.Add("rei");
         Assert.IsTrue(trie.Remove("ber"));
-        Assert.AreEqual(trie.Size, 1);
+        Assert.AreEqual(1, trie.Size);
     }
 
     [Test]
@@ -81,7 +81,7 @@ public class Tests
         trie.Add("a");
         Assert.IsTrue(trie.Contains("e"));
         Assert.IsTrue(trie.Contains("a"));
-        Assert.AreEqual(trie.Size, 2);
+        Assert.AreEqual(2, trie.Size);
     }
 
     [Test]
@@ -98,9 +98,9 @@ public class Tests
     {
         trie.Add("ber");
         trie.Add("berk");
-        Assert.AreEqual(trie.HowManyStartsWithPrefix("be"), 2);
-        Assert.AreEqual(trie.HowManyStartsWithPrefix("ber"), 2);
-        Assert.AreEqual(trie.HowManyStartsWithPrefix("berk"), 1);
+        Assert.AreEqual(2, trie.HowManyStartsWithPrefix("be"));
+        Assert.AreEqual(2, trie.HowManyStartsWithPrefix("ber"));
+        Assert.AreEqual(1, trie.HowManyStartsWithPrefix("berk"));
     }
 
     [Test]
@@ -110,8 +110,8 @@ public class Tests
         trie.Add("bear");
         trie.Add("berk");
         trie.Remove("berk");
-        Assert.AreEqual(trie.HowManyStartsWithPrefix("be"), 2);
+        Assert.AreEqual(2, trie.HowManyStartsWithPrefix("be"));
         trie.Remove("bear");
-        Assert.AreEqual(trie.HowManyStartsWithPrefix("be"), 1);
+        Assert.AreEqual(1, trie.HowManyStartsWithPrefix("be"));
     }
 }

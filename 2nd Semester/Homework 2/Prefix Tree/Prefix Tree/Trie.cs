@@ -17,9 +17,9 @@ public class Trie
     }
 
     /// <summary>
-    /// Gets or sets the amount of words in the Trie.
+    /// Gets the amount of words in the Trie.
     /// </summary>
-    public int Size { get; set; }
+    public int Size { get; private set; }
 
     /// <summary>
     /// Adds an element to the Trie.
@@ -98,9 +98,8 @@ public class Trie
                 currentElement.HowManyFollow--;
                 if (currentElement.HowManyFollow == 0)
                 {
-                    var next = currentElement.Next[c];
                     currentElement.Next.Remove(c);
-                    currentElement = next;
+                    break;
                 }
                 else
                 {
@@ -112,10 +111,8 @@ public class Trie
             this.Size--;
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
     /// <summary>
@@ -137,5 +134,36 @@ public class Trie
         }
 
         return currentElement.HowManyFollow;
+    }
+
+    /// <summary>
+    /// Single vertex of a prefix tree.
+    /// </summary>
+    private class Vertex
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Vertex"/> class.
+        /// </summary>
+        public Vertex()
+        {
+            this.Next = new Dictionary<char, Vertex>();
+            this.IsTerminal = false;
+            this.HowManyFollow = 0;
+        }
+
+        /// <summary>
+        /// Gets or sets a dictionary which has pointers to the next elements.
+        /// </summary>
+        public Dictionary<char, Vertex> Next { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the vertex is terminal or not.
+        /// </summary>
+        public bool IsTerminal { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating how many words there are that have this vertex in them.
+        /// </summary>
+        public int HowManyFollow { get; set; }
     }
 }

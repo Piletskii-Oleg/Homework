@@ -1,5 +1,7 @@
 ﻿namespace PrefixTree;
 
+using PrefixTree.Exceptions;
+
 /// <summary>
 /// Main class.
 /// </summary>
@@ -8,7 +10,7 @@ internal static class Program
     /// <summary>
     /// Entry point.
     /// </summary>
-    /// <exception cref="ArgumentNullException">Throws if input was null.</exception>
+    /// <exception cref="NullStringException">Throws if input was null.</exception>
     public static void Main()
     {
         var trie = new Trie();
@@ -24,7 +26,7 @@ internal static class Program
             switch (input)
             {
                 case null:
-                    throw new ArgumentNullException();
+                    throw new NullStringException();
                 case "0":
                     Console.WriteLine("0 - открыть помощь" +
                         "1 - добавить слово \n2 - удалить слово \n3 - проверить, есть ли слово\n" +
@@ -36,7 +38,7 @@ internal static class Program
                     input = Console.ReadLine();
                     if (input == null)
                     {
-                        throw new ArgumentNullException();
+                        throw new NullStringException();
                     }
 
                     if (trie.Add(input))
@@ -54,7 +56,7 @@ internal static class Program
                     input = Console.ReadLine();
                     if (input == null)
                     {
-                        throw new ArgumentNullException();
+                        throw new NullStringException();
                     }
 
                     if (trie.Remove(input))
@@ -72,7 +74,7 @@ internal static class Program
                     input = Console.ReadLine();
                     if (input == null)
                     {
-                        throw new ArgumentNullException();
+                        throw new NullStringException();
                     }
 
                     if (trie.Contains(input))
@@ -90,7 +92,7 @@ internal static class Program
                     input = Console.ReadLine();
                     if (input == null)
                     {
-                        throw new ArgumentNullException();
+                        throw new NullStringException();
                     }
 
                     int howManyStart = trie.HowManyStartsWithPrefix(input);

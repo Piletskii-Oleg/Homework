@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrefixTree", "Prefix Tree\P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrefixTree.Tests", "PrefixTree.Tests\PrefixTree.Tests.csproj", "{75A3E586-44C7-46E0-B3B2-FF3F98A36523}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrefixTree.Exceptions", "PrefixTree.Exceptions\PrefixTree.Exceptions.csproj", "{7B2D6F6E-401D-4BBD-B3FE-AB30D3BB24AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{75A3E586-44C7-46E0-B3B2-FF3F98A36523}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75A3E586-44C7-46E0-B3B2-FF3F98A36523}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75A3E586-44C7-46E0-B3B2-FF3F98A36523}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B2D6F6E-401D-4BBD-B3FE-AB30D3BB24AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B2D6F6E-401D-4BBD-B3FE-AB30D3BB24AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B2D6F6E-401D-4BBD-B3FE-AB30D3BB24AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B2D6F6E-401D-4BBD-B3FE-AB30D3BB24AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
