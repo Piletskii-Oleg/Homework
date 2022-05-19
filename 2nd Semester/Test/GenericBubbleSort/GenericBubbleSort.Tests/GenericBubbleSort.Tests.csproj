@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GenericBubbleSort.Comparers\GenericBubbleSort.Comparers.csproj" />
     <ProjectReference Include="..\GenericBubbleSort\GenericBubbleSort.csproj" />
   </ItemGroup>
 

@@ -1,8 +1,17 @@
 ﻿namespace GenericBubbleSort;
 
+/// <summary>
+/// Class that implements a generic bubble sort method.
+/// </summary>
 public static class BubbleSort
 {
-    public static IList<T> Sort<T>(IList<T> list, IComparer<T>? comparer)
+    /// <summary>
+    /// Sorts a list using bubble sort.
+    /// </summary>
+    /// <typeparam name="T">Parameter type.</typeparam>
+    /// <param name="list">A list that implements IList.</param>
+    /// <param name="comparer">Comparer to use.</param>
+    public static void Sort<T>(IList<T> list, IComparer<T>? comparer)
     {
         if (comparer == null)
         {
@@ -26,32 +35,6 @@ public static class BubbleSort
                 break;
             }
         }
-
-        return list;
-    }
-
-    public static ICollection<T> Sort<T>(ICollection<T> collection, IComparer<T>? comparer)
-    {
-        if (typeof(T).GetGenericArguments().Length > 1)
-        {
-            throw new ArgumentException("Collection must consist of only 1 parameter", nameof(collection));
-        }
-
-        var collectionList = new List<T>(collection);
-        var sortedList = Sort(collectionList, comparer);
-        return sortedList;
-    }
-
-    public static IEnumerable<T> Sort<T>(IEnumerable<T> enumerable, IComparer<T>? comparer)
-    {
-        if (typeof(T).GetGenericArguments().Length > 1)
-        {
-            throw new ArgumentException("Collection must consist of only 1 parameter", nameof(enumerable));
-        }
-
-        var enumerableList = new List<T>(enumerable);
-        var sortedList = Sort(enumerableList, comparer);
-        return sortedList;
     }
 
     private static void Swap<T>(IList<T> list, int index1, int index2)

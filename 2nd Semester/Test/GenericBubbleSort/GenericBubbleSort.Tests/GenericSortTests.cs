@@ -11,11 +11,11 @@ public class Tests
     public void IntArrayWithDefaultComparerIsSortedCorrectly()
     {
         var array = new[] { 3, 9, 123, 586, 33 };
-        var bubbleSorted = BubbleSort.Sort(array, null);
-        Array.Sort(array);
+        BubbleSort.Sort(array, null);
+        var sorted = new[] { 3, 9, 33, 123, 586 };
         for (int i = 0; i < array.Length; i++)
         {
-            Assert.AreEqual(array[i], bubbleSorted[i]);
+            Assert.AreEqual(array[i], sorted[i]);
         }
     }
 
@@ -23,11 +23,11 @@ public class Tests
     public void IntArrayWithReverseComparerIsSortedCorrectly()
     {
         var array = new[] { 3, 9, 123, 586, 33 };
-        var bubbleSorted = BubbleSort.Sort(array, new Comparers.ReverseComparer());
-        Array.Sort(array, new Comparers.ReverseComparer());
+        BubbleSort.Sort(array, new ReverseComparer());
+        var sorted = new[] { 586, 123, 33, 9, 3 };
         for (int i = 0; i < array.Length; i++)
         {
-            Assert.AreEqual(array[i], bubbleSorted[i]);
+            Assert.AreEqual(array[i], sorted[i]);
         }
     }
 
@@ -35,38 +35,93 @@ public class Tests
     public void DoubleListWithSortByFractionIsSortedCorrectly()
     {
         var list = new List<double> { 3.2, 2.43, 6.03, 399.01, 0.7 };
-        var bubbleSorted = BubbleSort.Sort(list, new Comparers.FractionComparer());
+        BubbleSort.Sort(list, new FractionComparer());
         var threshold = 1e-9;
-        list.Sort(new Comparers.FractionComparer());
+        var sorted = new[] { 399.01, 6.03, 3.2, 2.43, 0.7 };
         for (int i = 0; i < list.Count; i++)
         {
-            Assert.AreEqual(list[i], bubbleSorted[i], threshold);
+            Assert.AreEqual(list[i], sorted[i], threshold);
         }
     }
 
     [Test]
-    public void StringLinkedListWithSortByLengthIsSortedCorrectly()
+    public void StringListWithSortByLengthIsSortedCorrectly()
     {
-        var linkedList = new LinkedList<string>();
-        linkedList.AddFirst("ew");
-        linkedList.AddFirst("eweqw");
-        linkedList.AddFirst("ke");
-        linkedList.AddFirst("a");
-        linkedList.AddFirst("ewerytry");
-        var bubbleSorted = BubbleSort.Sort(linkedList, new Comparers.StringLengthComparer());
-        var sorted = new List<string> { "a", "ke", "ew", "eweqw", "ewerytry" };
-        int i = 0;
-        foreach (var item in bubbleSorted)
+        var list = new List<string> { "eqw", "23e", "s" , "eeeee", "eksl" };
+        BubbleSort.Sort(list, new StringLengthComparer());
+        var sorted = new List<string> { "s", "eqw", "23e", "eksl", "eeeee" };
+        for (int i = 0; i < list.Count; i++)
         {
-            Assert.AreEqual(sorted[i], item);
-            i++;
+            Assert.AreEqual(list[i], sorted[i]);
         }
     }
 
-    [Test]
-    public void IntDictionaryIsNotSorted()
+    private class FractionComparer : IComparer<double>
     {
-        var dictionary = new Dictionary<int, int> { { 2, 1 }, { 1, 2 }, { 3, 3 } };
-        Assert.Throws<ArgumentException>(() => BubbleSort.Sort(dictionary, null));
+        public int Compare(double x, double y)
+        {
+            var fractionX = x - Math.Truncate(x);
+            var fractionY = y - Math.Truncate(y);
+            double threshold = 1e-9;
+            if (fractionX > fractionY)
+            {
+                return 1;
+            }
+            else if (Math.Abs(fractionX - fractionY) < threshold)
+            {
+                return 0;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+    }
+
+    private class ReverseComparer : IComparer<int>
+    {
+        public int Compare(int x, int y)
+        {
+            if (x > y)
+            {
+                return -1;
+            }
+            else if (x == y)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
+        }
+    }
+
+    private class StringLengthComparer : IComparer<string>
+    {
+        public int Compare(string? x, string? y)
+        {
+            if (x is null)
+            {
+                throw new ArgumentException("String cannot be null", x);
+            }
+            else if (y is null)
+            {
+                throw new ArgumentException("String cannot be null", y);
+            }
+
+            if (x.Length > y.Length)
+            {
+                return 1;
+            }
+            else if (x.Length == y.Length)
+            {
+                return 0;
+            }
+            else
+            {
+                return -1;
+            }
+        }
     }
 }
