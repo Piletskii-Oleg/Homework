@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 public class SkipListTests
 {
-    private SkipList<int> skipList;
+    private SkipList<int> skipList = new ();
 
     [SetUp]
     public void Setup()

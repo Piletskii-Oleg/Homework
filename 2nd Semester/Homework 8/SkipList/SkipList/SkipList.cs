@@ -4,22 +4,23 @@ using System.Collections;
 
 public class SkipList<T> : IList<T> where T : IComparable<T>
 {
-    private Node<T>? head;
+    private Head<T> head;
 
     public int MaxLevel { get; private set; } = 1;
 
-    int ICollection<T>.Count => throw new NotImplementedException();
+    public int Count { get; private set; }
 
-    bool ICollection<T>.IsReadOnly => throw new NotImplementedException();
+    public bool IsReadOnly => throw new NotImplementedException();
 
-    T IList<T>.this[int index] { get => throw new NotImplementedException(); set => throw new NotSupportedException(); }
+    public T this[int index] { get => throw new NotImplementedException(); set => throw new NotSupportedException(); }
 
     public SkipList()
     {
-        head = null;
+        head = new Head<T>();
     }
 
     public SkipList(IList<T> list)
+        : this ()
     {
         foreach (T item in list)
         {
@@ -29,23 +30,9 @@ public class SkipList<T> : IList<T> where T : IComparable<T>
 
     public void Add(T value)
     {
-        if (head is null)
+        if (head.Next is null)
         {
-            head = new Node<T>(value, null);
-        }
-        else if (value.CompareTo(head.Value) < 0)
-        {
-            //var headStorage = head;
-            //var currentLevel = MaxLevel;
-            //while (currentLevel > 0)
-            //{
-            //    head = new Node<T>(value, head, head.Below);
-            //    currentLevel--;
-            //}
-
-            //head = headStorage;
-
-            throw new NotImplementedException();
+            head.Next = new Node<T>(value, null);
         }
         else
         {
@@ -68,7 +55,7 @@ public class SkipList<T> : IList<T> where T : IComparable<T>
             {
                 if (MaxLevel == currentLevel - 1)
                 {
-                    head = new Node<T>(head.Value, null, head);
+                    head = new Head<T>(head);
                     previousValues.Add(currentLevel, head);
                     MaxLevel++;
                     newLevelCreated = true;
@@ -78,32 +65,14 @@ public class SkipList<T> : IList<T> where T : IComparable<T>
                 currentLevel++;
             }
         }
+
+        Count++;
     }
 
-    public void Print()
+    private Dictionary<int, INode<T>> FindPreviousNodes(T value)
     {
-        int level = MaxLevel;
-        var currentHead = head;
-        while (level > 0)
-        {
-            Console.Write((MaxLevel - level) + ": ");
-            var currentNode = currentHead;
-            while (currentNode is not null)
-            {
-                Console.Write(currentNode.Value + " ");
-                currentNode = currentNode.Next;
-            }
-
-            Console.WriteLine();
-            currentHead = currentHead!.Below;
-            level--;
-        }
-    }
-
-    private Dictionary<int, Node<T>> FindPreviousNodes(T value)
-    {
-        var currentNode = head;
-        var previousValues = new Dictionary<int, Node<T>>();
+        INode<T> currentNode = head;
+        var previousValues = new Dictionary<int, INode<T>>();
         var currentLevel = MaxLevel;
         while (currentNode!.Below is not null)
         {
@@ -132,7 +101,27 @@ public class SkipList<T> : IList<T> where T : IComparable<T>
         return random.Next(2);
     }
 
-    int IList<T>.IndexOf(T item)
+    public void Print()
+    {
+        int level = MaxLevel;
+        INode<T> currentHead = head;
+        while (level > 0)
+        {
+            Console.Write((MaxLevel - level) + ": ");
+            var currentNode = currentHead.Next;
+            while (currentNode is not null)
+            {
+                Console.Write(currentNode.Value + " ");
+                currentNode = currentNode.Next;
+            }
+
+            Console.WriteLine();
+            currentHead = currentHead.Below;
+            level--;
+        }
+    }
+
+    public int IndexOf(T item)
     {
         throw new NotImplementedException();
     }
@@ -149,22 +138,88 @@ public class SkipList<T> : IList<T> where T : IComparable<T>
 
     public void Clear()
     {
-
+        head = new Head<T>();
+        Count = 0;
+        MaxLevel = 1;
     }
 
-    bool ICollection<T>.Contains(T item)
+    public bool Contains(T item)
     {
-        throw new NotImplementedException();
+        INode<T> currentNode = head;
+        while (currentNode!.Below is not null)
+        {
+            while (currentNode.Next is not null && item.CompareTo(currentNode.Next.Value) >= 0)
+            {
+                currentNode = currentNode.Next;
+            }
+
+            currentNode = currentNode.Below;
+        }
+
+        while (currentNode!.Next is not null && item.CompareTo(currentNode.Next.Value) >= 0)
+        {
+            currentNode = currentNode.Next;
+        }
+
+        return currentNode.Value.Equals(item);
     }
 
-    void ICollection<T>.CopyTo(T[] array, int arrayIndex)
+    public void CopyTo(T[] array, int arrayIndex)
     {
-        throw new NotImplementedException();
+        if (array is null)
+        {
+            throw new ArgumentNullException(nameof(array));
+        }
+        else if (array.Length - arrayIndex < Count)
+        {
+            throw new ArgumentException("Target array was not long enough.", nameof(array));
+        }
+        else if (arrayIndex < 0 || arrayIndex > array.Length)
+        {
+            throw new ArgumentOutOfRangeException(nameof(arrayIndex), "Index was out of the array bounds.");
+        }
+
+        for (int i = arrayIndex; i < Count; i++)
+        {
+            array[i] = this[i];
+        }
     }
 
-    bool ICollection<T>.Remove(T item)
+    public bool Remove(T item)
     {
-        throw new NotImplementedException();
+        if (head is null)
+        {
+            throw new InvalidOperationException();
+        }
+        else if (head.Value.Equals(item))
+        {
+            //if (head.Next is null && head.Below is not null)
+            //{
+            //    MaxLevel--;
+            //    head = head.Below;
+            //}
+
+            //head.Below = head.Next.Below;
+            //head = head.Next;
+            //Count--;
+            //return true;
+        }
+        else
+        {
+            var previousValues = FindPreviousNodes(item);
+            if (previousValues[1].Next is not null && previousValues[1].Next.Value.Equals(item))
+            {
+                foreach (var value in previousValues)
+                {
+                    value.Value.Next = value.Value.Next?.Next;
+                }
+
+                Count--;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     IEnumerator<T> IEnumerable<T>.GetEnumerator()
@@ -177,29 +232,47 @@ public class SkipList<T> : IList<T> where T : IComparable<T>
         throw new NotImplementedException();
     }
 
-    private class Node<TValue> where TValue : IComparable<T>
+    private class Node<TValue> : INode<TValue> where TValue : IComparable<TValue>
     {
-        public Node(T value)
+        public Node(TValue value)
             : this(value, null, null)
         {
         }
 
-        public Node(T value, Node<T>? next)
+        public Node(TValue value, INode<TValue>? next)
             : this(value, next, null)
         {
         }
 
-        public Node(T value, Node<T>? next, Node<T>? below)
+        public Node(TValue value, INode<TValue>? next, INode<TValue>? below)
         {
             Value = value;
             Next = next;
             Below = below;
         }
 
-        public T Value { get; private set; }
+        public TValue Value { get; set; }
 
-        public Node<T>? Next { get; set; }
+        public INode<TValue>? Next { get; set; }
 
-        public Node<T>? Below { get; private set; }
+        public INode<TValue>? Below { get; set; }
+    }
+
+    private class Head<TValue> : INode<TValue> where TValue : IComparable<TValue>
+    {
+        public Head()
+        {
+        }
+
+        public Head(INode<TValue> below)
+        {
+            Below = below;
+        }
+
+        public INode<TValue>? Next { get; set; }
+
+        public INode<TValue>? Below { get; set; }
+
+        public TValue Value { get; set; }
     }
 }
