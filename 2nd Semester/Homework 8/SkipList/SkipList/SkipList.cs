@@ -1,26 +1,31 @@
 ﻿namespace SkipList;
 
 using System.Collections;
+using System.Collections.Generic;
 
-public class SkipList<T> : IList<T> where T : IComparable<T>
+/// <summary>
+/// Class that implements the skip list data structure.
+/// </summary>
+/// <typeparam name="T">Value type.</typeparam>
+public class SkipList<T> : IList<T>
+    where T : IComparable<T>
 {
     private Head<T> head;
 
-    public int MaxLevel { get; private set; } = 1;
-
-    public int Count { get; private set; }
-
-    public bool IsReadOnly => throw new NotImplementedException();
-
-    public T this[int index] { get => throw new NotImplementedException(); set => throw new NotSupportedException(); }
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SkipList{T}"/> class.
+    /// </summary>
     public SkipList()
     {
-        head = new Head<T>();
+        this.head = new Head<T>();
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SkipList{T}"/> class.
+    /// </summary>
+    /// <param name="list">List to copy elements from.</param>
     public SkipList(IList<T> list)
-        : this ()
+        : this()
     {
         foreach (T item in list)
         {
@@ -28,17 +33,45 @@ public class SkipList<T> : IList<T> where T : IComparable<T>
         }
     }
 
+    /// <summary>
+    /// Gets maximum level of the list.
+    /// </summary>
+    public int MaxLevel { get; private set; } = 1;
+
+    /// <summary>
+    /// Gets the number of elements stored in the skip list.
+    /// </summary>
+    public int Count { get; private set; }
+
+    /// <summary>
+    /// Gets a value indicating whether the skip list is read-only.
+    /// </summary>
+    public bool IsReadOnly => false;
+
+    /// <summary>
+    /// Gets element at the specified index.
+    /// </summary>
+    /// <param name="index">Position in the list.</param>
+    /// <returns> Value of the element at the specified index.</returns>
+    /// <exception cref="NotSupportedException">Throws when attempt to set the value is made.</exception>
+    public T this[int index] { get => this.GetValue(index); set => throw new NotSupportedException(); }
+
+    /// <summary>
+    /// Adds an item to the skip list.
+    /// </summary>
+    /// <param name="value">A value to add.</param>
+    /// <exception cref="InvalidOperationException">Throws when an element with existing value is attempted to be added.</exception>
     public void Add(T value)
     {
-        if (head.Next is null)
+        if (this.head.Next is null)
         {
-            head.Next = new Node<T>(value, null);
+            this.head.Next = new Node<T>(value, null);
         }
         else
         {
-            var previousValues = FindPreviousNodes(value);
+            var previousValues = this.GetPreviousNodes(value);
             var currentNode = previousValues[1];
-            if (currentNode.Value.Equals(value))
+            if (currentNode.Next!.Value.Equals(value))
             {
                 throw new InvalidOperationException();
             }
@@ -53,11 +86,11 @@ public class SkipList<T> : IList<T> where T : IComparable<T>
             var currentLevel = 2;
             while (!newLevelCreated && CoinFlip() == 1)
             {
-                if (MaxLevel == currentLevel - 1)
+                if (this.MaxLevel == currentLevel - 1)
                 {
-                    head = new Head<T>(head);
-                    previousValues.Add(currentLevel, head);
-                    MaxLevel++;
+                    this.head = new Head<T>(this.head);
+                    previousValues.Add(currentLevel, this.head);
+                    this.MaxLevel++;
                     newLevelCreated = true;
                 }
 
@@ -66,14 +99,240 @@ public class SkipList<T> : IList<T> where T : IComparable<T>
             }
         }
 
-        Count++;
+        this.Count++;
     }
 
-    private Dictionary<int, INode<T>> FindPreviousNodes(T value)
+    /// <summary>
+    /// Prints elements of the skip list on the screen preserving the list structure.
+    /// </summary>
+    public void Print()
     {
-        INode<T> currentNode = head;
+        if (this.head.Next is not null)
+        {
+            int level = this.MaxLevel;
+            INode<T>? currentHead = this.head;
+            while (currentHead is not null)
+            {
+                Console.Write((this.MaxLevel - level) + ": ");
+                var currentNode = currentHead.Next;
+                while (currentNode is not null)
+                {
+                    Console.Write(currentNode.Value + " ");
+                    currentNode = currentNode.Next;
+                }
+
+                Console.WriteLine();
+                currentHead = currentHead.Below;
+                level--;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Determines the index of a specific item in the skip list.
+    /// </summary>
+    /// <param name="item">Item to find index of.</param>
+    /// <returns>The index of <paramref name="item"/> if found in the list; otherwise, -1.</returns>
+    public int IndexOf(T item)
+    {
+        if (this.head.Next is null)
+        {
+            return -1;
+        }
+
+        INode<T> currentNode = this.head;
+        while (currentNode.Below is not null)
+        {
+            currentNode = currentNode.Below;
+        }
+
+        int index = -1;
+        while (currentNode.Next is not null && item.CompareTo(currentNode.Next.Value) >= 0)
+        {
+            currentNode = currentNode.Next;
+            index++;
+        }
+
+        if (currentNode.Value.Equals(item))
+        {
+            return index;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+
+    /// <summary>
+    /// (Not supported) Inserts an item to the <see cref="SkipList{T}"/> at the specified index.
+    /// </summary>
+    /// <param name="index">The zero-based index at which <paramref name="item"/> should be added.</param>
+    /// <param name="item">An element to add.</param>
+    /// <exception cref="NotSupportedException">Throws when the method is called.</exception>
+    public void Insert(int index, T item)
+    {
+        throw new NotSupportedException();
+    }
+
+    /// <summary>
+    /// Removes the <see cref="SkipList.SkipList{T}"/> item at the specified index.
+    /// </summary>
+    /// <param name="index">The zero-based index of the item to remove.</param>
+    /// <exception cref="ArgumentOutOfRangeException">Throws when <paramref name="index"/> is out of range of the list.</exception>
+    public void RemoveAt(int index)
+    {
+        if (index < 0 || index >= this.Count)
+        {
+            throw new ArgumentOutOfRangeException(nameof(index));
+        }
+
+        var previousNode = this.GetPreviousByIndex(index);
+        var previous = this.GetPreviousNodes(previousNode.Next!.Value);
+        foreach (var node in previous)
+        {
+            node.Value.Next = node.Value.Next?.Next;
+        }
+
+        while (this.head.Below as Head<T> is not null && this.head.Next is null)
+        {
+            this.head = this.head.Below as Head<T>;
+            this.MaxLevel--;
+        }
+    }
+
+    /// <summary>
+    /// Removes all items from the <see cref="SkipList.SkipList{T}"/>.
+    /// </summary>
+    public void Clear()
+    {
+        this.head = new Head<T>();
+        this.Count = 0;
+        this.MaxLevel = 1;
+    }
+
+    /// <summary>
+    /// Determines whether the <see cref="SkipList{T}"/> contains the specified value.
+    /// </summary>
+    /// <param name="item">The object to locate in the <see cref="SkipList{T}"/>.</param>
+    /// <returns><see langword="true"/> if <paramref name="item"/> is present in the <see cref="SkipList{T}"/> and <see langword="false"/> otherwise.</returns>
+    public bool Contains(T item)
+    {
+        if (this.head.Next is null)
+        {
+            return false;
+        }
+
+        INode<T>? currentNode = this.head;
+        while (currentNode!.Below is not null)
+        {
+            while (currentNode.Next is not null && item.CompareTo(currentNode.Next.Value) >= 0)
+            {
+                currentNode = currentNode.Next;
+            }
+
+            currentNode = currentNode.Below;
+        }
+
+        while (currentNode!.Next is not null && item.CompareTo(currentNode.Next.Value) >= 0)
+        {
+            currentNode = currentNode.Next;
+        }
+
+        return currentNode.Value.Equals(item);
+    }
+
+    /// <inheritdoc/>
+    public void CopyTo(T[] array, int arrayIndex)
+    {
+        if (array is null)
+        {
+            throw new ArgumentNullException(nameof(array));
+        }
+        else if (array.Length - arrayIndex < this.Count)
+        {
+            throw new ArgumentException("Target array was not long enough.", nameof(array));
+        }
+        else if (arrayIndex < 0 || arrayIndex > array.Length)
+        {
+            throw new ArgumentOutOfRangeException(nameof(arrayIndex), "Index was out of the array bounds.");
+        }
+
+        for (int i = arrayIndex; i < this.Count; i++)
+        {
+            array[i] = this[i];
+        }
+    }
+
+    /// <summary>
+    /// Removes the element from the <see cref="SkipList{T}"/>.
+    /// </summary>
+    /// <inheritdoc/>
+    public bool Remove(T item)
+    {
+        if (this.head.Next is null)
+        {
+            throw new InvalidOperationException();
+        }
+
+        var previousValues = this.GetPreviousNodes(item);
+        if (previousValues[1].Next is not null && previousValues[1].Next!.Value.Equals(item))
+        {
+            foreach (var value in previousValues)
+            {
+                value.Value.Next = value.Value.Next?.Next;
+            }
+
+            while (this.head.Next is null && this.head.Below is not null)
+            {
+                this.head = this.head.Below as Head<T>;
+                this.MaxLevel--;
+            }
+
+            this.Count--;
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <inheritdoc/>
+    public IEnumerator<T> GetEnumerator()
+    {
+        INode<T>? currentNode = this.head;
+        var list = new List<T>();
+        while (currentNode.Below is not null)
+        {
+            currentNode = currentNode.Below;
+        }
+
+        if (currentNode.Next is not null)
+        {
+            currentNode = currentNode.Next;
+            while (currentNode is not null)
+            {
+                list.Add(currentNode.Value);
+                currentNode = currentNode?.Next;
+            }
+        }
+
+        return list.GetEnumerator();
+    }
+
+    /// <inheritdoc/>
+    IEnumerator IEnumerable.GetEnumerator()
+        => this.GetEnumerator();
+
+    private static int CoinFlip()
+    {
+        var random = new Random();
+        return random.Next(2);
+    }
+
+    private Dictionary<int, INode<T>> GetPreviousNodes(T value)
+    {
+        INode<T>? currentNode = this.head;
         var previousValues = new Dictionary<int, INode<T>>();
-        var currentLevel = MaxLevel;
+        var currentLevel = this.MaxLevel;
         while (currentNode!.Below is not null)
         {
             while (currentNode.Next is not null && value.CompareTo(currentNode.Next.Value) > 0)
@@ -95,144 +354,37 @@ public class SkipList<T> : IList<T> where T : IComparable<T>
         return previousValues;
     }
 
-    private static int CoinFlip()
+    private INode<T> GetPreviousByIndex(int index)
     {
-        var random = new Random();
-        return random.Next(2);
-    }
-
-    public void Print()
-    {
-        int level = MaxLevel;
-        INode<T> currentHead = head;
-        while (level > 0)
+        INode<T> currentNode = this.head;
+        while (currentNode.Below is not null)
         {
-            Console.Write((MaxLevel - level) + ": ");
-            var currentNode = currentHead.Next;
-            while (currentNode is not null)
-            {
-                Console.Write(currentNode.Value + " ");
-                currentNode = currentNode.Next;
-            }
-
-            Console.WriteLine();
-            currentHead = currentHead.Below;
-            level--;
-        }
-    }
-
-    public int IndexOf(T item)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Insert(int index, T item)
-    {
-        throw new NotSupportedException();
-    }
-
-    void IList<T>.RemoveAt(int index)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Clear()
-    {
-        head = new Head<T>();
-        Count = 0;
-        MaxLevel = 1;
-    }
-
-    public bool Contains(T item)
-    {
-        INode<T> currentNode = head;
-        while (currentNode!.Below is not null)
-        {
-            while (currentNode.Next is not null && item.CompareTo(currentNode.Next.Value) >= 0)
-            {
-                currentNode = currentNode.Next;
-            }
-
             currentNode = currentNode.Below;
         }
 
-        while (currentNode!.Next is not null && item.CompareTo(currentNode.Next.Value) >= 0)
+        int currentIndex = -1;
+        while (currentNode.Next is not null && currentIndex < index - 1)
         {
             currentNode = currentNode.Next;
+            currentIndex++;
         }
 
-        return currentNode.Value.Equals(item);
+        return currentNode;
     }
 
-    public void CopyTo(T[] array, int arrayIndex)
+    private T GetValue(int index)
     {
-        if (array is null)
+        if (index < 0 || index >= this.Count)
         {
-            throw new ArgumentNullException(nameof(array));
-        }
-        else if (array.Length - arrayIndex < Count)
-        {
-            throw new ArgumentException("Target array was not long enough.", nameof(array));
-        }
-        else if (arrayIndex < 0 || arrayIndex > array.Length)
-        {
-            throw new ArgumentOutOfRangeException(nameof(arrayIndex), "Index was out of the array bounds.");
+            throw new ArgumentOutOfRangeException(nameof(index));
         }
 
-        for (int i = arrayIndex; i < Count; i++)
-        {
-            array[i] = this[i];
-        }
+        var previousNode = this.GetPreviousByIndex(index);
+        return previousNode.Next!.Value;
     }
 
-    public bool Remove(T item)
-    {
-        if (head is null)
-        {
-            throw new InvalidOperationException();
-        }
-        else if (head.Value.Equals(item))
-        {
-            //if (head.Next is null && head.Below is not null)
-            //{
-            //    MaxLevel--;
-            //    head = head.Below;
-            //}
-
-            //head.Below = head.Next.Below;
-            //head = head.Next;
-            //Count--;
-            //return true;
-        }
-        else
-        {
-            var previousValues = FindPreviousNodes(item);
-            if (previousValues[1].Next is not null && previousValues[1].Next.Value.Equals(item))
-            {
-                foreach (var value in previousValues)
-                {
-                    value.Value.Next = value.Value.Next?.Next;
-                }
-
-                Count--;
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    IEnumerator<T> IEnumerable<T>.GetEnumerator()
-    {
-        throw new NotImplementedException();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        throw new NotImplementedException();
-    }
-
-    private class Node<TValue> : INode<TValue> where TValue : IComparable<TValue>
+    private class Node<TValue> : INode<TValue>
+        where TValue : IComparable<TValue>
     {
         public Node(TValue value)
             : this(value, null, null)
@@ -246,9 +398,9 @@ public class SkipList<T> : IList<T> where T : IComparable<T>
 
         public Node(TValue value, INode<TValue>? next, INode<TValue>? below)
         {
-            Value = value;
-            Next = next;
-            Below = below;
+            this.Value = value;
+            this.Next = next;
+            this.Below = below;
         }
 
         public TValue Value { get; set; }
@@ -258,7 +410,8 @@ public class SkipList<T> : IList<T> where T : IComparable<T>
         public INode<TValue>? Below { get; set; }
     }
 
-    private class Head<TValue> : INode<TValue> where TValue : IComparable<TValue>
+    private class Head<TValue> : INode<TValue>
+        where TValue : IComparable<TValue>
     {
         public Head()
         {
@@ -266,13 +419,13 @@ public class SkipList<T> : IList<T> where T : IComparable<T>
 
         public Head(INode<TValue> below)
         {
-            Below = below;
+            this.Below = below;
         }
 
         public INode<TValue>? Next { get; set; }
 
         public INode<TValue>? Below { get; set; }
 
-        public TValue Value { get; set; }
+        public TValue Value { get => this.Next is null ? throw new InvalidOperationException() : this.Next.Value; }
     }
 }
