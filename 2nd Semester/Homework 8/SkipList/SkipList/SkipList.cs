@@ -23,7 +23,7 @@ public class SkipList<T> : IList<T>
     /// <summary>
     /// Initializes a new instance of the <see cref="SkipList{T}"/> class.
     /// </summary>
-    /// <param name="list">List to copy elements from.</param>
+    /// <param name="list"><see cref="IList{T}"/> to copy elements from.</param>
     public SkipList(IList<T> list)
         : this()
     {
@@ -34,30 +34,30 @@ public class SkipList<T> : IList<T>
     }
 
     /// <summary>
-    /// Gets maximum level of the list.
+    /// Gets maximum level of the <see cref="SkipList{T}"/>.
     /// </summary>
     public int MaxLevel { get; private set; } = 1;
 
     /// <summary>
-    /// Gets the number of elements stored in the skip list.
+    /// Gets the number of elements stored in the <see cref="SkipList{T}"/>.
     /// </summary>
     public int Count { get; private set; }
 
     /// <summary>
-    /// Gets a value indicating whether the skip list is read-only.
+    /// Gets a value indicating whether the <see cref="SkipList{T}"/> is read-only.
     /// </summary>
     public bool IsReadOnly => false;
 
     /// <summary>
-    /// Gets element at the specified index.
+    /// Gets element at the specified index. Setting is not supported.
     /// </summary>
-    /// <param name="index">Position in the list.</param>
+    /// <param name="index">Position in the <see cref="SkipList{T}"/>.</param>
     /// <returns> Value of the element at the specified index.</returns>
     /// <exception cref="NotSupportedException">Throws when attempt to set the value is made.</exception>
     public T this[int index] { get => this.GetValue(index); set => throw new NotSupportedException(); }
 
     /// <summary>
-    /// Adds an item to the skip list.
+    /// Adds an item to the <see cref="SkipList{T}"/>.
     /// </summary>
     /// <param name="value">A value to add.</param>
     /// <exception cref="InvalidOperationException">Throws when an element with existing value is attempted to be added.</exception>
@@ -71,7 +71,7 @@ public class SkipList<T> : IList<T>
         {
             var previousValues = this.GetPreviousNodes(value);
             var currentNode = previousValues[1];
-            if (currentNode.Next!.Value.Equals(value))
+            if (currentNode.Next is not null && currentNode.Next.Value.Equals(value))
             {
                 throw new InvalidOperationException();
             }
@@ -103,7 +103,7 @@ public class SkipList<T> : IList<T>
     }
 
     /// <summary>
-    /// Prints elements of the skip list on the screen preserving the list structure.
+    /// Prints elements of the <see cref="SkipList{T}"/> on the screen preserving the list structure.
     /// </summary>
     public void Print()
     {
@@ -129,7 +129,7 @@ public class SkipList<T> : IList<T>
     }
 
     /// <summary>
-    /// Determines the index of a specific item in the skip list.
+    /// Determines the index of a specific item in the <see cref="SkipList{T}"/>.
     /// </summary>
     /// <param name="item">Item to find index of.</param>
     /// <returns>The index of <paramref name="item"/> if found in the list; otherwise, -1.</returns>
@@ -170,9 +170,7 @@ public class SkipList<T> : IList<T>
     /// <param name="item">An element to add.</param>
     /// <exception cref="NotSupportedException">Throws when the method is called.</exception>
     public void Insert(int index, T item)
-    {
-        throw new NotSupportedException();
-    }
+        => throw new NotSupportedException();
 
     /// <summary>
     /// Removes the <see cref="SkipList.SkipList{T}"/> item at the specified index.
@@ -180,25 +178,7 @@ public class SkipList<T> : IList<T>
     /// <param name="index">The zero-based index of the item to remove.</param>
     /// <exception cref="ArgumentOutOfRangeException">Throws when <paramref name="index"/> is out of range of the list.</exception>
     public void RemoveAt(int index)
-    {
-        if (index < 0 || index >= this.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(index));
-        }
-
-        var previousNode = this.GetPreviousByIndex(index);
-        var previous = this.GetPreviousNodes(previousNode.Next!.Value);
-        foreach (var node in previous)
-        {
-            node.Value.Next = node.Value.Next?.Next;
-        }
-
-        while (this.head.Below as Head<T> is not null && this.head.Next is null)
-        {
-            this.head = this.head.Below as Head<T>;
-            this.MaxLevel--;
-        }
-    }
+        => this.Remove(this[index]);
 
     /// <summary>
     /// Removes all items from the <see cref="SkipList.SkipList{T}"/>.
@@ -233,7 +213,7 @@ public class SkipList<T> : IList<T>
             currentNode = currentNode.Below;
         }
 
-        while (currentNode!.Next is not null && item.CompareTo(currentNode.Next.Value) >= 0)
+        while (currentNode.Next is not null && item.CompareTo(currentNode.Next.Value) >= 0)
         {
             currentNode = currentNode.Next;
         }
@@ -248,13 +228,13 @@ public class SkipList<T> : IList<T>
         {
             throw new ArgumentNullException(nameof(array));
         }
-        else if (array.Length - arrayIndex < this.Count)
-        {
-            throw new ArgumentException("Target array was not long enough.", nameof(array));
-        }
         else if (arrayIndex < 0 || arrayIndex > array.Length)
         {
             throw new ArgumentOutOfRangeException(nameof(arrayIndex), "Index was out of the array bounds.");
+        }
+        else if (array.Length - arrayIndex < this.Count)
+        {
+            throw new ArgumentException("Target array was not long enough.", nameof(array));
         }
 
         for (int i = arrayIndex; i < this.Count; i++)
