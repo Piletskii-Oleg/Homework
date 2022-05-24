@@ -59,19 +59,19 @@ public class SkipList<T> : IList<T>
     /// <summary>
     /// Adds an item to the <see cref="SkipList{T}"/>.
     /// </summary>
-    /// <param name="value">A value to add.</param>
+    /// <param name="item">An item to add to the <see cref="SkipList{T}"/>.</param>
     /// <exception cref="InvalidOperationException">Throws when an element with existing value is attempted to be added.</exception>
-    public void Add(T value)
+    public void Add(T item)
     {
         if (this.head.Next is null)
         {
-            this.head.Next = new Node<T>(value, null);
+            this.head.Next = new Node<T>(item, null);
         }
         else
         {
-            var previousValues = this.GetPreviousNodes(value);
+            var previousValues = this.GetPreviousNodes(item);
             var currentNode = previousValues[1];
-            if (currentNode.Next is not null && currentNode.Next.Value.Equals(value))
+            if (currentNode.Next is not null && currentNode.Next.Value.Equals(item))
             {
                 throw new InvalidOperationException();
             }
@@ -81,7 +81,7 @@ public class SkipList<T> : IList<T>
                 currentNode = currentNode.Below;
             }
 
-            previousValues[1].Next = new Node<T>(value, previousValues[1].Next);
+            previousValues[1].Next = new Node<T>(item, previousValues[1].Next);
             bool newLevelCreated = false;
             var currentLevel = 2;
             while (!newLevelCreated && CoinFlip() == 1)
@@ -94,7 +94,7 @@ public class SkipList<T> : IList<T>
                     newLevelCreated = true;
                 }
 
-                previousValues[currentLevel].Next = new Node<T>(value, previousValues[currentLevel].Next, previousValues[currentLevel - 1].Next);
+                previousValues[currentLevel].Next = new Node<T>(item, previousValues[currentLevel].Next, previousValues[currentLevel - 1].Next);
                 currentLevel++;
             }
         }
