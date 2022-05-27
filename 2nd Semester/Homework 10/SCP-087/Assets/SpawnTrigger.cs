@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SpawnTrigger : MonoBehaviour
 {
-    public GameObject stairsSegment;
+    [SerializeField] private GameObject stairsSegment;
 
     private void Spawn()
     {
