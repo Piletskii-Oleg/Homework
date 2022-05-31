@@ -4,5 +4,10 @@ using UnityEngine;
 
 public class Monster : MonoBehaviour
 {
-    public int probability;
+    [SerializeField] private Menu menu;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        menu.EndGame();
+    }
 }

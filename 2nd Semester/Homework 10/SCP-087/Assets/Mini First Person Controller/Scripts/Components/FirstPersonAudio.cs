@@ -29,6 +29,11 @@ public class FirstPersonAudio : MonoBehaviour
     public AudioSource crouchStartAudio, crouchedAudio, crouchEndAudio;
     public AudioClip[] crouchStartSFX, crouchEndSFX;
 
+    [Header("GameOver(Astrunaot)")]
+    public Menu menu;
+    public AudioSource gameOverAudio;
+    public AudioClip[] gameOverSFX;
+
     AudioSource[] MovingAudios => new AudioSource[] { stepAudio, runningAudio, crouchedAudio };
 
 
@@ -40,6 +45,7 @@ public class FirstPersonAudio : MonoBehaviour
         stepAudio = GetOrCreateAudioSource("Step Audio");
         runningAudio = GetOrCreateAudioSource("Running Audio");
         landingAudio = GetOrCreateAudioSource("Landing Audio");
+        gameOverAudio = GetOrCreateAudioSource("Game Over Audio");
 
         // Setup jump audio.
         jump = GetComponentInParent<Jump>();
@@ -88,6 +94,11 @@ public class FirstPersonAudio : MonoBehaviour
 
         // Remember lastCharacterPosition.
         lastCharacterPosition = CurrentCharacterPosition;
+    }
+
+    public void EndGame()
+    {
+        gameOverAudio.Play();
     }
 
 

@@ -3,6 +3,7 @@ using UnityEngine;
 public class SpawnTrigger : MonoBehaviour
 {
     [SerializeField] private GameObject stairsSegment;
+    [SerializeField] private MonsterTrigger[] monsterTriggers;
 
     private void Spawn()
     {
@@ -15,6 +16,11 @@ public class SpawnTrigger : MonoBehaviour
     private void OnTriggerEnter()
     {
         Spawn();
+        foreach (var trigger in monsterTriggers)
+        {
+            trigger.isEntered = false;
+        }
+
         Destroy(gameObject);
     }
 }
