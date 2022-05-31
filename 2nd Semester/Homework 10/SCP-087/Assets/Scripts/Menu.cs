@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -9,10 +7,11 @@ public class Menu : MonoBehaviour
     [SerializeField] private GameObject startText;
     [SerializeField] private GameObject endText;
     [SerializeField] private GameObject inputField;
+    [SerializeField] private GameObject button;
     [SerializeField] private FirstPersonLook fpsLook;
     [SerializeField] private FirstPersonMovement fpsMovement;
 
-    public int probability;
+    [HideInInspector] public int probability;
 
     public void StartGame()
     {
@@ -35,10 +34,12 @@ public class Menu : MonoBehaviour
 
     public void EndGame()
     {
-        endText.SetActive(true);
         gameObject.SetActive(true);
+        button.SetActive(true);
+        endText.SetActive(true);
+        fpsLook.gameObject.transform.localRotation = Quaternion.identity;
         fpsLook.enabled = false;
         fpsMovement.enabled = false;
-        fpsAudio.EndGame();
+        Cursor.lockState = CursorLockMode.Confined;
     }
 }

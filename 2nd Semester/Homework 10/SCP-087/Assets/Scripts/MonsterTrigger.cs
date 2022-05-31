@@ -7,6 +7,8 @@ public class MonsterTrigger : MonoBehaviour
     public bool isEntered = false;
     [SerializeField] private Menu menu;
     [SerializeField] private GameObject monster;
+    [SerializeField] private AudioSource horrorAudio;
+    [SerializeField] private AudioClip monsterSound;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -20,6 +22,8 @@ public class MonsterTrigger : MonoBehaviour
                 var renderer = monster.GetComponent<MeshRenderer>();
                 renderer.enabled = true;
                 collider.enabled = true;
+                horrorAudio.Stop();
+                horrorAudio.PlayOneShot(monsterSound);
             }
 
             isEntered = true;
