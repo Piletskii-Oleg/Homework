@@ -1,8 +1,8 @@
 namespace Routers.Tests;
 
 using System;
-using NUnit.Framework;
 using Routers;
+using NUnit.Framework;
 using Routers.Exceptions;
 
 public class GraphTests
@@ -11,14 +11,14 @@ public class GraphTests
     public void ExceptionShouldBeThrownWhenGraphIsNotConnected()
     {
         var path = "../../../TestFiles/disconnected.txt";
-        Assert.Throws<GraphNotConnectedException>(() => Routers.RoutersUtility.MakeConfiguration(path));
+        Assert.Throws<GraphNotConnectedException>(() => RoutersUtility.MakeConfiguration(path, path + ".txt"));
     }
 
     [Test]
     public void ExceptionShouldBeThrownWhenInputIsIncorrect()
     {
         var path = "../../../TestFiles/incorrectInput.txt";
-        Assert.Throws<ArgumentException>(() => Routers.RoutersUtility.MakeConfiguration(path));
+        Assert.Throws<ArgumentException>(() => RoutersUtility.MakeConfiguration(path, path + ".txt"));
     }
 
     [Test]

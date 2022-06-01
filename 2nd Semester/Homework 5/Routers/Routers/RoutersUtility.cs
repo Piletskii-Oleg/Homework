@@ -10,13 +10,12 @@ public static class RoutersUtility
     /// <summary>
     /// Makes configuration with maximum carrying capacity and minimum amount of connections.
     /// </summary>
-    /// <param name="path">Path to the input file.</param>
-    public static void MakeConfiguration(string path)
+    /// <param name="inputPath">Path to the input file.</param>
+    /// <param name="outputPath">Path to the output file.</param>
+    public static void MakeConfiguration(string inputPath, string outputPath)
     {
-        var tree = Graph.MakeMinimalTree(path);
-        var newPath = path.Replace(Path.GetFileNameWithoutExtension(path), "output");
-
-        using var writer = new StreamWriter(newPath);
+        var tree = Graph.MakeMinimalTree(inputPath);
+        using var writer = new StreamWriter(outputPath);
         var visitedEdges = new List<Edge>();
         foreach (var node in tree.Nodes)
         {

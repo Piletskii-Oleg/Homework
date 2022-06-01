@@ -10,7 +10,7 @@ public class RoutersTests
     {
         string path = "../../../TestFiles/correct.txt";
         string outputPath = "../../../TestFiles/output.txt";
-        RoutersUtility.MakeConfiguration(path);
+        RoutersUtility.MakeConfiguration(path, outputPath);
         Assert.Multiple(() =>
         {
             using var output = new StreamReader(File.OpenRead(outputPath));

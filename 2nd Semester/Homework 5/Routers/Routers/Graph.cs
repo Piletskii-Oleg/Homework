@@ -7,15 +7,18 @@ using Routers.Exceptions;
 /// </summary>
 public class Graph
 {
-    /// <summary>
-    /// Gets list containing edges of the graph.
-    /// </summary>
-    public List<Edge> Edges { get; private set; } = new ();
+    private List<Edge> edges = new ();
+    private Dictionary<int, Node> nodes = new ();
 
     /// <summary>
     /// Gets dictionary that contains nodes of the graph with the keys being their index numbers.
     /// </summary>
-    public Dictionary<int, Node> Nodes { get; private set; } = new ();
+    public IReadOnlyDictionary<int, Node> Nodes { get; private set; } = new Dictionary<int, Node>();
+
+    /// <summary>
+    /// Gets list containing edges of the graph.
+    /// </summary>
+    public IReadOnlyList<Edge> Edges { get; private set; } = new List<Edge>();
 
     /// <summary>
     /// Creates minimum spanning tree from a graph.
@@ -28,10 +31,10 @@ public class Graph
     {
         var graph = new Graph();
         graph.FillEdgesAndNodes(path);
-        graph.Edges.Sort();
+        graph.edges.Sort();
         var tree = new Graph();
         var newEdges = new List<Edge>();
-        foreach (var edge in graph.Edges)
+        foreach (var edge in graph.edges)
         {
             if (DisjointSet.Find(edge.Begin) != DisjointSet.Find(edge.End))
             {
@@ -40,9 +43,11 @@ public class Graph
             }
         }
 
-        tree.Edges = newEdges;
-        tree.Nodes = graph.Nodes;
-        foreach (var node in tree.Nodes)
+        tree.edges = newEdges;
+        tree.Edges = tree.edges;
+        tree.nodes = graph.nodes;
+        tree.Nodes = tree.nodes;
+        foreach (var node in tree.nodes)
         {
             node.Value.ConnectedEdges = new List<Edge>();
             foreach (var edge in newEdges)
@@ -60,12 +65,12 @@ public class Graph
     private bool CheckForConnectivity()
     {
         var visitedNodes = new Dictionary<Node, bool>();
-        foreach (var node in Nodes)
+        foreach (var node in nodes)
         {
             visitedNodes.Add(node.Value, false);
         }
 
-        if (DepthFirstSearch(Nodes[1], visitedNodes) == Nodes.Count)
+        if (DepthFirstSearch(nodes[1], visitedNodes) == nodes.Count)
         {
             return true;
         }
@@ -102,14 +107,14 @@ public class Graph
             while ((line = streamReader.ReadLine()) != null)
             {
                 int routerNumber = int.Parse(line[0].ToString());
-                Nodes.Add(routerNumber, new Node(routerNumber));
+                nodes.Add(routerNumber, new Node(routerNumber));
             }
 
             for (int i = 1; i < MaxNodeNumber(); i++)
             {
-                if (!Nodes.ContainsKey(i))
+                if (!nodes.ContainsKey(i))
                 {
-                    Nodes.Add(i, new Node(i));
+                    nodes.Add(i, new Node(i));
                 }
             }
 
@@ -138,26 +143,26 @@ public class Graph
                 throw new ArgumentException("Input was not in correct form");
             }
 
-            if (number > Nodes.Count || routerNumber > Nodes.Count)
+            if (number > nodes.Count || routerNumber > nodes.Count)
             {
-                while (Nodes.Count < number || Nodes.Count < routerNumber)
+                while (nodes.Count < number || nodes.Count < routerNumber)
                 {
-                    Nodes.Add(Nodes.Count + 1, new Node(Nodes.Count + 1));
+                    nodes.Add(nodes.Count + 1, new Node(nodes.Count + 1));
                 }
             }
 
             var capacityToPut = array[i + 1].Where(c => char.IsDigit(c)).ToArray();
-            var newEdge = new Edge(int.Parse(capacityToPut), Nodes[routerNumber], Nodes[number]);
-            Nodes[routerNumber].ConnectedEdges.Add(newEdge);
-            Nodes[number].ConnectedEdges.Add(newEdge);
-            Edges.Add(newEdge);
+            var newEdge = new Edge(int.Parse(capacityToPut), nodes[routerNumber], nodes[number]);
+            nodes[routerNumber].ConnectedEdges.Add(newEdge);
+            nodes[number].ConnectedEdges.Add(newEdge);
+            edges.Add(newEdge);
         }
     }
 
     private int MaxNodeNumber()
     {
         int max = 0;
-        foreach (var node in Nodes)
+        foreach (var node in nodes)
         {
             if (node.Key > max)
             {
