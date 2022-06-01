@@ -10,5 +10,5 @@ else if (args[1] == "-u")
 }
 else
 {
-    throw new ArgumentException("Passed parameter was not of correct form.", args[1]);
+    Console.WriteLine("Passed parameter was not of correct form.");
 }

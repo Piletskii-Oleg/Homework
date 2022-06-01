@@ -14,7 +14,7 @@ public static class LZWCompress
         var trie = new Trie();
         for (int i = 0; i < 256; i++)
         {
-            trie.Add(new[] { (byte)i }.ToList());
+            trie.Add((byte)i);
         }
 
         var allBytes = File.ReadAllBytes(path);
@@ -31,8 +31,8 @@ public static class LZWCompress
             }
             else
             {
-                trie.Add(currentBytes);
-                int currentNumber = trie.GetNumberInDictionary(previousBytes);
+                trie.Add(currentBytes[^1]);
+                int currentNumber = trie.GetNumberInDictionary();
                 previousBytes.Clear();
                 previousBytes.Add(currentBytes[^1]);
                 writer.Write(TransformToBytes(currentNumber, byteAmount));
