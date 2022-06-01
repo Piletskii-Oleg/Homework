@@ -1,9 +1,9 @@
+namespace UniqueList.Tests;
+
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using UniqueList.Exceptions;
-
-namespace UniqueList.Tests;
 
 public class ListTests
 {
@@ -118,5 +118,12 @@ public class ListTests
             Assert.AreEqual(4, list[1]);
             Assert.AreEqual(5, list[2]);
         });
+    }
+
+    [TestCaseSource(nameof(Lists))]
+    public void InsertingAtNegativePositionShouldThrowException(MyList<int> list)
+    {
+        list.Add(3);
+        Assert.Throws<IndexOutOfRangeException>(() => list.Insert(-2, 5));
     }
 }

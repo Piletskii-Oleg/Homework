@@ -8,15 +8,13 @@ using UniqueList.Exceptions;
 /// <typeparam name="T">Type.</typeparam>
 public class MyList<T>
 {
-    /// <summary>
-    /// Gets or sets length of the linked list.
-    /// </summary>
-    public int Length { get; set; }
+    private Node? head;
+    private Node? tail;
 
     /// <summary>
-    /// Gets head of the linked list.
+    /// Gets length of the linked list.
     /// </summary>
-    internal Node<T>? Head { get; private set; }
+    public int Length { get; private set; }
 
     /// <summary>
     /// Gets or sets a value in the linked list by index.
@@ -35,19 +33,15 @@ public class MyList<T>
     /// <param name="value">A value to add.</param>
     public virtual void Add(T value)
     {
-        if (Head is null)
+        if (head is null || tail is null)
         {
-            Head = new Node<T>(value, null);
+            head = new Node(value, null);
+            tail = head;
         }
         else
         {
-            Node<T> currentNode = Head;
-            while (currentNode.Next is not null)
-            {
-                currentNode = currentNode.Next;
-            }
-
-            currentNode.Next = new Node<T>(value, null);
+            tail.Next = new Node(value);
+            tail = tail.Next;
         }
 
         Length++;
@@ -61,22 +55,25 @@ public class MyList<T>
     /// <exception cref="IndexOutOfRangeException">Throws if the index was outside the linked list.</exception>
     public virtual void Insert(int index, T value)
     {
-        if (index == 0)
+        if (index < 0 || index > Length)
         {
-            Head = new Node<T>(value, Head);
+            throw new IndexOutOfRangeException();
+        }
+        else if (head is null || index == Length)
+        {
+            Add(value);
+        }
+        else if (index == 0)
+        {
+            head = new Node(value, head);
+            Length++;
         }
         else
         {
             var currentNode = GetNode(index, 1);
-            if (currentNode is null)
-            {
-                throw new IndexOutOfRangeException();
-            }
-
-            currentNode.Next = new Node<T>(value, currentNode.Next);
+            currentNode.Next = new Node(value, currentNode.Next);
+            Length++;
         }
-
-        Length++;
     }
 
     /// <summary>
@@ -87,21 +84,25 @@ public class MyList<T>
     /// <exception cref="IndexOutOfRangeException">Throws if the index was outside the linked list.</exception>
     public virtual void DeleteAt(int index)
     {
-        if (Head is null)
+        if (head is null)
         {
             throw new DeleteFromEmptyListException();
+        }
+        else if (index < 0 || index > Length - 1)
+        {
+            throw new IndexOutOfRangeException();
         }
 
         if (index == 0)
         {
-            Head = Head.Next ?? null;
+            head = head.Next;
         }
         else
         {
             var currentNode = GetNode(index, 1);
-            if (currentNode is null)
+            if (currentNode.Next is not null && currentNode.Next.Equals(tail))
             {
-                throw new IndexOutOfRangeException();
+                tail = currentNode;
             }
 
             currentNode.Next = currentNode.Next?.Next;
@@ -119,21 +120,21 @@ public class MyList<T>
     /// <exception cref="DeleteNonexistentElementException">Throws if element is not contained in the list.</exception>
     public virtual void Delete(T value)
     {
-        if (Head is null)
+        if (head is null || head.Value is null)
         {
             throw new DeleteFromEmptyListException();
         }
-        else if (Head.Value.Equals(value))
+        else if (head.Value.Equals(value))
         {
-            Head = Head.Next ?? null;
+            head = head.Next;
             Length--;
         }
         else
         {
-            var currentNode = Head;
+            var currentNode = head;
             while (currentNode.Next is not null)
             {
-                if (currentNode.Next.Value.Equals(value))
+                if (currentNode.Next.Value is not null && currentNode.Next.Value.Equals(value))
                 {
                     currentNode.Next = currentNode.Next.Next ?? null;
                     Length--;
@@ -148,37 +149,26 @@ public class MyList<T>
     }
 
     /// <summary>
-    /// Gets a node at the specified position with an offset to the left.
+    /// Indicates whether list contains the given element.
     /// </summary>
-    /// <param name="index">Index of an element.</param>
-    /// <param name="offset">Offset to the left (must be 0 or 1).</param>
-    /// <returns>Node at the specified position with an offset.</returns>
-    /// <exception cref="IndexOutOfRangeException">Throws if the index was outside the linked list.</exception>
-    /// <exception cref="ArgumentException">Throws if offset was not 0 or 1.</exception>
-    internal Node<T>? GetNode(int index, int offset)
+    /// <param name="value">Value index of which is to be found.</param>
+    /// <returns>Index of the element if it is in the list and -1 otherwise.</returns>
+    public int Contains(T value)
     {
-        if (offset != 0 && offset != 1)
+        var currentNode = head;
+        int index = 0;
+        while (currentNode is not null)
         {
-            throw new ArgumentException("Offset was not 0 or 1", nameof(offset));
-        }
-
-        var currentNode = Head;
-        if (currentNode is null)
-        {
-            return null;
-        }
-
-        for (int i = 0; i < index - offset; i++)
-        {
-            if (currentNode.Next is null)
+            if (currentNode.Value is not null && currentNode.Value.Equals(value))
             {
-                throw new IndexOutOfRangeException();
+                return index;
             }
 
+            index++;
             currentNode = currentNode.Next;
         }
 
-        return currentNode;
+        return -1;
     }
 
     /// <summary>
@@ -198,9 +188,25 @@ public class MyList<T>
         currentNode.Value = value;
     }
 
+    private Node GetNode(int index, int offset)
+    {
+        var currentNode = head;
+        for (int i = 0; i < index - offset; i++)
+        {
+            if (currentNode is not null && currentNode.Next is null)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            currentNode = currentNode!.Next;
+        }
+
+        return currentNode!;
+    }
+
     private T GetValue(int index)
     {
-        if (Head is null)
+        if (head is null)
         {
             throw new GetElementFromEmptyListException();
         }
@@ -212,5 +218,38 @@ public class MyList<T>
         }
 
         return currentNode.Value;
+    }
+
+    private class Node
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Node"/> class.
+        /// </summary>
+        /// <param name="value">Value of the node.</param>
+        public Node(T value)
+            : this(value, null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Node"/> class.
+        /// </summary>
+        /// <param name="value">Value of the node.</param>
+        /// <param name="next">Points to the next node.</param>
+        public Node(T value, Node? next)
+        {
+            Value = value;
+            Next = next;
+        }
+
+        /// <summary>
+        /// Gets or sets value stored in the node.
+        /// </summary>
+        public T Value { get; set; }
+
+        /// <summary>
+        /// Gets or sets pointer to the next node.
+        /// </summary>
+        public Node? Next { get; set; }
     }
 }

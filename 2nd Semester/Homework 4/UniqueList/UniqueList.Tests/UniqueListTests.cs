@@ -1,8 +1,7 @@
-﻿using System;
+﻿namespace UniqueList.Tests;
+
 using UniqueList.Exceptions;
 using NUnit.Framework;
-
-namespace UniqueList.Tests;
 
 public class UniqueListTests
 {
@@ -67,5 +66,12 @@ public class UniqueListTests
             Assert.AreEqual(list[1], 1);
             Assert.AreEqual(list[2], 2);
         });
+    }
+
+    [Test]
+    public void SameElementCanBeSetOnTheSamePosition()
+    {
+        list.Add(0);
+        Assert.DoesNotThrow(() => list[0] = 0);
     }
 }
