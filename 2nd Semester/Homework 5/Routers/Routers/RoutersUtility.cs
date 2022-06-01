@@ -1,6 +1,7 @@
 ﻿namespace Routers;
 
 using System.Text;
+using Routers.Exceptions;
 
 /// <summary>
 /// Utility to work with router networks.
@@ -12,6 +13,8 @@ public static class RoutersUtility
     /// </summary>
     /// <param name="inputPath">Path to the input file.</param>
     /// <param name="outputPath">Path to the output file.</param>
+    /// <exception cref="GraphNotConnectedException">Throws if the graph was not connected.</exception>
+    /// <exception cref="ArgumentException">Throws if the input was not in correct form.</exception>
     public static void MakeConfiguration(string inputPath, string outputPath)
     {
         var tree = Graph.MakeMinimalTree(inputPath);

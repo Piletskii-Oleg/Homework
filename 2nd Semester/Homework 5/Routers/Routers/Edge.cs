@@ -46,13 +46,6 @@ public class Edge : IComparable<Edge>
             throw new ArgumentNullException(nameof(edge));
         }
 
-        if (edge.Capacity.CompareTo(this.Capacity) != 0)
-        {
-            return edge.Capacity.CompareTo(this.Capacity);
-        }
-        else
-        {
-            return 0;
-        }
+        return edge.Capacity.CompareTo(this.Capacity);
     }
 }

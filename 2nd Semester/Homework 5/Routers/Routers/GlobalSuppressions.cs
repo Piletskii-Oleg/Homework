@@ -15,3 +15,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1101:Prefix local calls with this", Justification = "<Ожидание>", Scope = "member", Target = "~M:Routers.Graph.GetEdgesFromFile(System.String,System.Int32)")]
 [assembly: SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1101:Prefix local calls with this", Justification = "<Ожидание>", Scope = "member", Target = "~M:Routers.Graph.CheckForConnectivity~System.Boolean")]
 [assembly: SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1101:Prefix local calls with this", Justification = "<Ожидание>", Scope = "member", Target = "~M:Routers.Graph.DepthFirstSearch(Routers.Node,System.Collections.Generic.Dictionary{Routers.Node,System.Boolean})~System.Int32")]
+[assembly: SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1200:Using directives should be placed correctly", Justification = "<Ожидание>")]

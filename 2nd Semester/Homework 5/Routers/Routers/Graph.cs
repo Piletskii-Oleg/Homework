@@ -70,14 +70,7 @@ public class Graph
             visitedNodes.Add(node.Value, false);
         }
 
-        if (DepthFirstSearch(nodes[1], visitedNodes) == nodes.Count)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return DepthFirstSearch(nodes[1], visitedNodes) == nodes.Count;
     }
 
     private int DepthFirstSearch(Node originalNode, Dictionary<Node, bool> visitedNodes)
@@ -101,29 +94,27 @@ public class Graph
 
     private void FillEdgesAndNodes(string path)
     {
-        using (var streamReader = new StreamReader(File.OpenRead(path)))
+        using var streamReader = new StreamReader(File.OpenRead(path));
+        string? line = string.Empty;
+        while ((line = streamReader.ReadLine()) != null)
         {
-            string? line = string.Empty;
-            while ((line = streamReader.ReadLine()) != null)
-            {
-                int routerNumber = int.Parse(line[0].ToString());
-                nodes.Add(routerNumber, new Node(routerNumber));
-            }
+            int routerNumber = int.Parse(line[0].ToString());
+            nodes.Add(routerNumber, new Node(routerNumber));
+        }
 
-            for (int i = 1; i < MaxNodeNumber(); i++)
+        for (int i = 1; i < MaxNodeNumber(); i++)
+        {
+            if (!nodes.ContainsKey(i))
             {
-                if (!nodes.ContainsKey(i))
-                {
-                    nodes.Add(i, new Node(i));
-                }
+                nodes.Add(i, new Node(i));
             }
+        }
 
-            streamReader.BaseStream.Seek(0, SeekOrigin.Begin);
-            while ((line = streamReader.ReadLine()) != null)
-            {
-                int routerNumber = int.Parse(line[0].ToString());
-                GetEdgesFromFile(line, routerNumber);
-            }
+        streamReader.BaseStream.Seek(0, SeekOrigin.Begin);
+        while ((line = streamReader.ReadLine()) != null)
+        {
+            int routerNumber = int.Parse(line[0].ToString());
+            GetEdgesFromFile(line, routerNumber);
         }
 
         if (!CheckForConnectivity())
