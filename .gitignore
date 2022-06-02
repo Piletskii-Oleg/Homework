@@ -72,8 +72,8 @@ StyleCopReport.xml
 *_i.c
 *_p.c
 *_h.h
+*.meta!/Homework 10
 *.ilk
-*.meta
 *.obj
 *.iobj
 *.pch
