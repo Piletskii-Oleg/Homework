@@ -70,8 +70,8 @@ public class Calculator
         {
             this.FirstOperand = this.FirstOperand.Replace(',', '.');
             this.SecondOperand = this.SecondOperand.Replace(',', '.');
-            var decimalFirst = decimal.Parse(this.FirstOperand);
-            var decimalSecond = decimal.Parse(this.SecondOperand);
+            var decimalFirst = decimal.Parse(this.FirstOperand, CultureInfo.GetCultureInfo("en-US"));
+            var decimalSecond = decimal.Parse(this.SecondOperand, CultureInfo.GetCultureInfo("en-US"));
             switch (this.Operator)
             {
                 case '+':
