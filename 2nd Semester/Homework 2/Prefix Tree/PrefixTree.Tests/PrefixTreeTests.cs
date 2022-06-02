@@ -68,10 +68,11 @@ public class Tests
     [Test]
     public void PrefixOfTheWordIsNotRemoved()
     {
-        trie.Add("beb");
-        trie.Add("bebe");
-        trie.Remove("bebe");
-        Assert.IsTrue(trie.Contains("beb"));
+        trie.Add("ber");
+        trie.Add("berk");
+        trie.Remove("berk");
+        Assert.IsTrue(trie.Contains("ber"));
+        Assert.IsFalse(trie.Contains("berk"));
     }
 
     [Test]
@@ -91,6 +92,9 @@ public class Tests
         trie.Add("berk");
         Assert.IsTrue(trie.Remove("berk"));
         Assert.IsTrue(trie.Remove("ber"));
+        Assert.IsFalse(trie.Contains("berk"));
+        Assert.IsFalse(trie.Contains("ber"));
+        Assert.AreEqual(0, trie.Size);
     }
 
     [Test]

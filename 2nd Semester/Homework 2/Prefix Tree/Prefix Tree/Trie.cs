@@ -17,18 +17,18 @@ public class Trie
     }
 
     /// <summary>
-    /// Gets the amount of words in the Trie.
+    /// Gets the amount of words in the <see cref="Trie"/>.
     /// </summary>
     public int Size { get; private set; }
 
     /// <summary>
-    /// Adds an element to the Trie.
+    /// Adds an element to the <see cref="Trie"/>.
     /// </summary>
     /// <param name="element">An element to add.</param>
     /// <returns>True if the element was not present in the Trie and false otherwise.</returns>
     public bool Add(string element)
     {
-        Vertex? currentElement = this.head;
+        Vertex currentElement = this.head;
         if (this.Contains(element))
         {
             return false;
@@ -52,13 +52,13 @@ public class Trie
     }
 
     /// <summary>
-    /// Checks if the element is present in the Trie.
+    /// Checks if the element is present in the <see cref="Trie"/>.
     /// </summary>
     /// <param name="element">An element to check.</param>
     /// <returns>True if the element is present and false otherwise.</returns>
     public bool Contains(string element)
     {
-        Vertex? currentElement = this.head;
+        Vertex currentElement = this.head;
         foreach (char c in element)
         {
             if (!currentElement.Next.ContainsKey(c))
@@ -73,7 +73,7 @@ public class Trie
     }
 
     /// <summary>
-    /// Removes an element from the Trie.
+    /// Removes an element from the <see cref="Trie"/>.
     /// </summary>
     /// <param name="element">An element to remove.</param>
     /// <returns>True if the element was present and false otherwise.</returns>
@@ -93,10 +93,11 @@ public class Trie
         if (currentElement.IsTerminal)
         {
             currentElement = this.head;
+            currentElement.HowManyFollow--;
             foreach (char c in element)
             {
-                currentElement.HowManyFollow--;
-                if (currentElement.HowManyFollow == 0)
+                currentElement.Next[c].HowManyFollow--;
+                if (currentElement.Next[c].HowManyFollow == 0)
                 {
                     currentElement.Next.Remove(c);
                     break;
@@ -107,7 +108,6 @@ public class Trie
                 }
             }
 
-            currentElement.IsTerminal = false;
             this.Size--;
             return true;
         }
